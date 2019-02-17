@@ -1,0 +1,386 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:P="http://java.sun.com/jsf/html">
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.registrarCompra" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formCompra" enctype="multipart/form-data">
+
+				<p:panel id="panelCompra" header="#{msg.MSG_HEADER_PANEL_COMPRA}">
+
+					<div align="center">
+						<p:messages id="men" globalOnly="true" showDetail="false"
+							severity="info error fatal" />
+						<p:growl id="growl" showDetail="false" severity="warn"
+							globalOnly="true" />
+
+						<p:panel id="panelInfoCompra">
+							<div align="center">
+
+								<h:panelGrid id="panelGridInfoCabecera" columns="2"
+									cellpadding="5" styleClass="ui-grid"
+									rendered="#{not empty registrarCompra.compraDetalle}">
+
+									<h:outputLabel value="#{msg.MSG_DIALOG_PROVEEDOR_NIT}" />
+									<h:outputLabel
+										value="#{registrarCompra.compraCabeceraId.idProveedorApp}" />
+
+									<h:outputLabel value="#{msg.MSG_DIALOG_PROVEEDOR_RAZON_SOCIAL}" />
+									<h:outputText
+										value="#{registrarCompra.compraCabecera.proveedorApp.razonSocial}" />
+
+									<h:outputLabel value="#{msg.MSG_DIALOG_PROVEEDOR_FACTURA}" />
+									<h:outputText
+										value="#{registrarCompra.compraCabeceraId.idFacturaCompra}" />
+
+								</h:panelGrid>
+							</div>
+
+							<div align="left">
+
+								<h:panelGrid id="panelGridInfoCompra" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+
+									<p:dataTable value="#{registrarCompra.compraDetalle}"
+										var="item" paginator="false" editable="true" editMode="row"
+										emptyMessage="#{msg.MSG_DATATABLE_DATA_NO_FOUND}">
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CATEGORIA}" />
+											</f:facet>
+											<h:outputText
+												value="#{item.producto.categoriaProducto.categoria}" />
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_PRODUCTO}" />
+											</f:facet>
+											<h:outputText value="#{item.producto.producto}" />
+										</p:column>
+
+										<p:column style="width: 100px">
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CANTIDAD}" />
+											</f:facet>
+											<h:outputText value="#{item.cantidad}" />
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_COMPRA_UNIDAD}" />
+											</f:facet>
+											<h:outputText value="#{item.precioCompra}">
+												<f:convertNumber locale="es_CO" maxFractionDigits="2" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_IVA}" />
+											</f:facet>
+											<h:outputText value="#{item.valorIva}">
+												<f:convertNumber locale="es_CO" maxFractionDigits="2" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_COMPRA_TOTAL}" />
+											</f:facet>
+											<h:outputText
+												value="#{(item.precioCompra + item.valorIva) * item.cantidad}">
+												<f:convertNumber locale="es_CO" maxFractionDigits="2" />
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="#{msg.MSG_DATATABLE_COLUMN_ACCIONES}"
+											style="width: 100px">
+											<p:commandButton id="btnEliminar" icon="ui-icon-close"
+												action="#{registrarCompra.actionEliminar}"
+												update=":formCompra:panelCompra">
+												<f:setPropertyActionListener value="#{item}"
+													target="#{registrarCompra.compraDelDetalle}" />
+											</p:commandButton>
+										</p:column>
+									</p:dataTable>
+
+								</h:panelGrid>
+
+								<p:commandButton value="#{msg.MSG_HEADER_PANEL_COMPRA}"
+									id="btnRegistrarCompra"
+									actionListener="#{registrarCompra.actionAdicionarProveedor}"
+									update="dialogProveedor" icon="ui-icon-circle-plus"
+									rendered="#{empty registrarCompra.compraDetalle}" />
+
+								<p:commandButton value="#{msg.MSG_BUTTON_ADICIONAR_ITEM}"
+									id="btnAdicionarItem"
+									actionListener="#{registrarCompra.actionAdicionar}"
+									update="dialogCompra" icon="ui-icon-circle-plus"
+									rendered="#{not empty registrarCompra.compraDetalle}" />
+
+								<h:panelGrid id="panelGridResumenCompra" columns="2"
+									cellpadding="5" styleClass="ui-grid"
+									rendered="#{not empty registrarCompra.compraDetalle}">
+
+									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_NETO}" />
+									<h:outputText
+										value="#{registrarCompra.compraCabecera.valorNeto}">
+										<f:convertNumber locale="es_CO" currencySymbol="$"
+											type="currency" />
+									</h:outputText>
+
+									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_IVA}" />
+									<h:outputText
+										value="#{registrarCompra.compraCabecera.valorIva}">
+										<f:convertNumber locale="es_CO" currencySymbol="$"
+											type="currency" />
+									</h:outputText>
+
+									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_TOTAL}" />
+									<h:outputText
+										value="#{registrarCompra.compraCabecera.valorTotal}">
+										<f:convertNumber locale="es_CO" currencySymbol="$"
+											type="currency" />
+									</h:outputText>
+
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotones" columns="2" cellpadding="5"
+									styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_REGISTRAR}"
+										id="btnRegistrar"
+										actionListener="#{registrarCompra.actionRegistrarCompra}"
+										update="men panelInfoCompra growl dialogRegistrar"
+										icon="ui-icon-disk"
+										disabled="#{empty registrarCompra.productos}"
+										rendered="#{not empty registrarCompra.compraDetalle}" />
+									<p:commandButton value="#{msg.MSG_BUTTON_LIMPIAR}"
+										id="btnLimpiar" update="@form" process="@this"
+										actionListener="#{registrarCompra.actionLimpiar}"
+										rendered="#{not empty registrarCompra.compraDetalle}" />
+								</h:panelGrid>
+
+							</div>
+						</p:panel>
+					</div>
+				</p:panel>
+			</h:form>
+
+			<p:dialog id="dialogProveedor" appendTo="@(body)" draggable="true"
+				closable="false" widgetVar="dialogProveedor" resizable="false"
+				modal="true" width="400"
+				visible="#{registrarCompra.showDialogProveedor}"
+				header="#{msg.MSG_HEADER_PANEL_DIALOG_PROVEEDOR}">
+
+				<h:form id="formProveedor">
+
+					<p:messages id="menProveedor" globalOnly="false" showDetail="false"
+						severity="info error fatal" />
+
+					<div align="center">
+						<h:panelGrid id="panelGridProveedor" columns="2" cellpadding="5"
+							styleClass="ui-grid">
+							<h:outputLabel for="nitProveedor"
+								value="#{msg.MSG_DIALOG_PROVEEDOR_NIT}" />
+							<p:inputText id="nitProveedor"
+								value="#{registrarCompra.compraCabeceraId.idProveedorApp}"
+								required="true"
+								requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+								label="#{msg.MSG_DIALOG_PROVEEDOR_NIT}"
+								onkeydown="return event.keyCode &gt;= 48 &amp;&amp; event.keyCode &lt;= 57 || event.keyCode &gt;= 96 &amp;&amp; event.keyCode &lt;= 105 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37  || event.keyCode == 39 || event.keyCode == 13" />
+
+							<h:outputLabel for="numeroFactura"
+								value="#{msg.MSG_DIALOG_PROVEEDOR_FACTURA}" />
+							<p:inputText id="numeroFactura"
+								value="#{registrarCompra.compraCabeceraId.idFacturaCompra}"
+								required="true"
+								requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+								label="#{msg.MSG_DIALOG_PROVEEDOR_FACTURA}" maxlength="20" />
+						</h:panelGrid>
+
+						<h:panelGrid id="panelGridProveedorBotones" columns="2"
+							cellpadding="5" styleClass="ui-grid">
+							<p:commandButton value="#{msg.MSG_BUTTON_ACEPTAR}"
+								id="btnIngresar"
+								actionListener="#{registrarCompra.actionIngresarProveedor}"
+								update="formCompra:panelCompra dialogCompra panelGridProveedor dialogProveedor"
+								icon="ui-icon-check" />
+							<p:commandButton value="#{msg.MSG_BUTTON_CANCELAR}"
+								id="btnCancelarIngresoProveedor"
+								actionListener="#{registrarCompra.actionCancelar}"
+								update="dialogProveedor" process="@this" icon="ui-icon-close" />
+						</h:panelGrid>
+
+					</div>
+				</h:form>
+			</p:dialog>
+
+
+			<p:dialog id="dialogCompra" appendTo="@(body)" draggable="true"
+				closable="false" widgetVar="dialogCompra" resizable="false"
+				modal="true" width="500"
+				visible="#{registrarCompra.showDialogAdicionarItem}">
+
+				<h:form id="formDialogCompra">
+
+					<p:messages id="menMod" globalOnly="false" showDetail="false"
+						severity="info error fatal" />
+
+					<p:panel id="panelDialogCompra"
+						header="#{msg.MSG_HEADER_PANEL_DIALOG_ITEM_COMPRA}">
+						<div align="left">
+
+							<h:panelGrid id="panelGridInfoCompra" columns="2" cellpadding="5"
+								styleClass="ui-grid">
+								<h:outputLabel for="categoriaModProducto"
+									value="#{msg.MSG_DATATABLE_COLUMN_CATEGORIA}" />
+								<p:selectOneMenu id="categoriaModProducto" filter="true"
+									filterMatchMode="contains" style="width:260px"
+									value="#{registrarCompra.categoriaProducto}"
+									converter="#{categoriaProductoConverter}"
+									rendered="#{not empty registrarCompra.categorias}">
+									<p:ajax event="change" update="formDialogCompra"
+										process="@this" listener="#{registrarCompra.initProductos}" />
+									<f:selectItems value="#{registrarCompra.categorias}" />
+								</p:selectOneMenu>
+								<p:messages id="menCategorias" showDetail="false"
+									globalOnly="false" severity="warn" autoUpdate="true"
+									rendered="#{empty registrarCompra.categorias}" />
+
+								<h:outputLabel for="nombreModProducto"
+									value="#{msg.MSG_DATATABLE_COLUMN_PRODUCTO}" />
+								<p:selectOneMenu id="nombreModProducto" filter="true"
+									filterMatchMode="contains" style="width:260px"
+									value="#{registrarCompra.compraModDetalle.producto}"
+									converter="#{productoConverter}"
+									rendered="#{not empty registrarCompra.productos}">
+									<f:selectItems value="#{registrarCompra.productos}" />
+								</p:selectOneMenu>
+								<p:messages id="menProductos" showDetail="false" severity="warn"
+									globalOnly="false" autoUpdate="true"
+									rendered="#{empty registrarCompra.productos}" />
+
+								<h:outputLabel for="cantidadModProducto"
+									value="#{msg.MSG_DATATABLE_COLUMN_CANTIDAD}" />
+								<p:spinner id="cantidadModProducto"
+									value="#{registrarCompra.cantidad}" min="1" />
+
+								<h:outputLabel for="precioCompraModProducto"
+									value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_COMPRA_UNIDAD}" />
+								<h:inputText id="precioCompraModProducto"
+									value="#{registrarCompra.compraModDetalle.precioCompra}"
+									required="true"
+									requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}">
+									<p:ajax event="blur" update="precioCompraModProducto" />
+									<f:validateLongRange minimum="0" />
+									<f:convertNumber locale="es_CO" maxFractionDigits="2" />
+								</h:inputText>
+
+								<h:outputLabel for="ivaModProducto"
+									value="#{msg.MSG_CHECKBOX_IVA}" />
+								<p:selectBooleanCheckbox id="ivaModProducto"
+									value="#{registrarCompra.compraModDetalle.discriminarIva}" />
+
+							</h:panelGrid>
+
+							<div align="center">
+								<h:panelGrid id="panelGridModBotones" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_ADICIONAR}"
+										id="btnModAdicionar"
+										actionListener="#{registrarCompra.actionAdicionarItem}"
+										update="menMod formCompra:panelCompra dialogCompra dialogActualizarItem formDialogCompra dialogProveedor"
+										icon="ui-icon-disk"
+										disabled="#{empty registrarCompra.categorias or empty registrarCompra.productos}" />
+									<p:commandButton value="#{msg.MSG_BUTTON_CANCELAR}"
+										id="btnCancelar" update="formCompra dialogCompra"
+										process="@this"
+										actionListener="#{registrarCompra.actionCancelar}" />
+								</h:panelGrid>
+							</div>
+						</div>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+			<p:dialog id="dialogActualizarItem" appendTo="@(body)"
+				draggable="true" closable="false" widgetVar="dialogActualizarItem"
+				resizable="false" modal="true" width="300"
+				visible="#{registrarCompra.showDialogConfirmacionActualizacion}"
+				header="#{msg.MSG_HEADER_DIALOG_MODIFICAR_CANTIDAD_ITEM}">
+
+				<div align="center">
+					<h:outputLabel value="#{msg.MSG_CONFIRM_MODIFICAR_CANTIDAD_ITEM}" />
+
+					<h:panelGrid id="panelGridConfirmBotones" columns="2"
+						cellpadding="5" styleClass="ui-grid">
+						<p:commandButton
+							value="#{msg.MSG_BUTTON_MODIFICAR_CANTIDAD_ITEM_YES}"
+							id="btnActualizar"
+							action="#{registrarCompra.actionActualizarItem}"
+							update="formCompra:panelCompra dialogCompra dialogActualizarItem"
+							icon="ui-icon-check" />
+						<p:commandButton
+							value="#{msg.MSG_BUTTON_MODIFICAR_CANTIDAD_ITEM_NO}"
+							id="btnCancelarActualizacion"
+							actionListener="#{registrarCompra.actionCancelar}"
+							update="dialogActualizarItem" process="@this"
+							icon="ui-icon-close" />
+					</h:panelGrid>
+
+				</div>
+
+			</p:dialog>
+
+			<p:dialog id="dialogRegistrar" appendTo="@(body)" draggable="false"
+				closable="false" widgetVar="dialogRegistrar" resizable="false"
+				modal="false" width="500"
+				visible="#{registrarCompra.showDialogRegistroCompra}"
+				header="#{msg.MSG_HEADER_DIALOG_REGISTRAR_COMPRA}">
+
+				<h:form id="formDialogRegistroCompra">
+
+					<div align="center">
+
+						<h:outputLabel value="#{msg.MSG_CONFIRM_REGISTRO_COMPRA}" />
+
+						<h:panelGrid id="panelGridConfirmRegistroCompraBotones"
+							columns="2" cellpadding="5" styleClass="ui-grid">
+							<p:commandButton value="#{msg.MSG_BUTTON_GUARDAR}"
+								id="btnGuardar"
+								actionListener="#{registrarCompra.actionGuardar}"
+								update="formCompra:panelInfoCompra formCompra:men dialogRegistrar"
+								icon="ui-icon-disk" process="@this">
+							</p:commandButton>
+							<p:commandButton value="#{msg.MSG_BUTTON_CANCELAR}"
+								id="btnCancelarResumenCompra"
+								actionListener="#{registrarCompra.actionCancelar}"
+								update="dialogRegistrar" process="@this" />
+						</h:panelGrid>
+
+					</div>
+				</h:form>
+			</p:dialog>
+		</f:view>
+	</ui:define>
+</ui:composition>

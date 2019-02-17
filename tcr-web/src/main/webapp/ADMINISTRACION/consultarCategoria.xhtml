@@ -1,0 +1,134 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.consultarCategoria" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formCategoria" enctype="multipart/form-data">
+
+				<p:panel id="panelCategoria"
+					header="#{msg.MSG_HEADER_PANEL_CATEGORIA}">
+
+					<div align="center">
+						<p:messages id="men" globalOnly="true" showDetail="false"
+							severity="info error fatal" />
+						<p:growl id="growl" showDetail="false" severity="warn" />
+
+						<p:panel id="panelConsultarCategoria">
+							<div align="left">
+
+								<p:dataTable value="#{consultarCategoria.categoriasProducto}"
+									var="categoria" paginator="true" rows="10"
+									emptyMessage="#{msg.MSG_DATATABLE_DATA_NO_FOUND}"
+									sortBy="#{categoria.categoria}">
+
+									<p:column filterBy="#{categoria.categoria}"
+										sortBy="#{categoria.categoria}" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CATEGORIA}" />
+										</f:facet>
+										<h:outputText value="#{categoria.categoria}" />
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText
+												value="#{msg.MSG_DATATABLE_COLUMN_FECHA_CREACION}" />
+										</f:facet>
+										<h:outputText value="#{categoria.fechaCreacion}" />
+									</p:column>
+
+									<p:column style="width: 100px">
+										<f:facet name="header">
+											<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_ESTADO}" />
+										</f:facet>
+										<h:outputText value="#{categoria.estado.estado}" />
+									</p:column>
+
+									<p:column headerText="#{msg.MSG_DATATABLE_COLUMN_ACCIONES}"
+										style="width: 100px">
+										<p:commandButton id="btnEditar" icon="ui-icon-pencil"
+											actionListener="#{consultarCategoria.actionEditar}"
+											update="dialogCategoria">
+											<f:setPropertyActionListener value="#{categoria}"
+												target="#{consultarCategoria.categoriaModProducto}" />
+										</p:commandButton>
+										<p:tooltip id="toolTipEditar" for="btnEditar"
+											value="#{msgGlobal.MSG_TOOLTIP_DATATABLE_EDITAR}" />
+
+									</p:column>
+								</p:dataTable>
+							</div>
+						</p:panel>
+					</div>
+				</p:panel>
+			</h:form>
+
+			<p:dialog id="dialogCategoria" appendTo="@(body)" draggable="true"
+				closable="false"
+				visible="#{consultarCategoria.showDialogModificarCategoria}"
+				resizable="false" modal="true" width="500">
+
+				<h:form id="formDialogCategoria">
+
+					<p:messages id="menMod" globalOnly="false" showDetail="false"
+						severity="info error fatal" />
+
+					<p:panel id="panelDialogCategoria"
+						header="#{msg.MSG_HEADER_PANEL_DIALOG_CATEGORIA}">
+						<div align="left">
+
+							<h:panelGrid id="panelGridInfoCategoria" columns="2"
+								cellpadding="5" styleClass="ui-grid">
+								<h:outputLabel for="nombreModCategoria"
+									value="#{msg.MSG_DATATABLE_COLUMN_CATEGORIA}" />
+								<p:inputText id="nombreModCategoria"
+									value="#{consultarCategoria.categoriaModProducto.categoria}"
+									required="true"
+									requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+									converter="toUpperCaseConverter" />
+
+								<h:outputLabel for="estadoModCategoria"
+									value="#{msg.MSG_DATATABLE_COLUMN_ESTADO}" />
+								<h:selectOneMenu id="estadoModCategoria"
+									value="#{consultarCategoria.categoriaModProducto.estado}"
+									converter="#{estadoAppConverter}">
+									<f:selectItems value="#{consultarCategoria.estadosApp}" />
+								</h:selectOneMenu>
+
+							</h:panelGrid>
+
+							<h:panelGrid id="panelGridModBotones" columns="2" cellpadding="5"
+								styleClass="ui-grid">
+								<p:commandButton value="#{msg.MSG_BUTTON_GUARDAR}"
+									id="btnModGuardar"
+									actionListener="#{consultarCategoria.actionModificar}"
+									update="menMod formCategoria:panelCategoria dialogCategoria"
+									icon="ui-icon-disk" />
+								<p:commandButton value="#{msg.MSG_BUTTON_CANCELAR}"
+									id="btnCancelar" update="formCategoria dialogCategoria"
+									process="@this"
+									actionListener="#{consultarCategoria.actionCancelar}" />
+							</h:panelGrid>
+						</div>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+		</f:view>
+	</ui:define>
+</ui:composition>

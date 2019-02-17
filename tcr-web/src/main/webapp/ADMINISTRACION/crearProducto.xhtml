@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.crearProducto" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formProducto" enctype="multipart/form-data">
+
+				<p:panel id="panelProducto"
+					header="#{msg.MSG_HEADER_PANEL_PRODUCTO}">
+
+					<div align="center">
+						<p:messages id="men" globalOnly="true" showDetail="false"
+							severity="info error fatal" />
+						<p:growl id="growl" showDetail="false" severity="warn" />
+
+						<p:panel id="panelInfoProducto">
+							<div align="left">
+
+								<h:panelGrid id="panelGridInfoProducto" columns="3"
+									cellpadding="5" styleClass="ui-grid">
+									<h:outputLabel for="nombreProducto"
+										value="#{msg.MSG_VALUE_PRODUCTO}" />
+									<p:inputText id="nombreProducto"
+										value="#{crearProducto.producto.producto}" required="true"
+										requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+										converter="toUpperCaseConverter" />
+									<p:message for="nombreProducto" display="text" />
+
+									<h:outputLabel for="categoriaProducto"
+										value="#{msg.MSG_VALUE_CATEGORIA}" />
+									<h:panelGroup id="panelGroupCategorias">
+										<h:selectOneMenu id="categoriaProducto" required="true"
+											requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+											value="#{crearProducto.producto.categoriaProducto}"
+											converter="#{categoriaProductoConverter}"
+											rendered="#{not empty crearProducto.categorias}">
+											<f:selectItems value="#{crearProducto.categorias}" />
+										</h:selectOneMenu>
+										<p:messages id="menCategorias" showDetail="false"
+											severity="warn" />
+									</h:panelGroup>
+									<p:message for="categoriaProducto" display="text" />
+
+									<h:outputLabel for="tipoUnidadMedida"
+										value="#{msg.MSG_VALUE_UNIDAD_MEDIDA}" />
+									<h:panelGroup id="panelGroupTiposUnidadesMedidas">
+										<h:selectOneMenu id="tipoUnidadMedida" required="true"
+											requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+											value="#{crearProducto.producto.tipoUnidadMedida}"
+											converter="#{tipoUnidadMedidaConverter}"
+											rendered="#{not empty crearProducto.unidades}">
+											<f:selectItems value="#{crearProducto.unidades}" />
+										</h:selectOneMenu>
+										<p:messages id="menUnidadesMedidas" showDetail="false"
+											severity="warn" />
+									</h:panelGroup>
+									<p:message for="tipoUnidadMedida" display="text" />
+
+									<h:outputLabel for="medida" value="#{msg.MSG_VALUE_MEDIDA}" />
+									<p:inputNumber id="medida" required="true"
+										requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+										value="#{crearProducto.producto.medida}"
+										converter="javax.faces.Double" decimalPlaces="1"
+										thousandSeparator="" />
+									<p:message for="medida" display="text" />
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotones" columns="2" cellpadding="5"
+									styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_GUARDAR}"
+										id="btnGuardar"
+										actionListener="#{crearProducto.actionGuardar}"
+										update="men panelInfoProducto growl" icon="ui-icon-disk"
+										disabled="#{empty crearProducto.categorias}">
+										<p:resetInput target=":formProducto"></p:resetInput>
+									</p:commandButton>
+									<p:commandButton value="#{msg.MSG_BUTTON_LIMPIAR}"
+										id="btnLimpiar" update="@form" process="@this"
+										actionListener="#{crearProducto.actionLimpiar}" />
+								</h:panelGrid>
+							</div>
+						</p:panel>
+					</div>
+				</p:panel>
+			</h:form>
+		</f:view>
+	</ui:define>
+</ui:composition>

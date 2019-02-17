@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 25-mar-2017 1:19:20 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping package="co.com.juan.tcr.model">
+	<class name="FacturaDetalle" table="factura_detalle" catalog="tcr">
+		<composite-id name="id" class="FacturaDetalleId">
+			<key-property name="idFactura" type="int">
+				<column name="id_factura" />
+			</key-property>
+			<key-property name="idProducto" type="int">
+				<column name="id_producto" />
+			</key-property>
+		</composite-id>
+		<many-to-one name="facturaCabecera" class="FacturaCabecera"
+			update="false" insert="false" fetch="select">
+			<column name="id_factura" not-null="true" />
+		</many-to-one>
+		<many-to-one name="producto" class="Producto" update="false"
+			insert="false" fetch="select">
+			<column name="id_producto" not-null="true" />
+		</many-to-one>
+		<property name="cantidad" type="int">
+			<column name="cantidad" not-null="true" />
+		</property>
+		<property name="precioVenta" type="double">
+			<column name="precio_venta" precision="22" scale="2" not-null="true" />
+		</property>
+		<property name="valorIva" type="double">
+			<column name="valor_iva" precision="22" scale="2" not-null="true" />
+		</property>
+		<property name="fechaCreacion" type="timestamp" not-null="false"
+			insert="false">
+			<column name="fecha_creacion" length="0" />
+		</property>
+	</class>
+</hibernate-mapping>

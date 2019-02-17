@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2018-12-02T05:39:59 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportProductos" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
+	<property name="template.engine" value="tabular_template"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value="dGNyLnJlcG9ydGVwcm9kdWN0b3MgLDE1LDE1LDBjY2RkZWE2LTJjZmQtNGU1YS04YzA2LWI0MTY4&#xA;OTI0MWU4ZTs="/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Mysql DB"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#EEEFF0"/>
+		</conditionalStyle>
+	</style>
+	<style name="Table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#FF0000">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#F7FBFC"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="tableDataset" uuid="1b24a27a-27e3-47c7-a1ef-e0dd37fe8aad">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Mysql DB"/>
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<parameter name="CATEGORIAS" class="java.util.List" nestedType="java.lang.Integer"/>
+		<parameter name="PRODUCTOS" class="java.util.List" nestedType="java.lang.Integer"/>
+		<parameter name="ESTADOS" class="java.util.List" nestedType="java.lang.String"/>
+		<parameter name="UNIDADES_MEDIDA" class="java.util.List" nestedType="java.lang.Integer"/>
+		<parameter name="PRECIO_COMPRA_MAX" class="java.lang.Integer"/>
+		<parameter name="PRECIO_COMPRA_MIN" class="java.lang.Integer"/>
+		<parameter name="PRECIO_VENTA_MAX" class="java.lang.Integer"/>
+		<parameter name="PRECIO_VENTA_MIN" class="java.lang.Integer"/>
+		<parameter name="STOCK_MAX" class="java.lang.Integer"/>
+		<parameter name="STOCK_MIN" class="java.lang.Integer"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT repr.id_producto,
+	repr.categoria,
+	repr.producto,
+	(CASE WHEN repr.estado = 'A' THEN 'ACTIVO' ELSE 'INACTIVO' END) estado,
+	repr.precio_compra,
+	repr.precio_venta,
+	repr.stock,
+	repr.unidad
+FROM tcr.reporteproductos repr
+WHERE 1 = 1 
+AND $X{IN, repr.id_categoria,  CATEGORIAS}
+AND $X{IN, repr.id_producto,  PRODUCTOS}
+AND $X{IN, repr.estado,  ESTADOS}
+AND $X{IN, repr.id_unidad_medida,  UNIDADES_MEDIDA}
+AND (repr.precio_compra BETWEEN  $P{PRECIO_COMPRA_MIN} AND $P{PRECIO_COMPRA_MAX})
+AND (repr.precio_venta BETWEEN  $P{PRECIO_VENTA_MIN} AND $P{PRECIO_VENTA_MAX})
+AND (repr.stock BETWEEN  $P{STOCK_MIN} AND $P{STOCK_MAX})
+ORDER BY repr.producto ASC, repr.categoria ASC]]>
+		</queryString>
+		<field name="id_producto" class="java.lang.Integer"/>
+		<field name="categoria" class="java.lang.String"/>
+		<field name="producto" class="java.lang.String"/>
+		<field name="estado" class="java.lang.String"/>
+		<field name="precio_compra" class="java.lang.Double"/>
+		<field name="precio_venta" class="java.lang.Double"/>
+		<field name="stock" class="java.lang.Integer"/>
+		<field name="unidad" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="LISTA_CATEGORIAS" class="java.util.List" nestedType="java.lang.Integer">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="LISTA_PRODUCTOS" class="java.util.List" nestedType="java.lang.Integer">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="LISTA_ESTADOS" class="java.util.List" nestedType="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="LISTA_UNIDADES_MEDIDA" class="java.util.List" nestedType="java.lang.Integer">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="LOGO_APP" class="java.awt.image.BufferedImage" isForPrompting="false"/>
+	<parameter name="RANGO_PRECIO_COMPRA" class="java.util.HashMap">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="RANGO_PRECIO_VENTA" class="java.util.HashMap">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="RANGO_STOCK" class="java.util.HashMap">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<title>
+		<band height="146" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<line>
+				<reportElement x="0" y="80" width="800" height="1" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="0" y="90" width="50" height="20" uuid="0f86baff-6386-4f3f-b3fe-2388707babe8"/>
+				<box rightPadding="4"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy h:mm a">
+				<reportElement x="50" y="90" width="84" height="20" uuid="bb10dbe1-0a4f-4722-9953-c163b63cf979"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center">
+				<reportElement x="0" y="0" width="65" height="60" uuid="94883631-a913-43e2-b182-ab8d77d0181e"/>
+				<imageExpression><![CDATA[$P{LOGO_APP}]]></imageExpression>
+			</image>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="50" y="110" width="84" height="20" uuid="3836ce65-eca3-4cad-a6de-b1818def0a2b"/>
+				<textFieldExpression><![CDATA["PRODUCTOS"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="110" width="50" height="20" uuid="0b3f9342-da78-4cfa-9fc5-2301c4749678"/>
+				<box rightPadding="4"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Reporte:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="95" y="0" width="705" height="25" uuid="e622555d-198b-4ccd-a4a1-c59c53304058">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="19" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ALMACEN Y TALLER DE CERRAJERIA RUBENCHO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="95" y="55" width="705" height="15" uuid="b8cc42fd-b569-497d-834d-7e854040ad18">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Tel: 6655231 - 6839255 Cel: 3104918719 - 3155439589]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="95" y="25" width="705" height="15" uuid="c226e44d-3bb5-4145-b0b3-903bf1d79fde">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Carrera 5N No. 46CN - 30]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="95" y="40" width="705" height="15" uuid="b96f7183-44f8-43ad-ba60-43d8fbf50b6e">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[B/ Popular - Cali - Colombia]]></text>
+			</staticText>
+		</band>
+	</title>
+	<summary>
+		<band height="343" splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<componentElement>
+				<reportElement x="0" y="0" width="800" height="343" uuid="73b3c912-e2d2-4518-b3fc-adc3674450fe">
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Productos"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="tableDataset" uuid="2c05323d-dd98-4ec6-89eb-4efcc5d68626">
+						<datasetParameter name="CATEGORIAS">
+							<datasetParameterExpression><![CDATA[$P{LISTA_CATEGORIAS}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="PRODUCTOS">
+							<datasetParameterExpression><![CDATA[$P{LISTA_PRODUCTOS}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ESTADOS">
+							<datasetParameterExpression><![CDATA[$P{LISTA_ESTADOS}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="UNIDADES_MEDIDA">
+							<datasetParameterExpression><![CDATA[$P{LISTA_UNIDADES_MEDIDA}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="PRECIO_COMPRA_MAX">
+							<datasetParameterExpression><![CDATA[$P{RANGO_PRECIO_COMPRA}.get( "MAX" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="PRECIO_COMPRA_MIN">
+							<datasetParameterExpression><![CDATA[$P{RANGO_PRECIO_COMPRA}.get( "MIN" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="PRECIO_VENTA_MAX">
+							<datasetParameterExpression><![CDATA[$P{RANGO_PRECIO_VENTA}.get( "MAX" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="PRECIO_VENTA_MIN">
+							<datasetParameterExpression><![CDATA[$P{RANGO_PRECIO_VENTA}.get( "MIN" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="STOCK_MAX">
+							<datasetParameterExpression><![CDATA[$P{RANGO_STOCK}.get( "MAX" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="STOCK_MIN">
+							<datasetParameterExpression><![CDATA[$P{RANGO_STOCK}.get( "MIN" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="70" uuid="55502e60-7302-46ee-816b-ae1ec30ab496">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement key="" style="Column header" x="0" y="0" width="70" height="30" forecolor="#000000" uuid="4af2cf51-0a2d-47b5-860e-ba06d6c222a0"/>
+								<box leftPadding="2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Código]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="23">
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							<textField>
+								<reportElement style="Detail" x="0" y="0" width="70" height="23" uuid="391211cf-d97f-4210-9672-54ded899bc57"/>
+								<box leftPadding="2" rightPadding="2"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="11"/>
+									<paragraph lineSpacingSize="1.0" spacingBefore="0" spacingAfter="0"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{id_producto}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="120" uuid="d3191f97-5e28-483b-93fd-ce52c8293cea">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement key="" style="Column header" x="0" y="0" width="120" height="30" forecolor="#000000" uuid="1ddef4e2-ccb6-455c-80b2-d482ea6b401f"/>
+								<box leftPadding="2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Categoría]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="23">
+							<textField>
+								<reportElement style="Detail" x="0" y="0" width="120" height="23" uuid="ac701fab-a9d6-4d0e-bd94-567a8bee76ec"/>
+								<box leftPadding="2" rightPadding="2"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="230" uuid="9446f096-dd51-4cd3-a301-70d162e9c095">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement key="" style="Column header" x="0" y="0" width="230" height="30" forecolor="#000000" uuid="7e1a4edc-7136-4112-81c3-7fc2ab31be6d"/>
+								<box leftPadding="2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Producto]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="23">
+							<textField>
+								<reportElement style="Detail" x="0" y="0" width="230" height="23" uuid="876bc43f-689e-475a-9e7e-3f0e4ee9b642"/>
+								<box leftPadding="2" rightPadding="2"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="78" uuid="437b936e-f4de-48cb-a8c3-19a154e45ad7">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement key="" style="Column header" x="0" y="0" width="78" height="30" forecolor="#000000" uuid="2b79b2a5-c5a7-4cae-8908-92394b4f6321"/>
+								<box leftPadding="2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Estado]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="23">
+							<textField>
+								<reportElement style="Detail" x="0" y="0" width="78" height="23" uuid="07f9878b-d08d-4193-9f34-2d2f8d664ed3"/>
+								<box topPadding="0" leftPadding="2" bottomPadding="0" rightPadding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="88" uuid="d2325c6a-534c-4155-bd51-78cc39e35c96">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement key="" style="Column header" x="0" y="0" width="88" height="30" forecolor="#000000" uuid="88a0a0be-5dab-4a0f-b0b9-8fc14efee589"/>
+								<box leftPadding="2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Precio Compra]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="23">
+							<textField>
+								<reportElement style="Detail" x="0" y="0" width="88" height="23" uuid="2a036043-0a56-44c6-aa0a-4d3610633619"/>
+								<box leftPadding="2" rightPadding="2"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{precio_compra})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="88" uuid="feb8ba3e-8a4d-4170-97d3-f41e21588fe1">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement key="" style="Column header" x="0" y="0" width="88" height="30" forecolor="#000000" uuid="048c30fa-219d-4694-91b8-ca91a755f7a7"/>
+								<box leftPadding="2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Precio Venta]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="23">
+							<textField>
+								<reportElement style="Detail" x="0" y="0" width="88" height="23" uuid="4a20db5b-3e50-41db-92dc-6c2fa3d41b34"/>
+								<box leftPadding="2" rightPadding="2"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format($F{precio_venta})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="59" uuid="373665e4-6984-449f-b9ab-ca3f275ed6b3">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement key="" style="Column header" x="0" y="0" width="59" height="30" forecolor="#000000" uuid="e3de4638-f5fe-43d3-bc12-c1ffa43f2a53"/>
+								<box leftPadding="2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Stock]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="23">
+							<textField>
+								<reportElement style="Detail" x="0" y="0" width="59" height="23" uuid="9fd76993-ef53-4d32-b7c1-017473124a2a"/>
+								<box leftPadding="2" rightPadding="2"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{stock}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="06bf835e-9f32-427e-b89b-e5b48358f9b2">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement key="" style="Column header" x="0" y="0" width="70" height="30" forecolor="#000000" uuid="12bb122f-20d1-43b9-acff-51a3b3f91786"/>
+								<box leftPadding="2"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Unidad]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="23">
+							<textField>
+								<reportElement style="Detail" x="0" y="0" width="70" height="23" uuid="5f9029b2-1c84-4175-9312-13869f56825b"/>
+								<box leftPadding="2" rightPadding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="DejaVu Sans" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{unidad}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>

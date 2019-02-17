@@ -1,0 +1,188 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.reporteProductos" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formReporteProductos" enctype="multipart/form-data">
+
+				<p:panel id="panelReporteProductos"
+					header="#{msg.MSG_HEADER_PANEL_REPORTE_PRODUCTOS}">
+
+					<div align="center">
+						<p:messages id="men" globalOnly="true" showDetail="false"
+							severity="info error fatal" />
+						<p:growl id="growl" showDetail="false" severity="warn" />
+
+						<p:panel id="panelFiltrosProducto">
+							<div align="left">
+
+								<h:outputText id="descripcionReporte"
+									value="#{msg.MSG_DESCRIPCION_REPORTE}" />
+
+								<div class="EmptyBox20" />
+
+								<h:panelGrid id="panelGridFiltrosProducto" columns="3"
+									cellpadding="5" styleClass="ui-grid, ui-update">
+									<h:outputLabel for="categoriaProducto"
+										value="#{msg.MSG_VALUE_CATEGORIA}" />
+									<h:panelGroup id="panelGroupCategorias">
+										<p:selectCheckboxMenu id="categoriaProducto"
+											value="#{reporteProductos.categoriaFiltro}"
+											converter="#{categoriaProductoConverter}"
+											disabled="#{empty reporteProductos.categorias}" filter="true"
+											filterMatchMode="startsWith"
+											label="#{msg.MSG_VALUE_CATEGORIAS}">
+											<p:ajax event="change" update="panelGroupProductos"
+												process="@this" listener="#{reporteProductos.initProductos}" />
+											<p:ajax event="toggleSelect" update="panelGroupProductos"
+												process="@this" listener="#{reporteProductos.initProductos}" />
+											<f:selectItems value="#{reporteProductos.categorias}" />
+										</p:selectCheckboxMenu>
+										<p:messages id="menCategorias" showDetail="false"
+											severity="warn" />
+									</h:panelGroup>
+									<p:message for="categoriaProducto" display="text" />
+
+									<h:outputLabel for="producto" value="#{msg.MSG_VALUE_PRODUCTO}" />
+									<h:panelGroup id="panelGroupProductos">
+										<p:selectCheckboxMenu id="producto"
+											value="#{reporteProductos.productoFiltro}"
+											converter="#{productoConverter}"
+											disabled="#{empty reporteProductos.productos}" filter="true"
+											filterMatchMode="startsWith"
+											label="#{msg.MSG_VALUE_PRODUCTOS}">
+											<f:selectItems value="#{reporteProductos.productos}" />
+										</p:selectCheckboxMenu>
+										<p:messages id="menProductos" showDetail="false"
+											severity="warn" />
+									</h:panelGroup>
+									<p:message for="producto" display="text" />
+
+									<h:outputLabel for="estado" value="#{msg.MSG_VALUE_ESTADO}" />
+									<h:panelGroup id="panelGroupEstados">
+										<p:selectCheckboxMenu id="estado"
+											value="#{reporteProductos.estadoFiltro}"
+											converter="#{estadoConverter}"
+											disabled="#{empty reporteProductos.estados}" filter="true"
+											filterMatchMode="startsWith" label="#{msg.MSG_VALUE_ESTADOS}">
+											<f:selectItems value="#{reporteProductos.estados}" />
+										</p:selectCheckboxMenu>
+										<p:messages id="menEstados" showDetail="false" severity="warn" />
+									</h:panelGroup>
+									<p:message for="estado" display="text" />
+
+									<h:outputLabel for="tipoUnidadMedida"
+										value="#{msg.MSG_VALUE_UNIDAD_MEDIDA}" />
+									<h:panelGroup id="panelGroupUnidadesMedida">
+										<p:selectCheckboxMenu id="tipoUnidadMedida"
+											value="#{reporteProductos.tiposUnidadMedidaFiltro}"
+											converter="#{tipoUnidadMedidaConverter}"
+											disabled="#{empty reporteProductos.tiposUnidadMedida}"
+											filter="true" filterMatchMode="startsWith"
+											label="#{msg.MSG_VALUE_UNIDADES_MEDIDA}">
+											<f:selectItems value="#{reporteProductos.tiposUnidadMedida}" />
+										</p:selectCheckboxMenu>
+										<p:messages id="menUnidadesMedida" showDetail="false"
+											severity="warn" />
+									</h:panelGroup>
+									<p:message for="tipoUnidadMedida" display="text" />
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridRangosProducto" columns="3"
+									cellpadding="5" styleClass="ui-grid">
+									<h:outputLabel for="precioCompra"
+										value="#{msg.MSG_VALUE_PRECIO_COMPRA}" />
+									<h:panelGrid id="precioCompra">
+										<h:outputText id="displayRangePrecioCompra"
+											value="Rango entre 0 y #{reporteProductos.stockProductoMaxPrecioCompra}" />
+										<p:slider for="precioCompraMin, precioCompraMax"
+											style="width: 800px" display="displayRangePrecioCompra"
+											range="true" displayTemplate="Rango entre {min} y {max}"
+											maxValue="#{reporteProductos.stockProductoMaxPrecioCompra}" />
+									</h:panelGrid>
+									<h:panelGrid id="precioCompraInput">
+										<h:inputHidden id="precioCompraMin"
+											value="#{reporteProductos.rangoPrecioCompra.MIN}"
+											converter="javax.faces.Integer" />
+										<h:inputHidden id="precioCompraMax"
+											value="#{reporteProductos.rangoPrecioCompra.MAX}"
+											converter="javax.faces.Integer" />
+									</h:panelGrid>
+
+									<h:outputLabel for="precioVenta"
+										value="#{msg.MSG_VALUE_PRECIO_VENTA}" />
+									<h:panelGrid id="precioVenta">
+										<h:outputText id="displayRangePrecioVenta"
+											value="Rango entre 0 y #{reporteProductos.stockProductoMaxPrecioVenta}" />
+										<p:slider for="precioVentaMin, precioVentaMax"
+											style="width: 800px" display="displayRangePrecioVenta"
+											range="true" displayTemplate="Rango entre {min} y {max}"
+											maxValue="#{reporteProductos.stockProductoMaxPrecioVenta}" />
+									</h:panelGrid>
+									<h:panelGrid id="precioVentaInput">
+										<h:inputHidden id="precioVentaMin"
+											value="#{reporteProductos.rangoPrecioVenta.MIN}"
+											converter="javax.faces.Integer" />
+										<h:inputHidden id="precioVentaMax"
+											value="#{reporteProductos.rangoPrecioVenta.MAX}"
+											converter="javax.faces.Integer" />
+									</h:panelGrid>
+
+									<h:outputLabel for="stock" value="#{msg.MSG_VALUE_STOCK}" />
+									<h:panelGrid id="stock">
+										<h:outputText id="displayRangeStock"
+											value="Rango entre 0 y #{reporteProductos.stockProductoMaxStock}" />
+										<p:slider for="stockMin, stockMax" display="displayRangeStock"
+											style="width: 800px" range="true"
+											displayTemplate="Rango entre {min} y {max}"
+											maxValue="#{reporteProductos.stockProductoMaxStock}" />
+									</h:panelGrid>
+									<h:panelGrid id="stockInput">
+										<h:inputHidden id="stockMin"
+											value="#{reporteProductos.rangoStock.MIN}"
+											converter="javax.faces.Integer" />
+										<h:inputHidden id="stockMax"
+											value="#{reporteProductos.rangoStock.MAX}"
+											converter="javax.faces.Integer" />
+									</h:panelGrid>
+								</h:panelGrid>
+
+
+								<h:panelGrid id="panelGridBotones" columns="2" cellpadding="5"
+									styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_GENERAR}"
+										id="btnGenerar"
+										actionListener="#{reporteProductos.actionGenerarReporte}"
+										ajax="false" update="men panelFiltrosProducto growl"
+										icon="fa fa-file"
+										onclick="PrimeFces.monitorDownload(PF('statusDialog').show(), PF('statusDialog').hide());">
+										<p:fileDownload value="#{reporteProductos.content}" />
+									</p:commandButton>
+									<p:commandButton value="#{msg.MSG_BUTTON_LIMPIAR}"
+										id="btnLimpiar" update="@(.ui-update)" process="@this"
+										actionListener="#{reporteProductos.actionLimpiar}" />
+								</h:panelGrid>
+							</div>
+						</p:panel>
+					</div>
+				</p:panel>
+			</h:form>
+		</f:view>
+	</ui:define>
+</ui:composition>

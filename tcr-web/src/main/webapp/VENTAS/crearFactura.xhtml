@@ -1,0 +1,384 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:P="http://java.sun.com/jsf/html">
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.crearFactura" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formFactura" enctype="multipart/form-data">
+
+				<p:panel id="panelFactura" header="#{msg.MSG_HEADER_PANEL_FACTURA}">
+
+					<div align="center">
+						<p:messages id="men" globalOnly="true" showDetail="false"
+							severity="info error fatal" />
+						<p:growl id="growl" globalOnly="true" showDetail="false"
+							severity="warn" />
+
+						<p:panel id="panelInfoFactura">
+							<div align="left">
+
+								<h:panelGrid id="panelGridInfoFactura" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+
+									<p:dataTable value="#{crearFactura.facturaDetalle}" var="item"
+										paginator="false" editable="true" editMode="row"
+										emptyMessage="#{msg.MSG_DATATABLE_DATA_NO_FOUND}">
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CATEGORIA}" />
+											</f:facet>
+											<h:outputText
+												value="#{item.producto.categoriaProducto.categoria}" />
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_PRODUCTO}" />
+											</f:facet>
+											<h:outputText value="#{item.producto.producto}" />
+										</p:column>
+
+										<p:column style="width: 100px">
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CANTIDAD}" />
+											</f:facet>
+											<h:outputText value="#{item.cantidad}" />
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_VENTA_UNIDAD}" />
+											</f:facet>
+											<h:outputText value="#{item.precioVenta}">
+												<f:convertNumber locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_VENTA_TOTAL}" />
+											</f:facet>
+											<h:outputText value="#{item.precioVenta * item.cantidad}">
+												<f:convertNumber locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="#{msg.MSG_DATATABLE_COLUMN_ACCIONES}"
+											style="width: 100px">
+											<p:commandButton id="btnEliminar" icon="ui-icon-close"
+												action="#{crearFactura.actionEliminar}"
+												update=":formFactura:panelFactura">
+												<f:setPropertyActionListener value="#{item}"
+													target="#{crearFactura.facturaDelDetalle}" />
+											</p:commandButton>
+										</p:column>
+									</p:dataTable>
+
+								</h:panelGrid>
+
+								<p:commandButton value="#{msg.MSG_BUTTON_ADICIONAR_ITEM}"
+									id="btnAdicionarItem"
+									actionListener="#{crearFactura.actionAdicionar}"
+									update="dialogFactura" icon="ui-icon-circle-plus" />
+
+								<h:panelGrid id="panelGridResumenFactura" columns="2"
+									cellpadding="5" styleClass="ui-grid"
+									rendered="#{not empty crearFactura.facturaDetalle}">
+
+									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_NETO}" />
+									<h:outputText value="#{crearFactura.facturaCabecera.valorNeto}">
+										<f:convertNumber locale="es_CO" currencySymbol="$"
+											type="currency" />
+									</h:outputText>
+
+									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_IVA}" />
+									<h:outputText value="#{crearFactura.facturaCabecera.valorIva}">
+										<f:convertNumber locale="es_CO" currencySymbol="$"
+											type="currency" />
+									</h:outputText>
+
+									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_TOTAL}" />
+									<h:outputText
+										value="#{crearFactura.facturaCabecera.valorTotal}">
+										<f:convertNumber locale="es_CO" currencySymbol="$"
+											type="currency" />
+									</h:outputText>
+
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotones" columns="2" cellpadding="5"
+									styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_GENERAR}"
+										id="btnGenerar"
+										actionListener="#{crearFactura.actionGenerarFactura}"
+										update="men panelInfoFactura growl dialogGenerar"
+										icon="ui-icon-disk" disabled="#{empty crearFactura.productos}"
+										rendered="#{not empty crearFactura.facturaDetalle}" />
+									<p:commandButton value="#{msg.MSG_BUTTON_FACTURA_TERCERO}"
+										id="btnFacturaTercero"
+										actionListener="#{crearFactura.actionFacturaTercero}"
+										update="men panelInfoFactura growl"
+										disabled="#{empty crearFactura.productos}" process="@this"
+										rendered="#{!crearFactura.showInputFacturaTercero and not empty crearFactura.facturaDetalle}" />
+									<p:commandButton value="#{msg.MSG_BUTTON_FACTURA_NORMAL}"
+										id="btnFacturaNormal"
+										actionListener="#{crearFactura.actionFacturaNormal}"
+										update="men panelInfoFactura growl"
+										disabled="#{empty crearFactura.productos}" process="@this"
+										rendered="#{crearFactura.showInputFacturaTercero}" />
+									<p:commandButton value="#{msg.MSG_BUTTON_LIMPIAR}"
+										id="btnLimpiar" update="@form" process="@this"
+										actionListener="#{crearFactura.actionLimpiar}"
+										rendered="#{not empty crearFactura.facturaDetalle}" />
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridInfoTercero" columns="2"
+									cellpadding="5" styleClass="ui-grid"
+									rendered="#{crearFactura.showInputFacturaTercero}">
+
+									<f:facet name="header">
+										<p:outputLabel
+											value="#{msg.MSG_PANELGRID_FACTURA_TERCERO_INFORMACION}" />
+									</f:facet>
+
+									<h:outputLabel for="nitTercero"
+										value="#{msg.MSG_PANELGRID_FACTURA_TERCERO_NIT}" />
+									<p:inputText id="nitTercero" value="#{crearFactura.nitTercero}"
+										converter="toUpperCaseConverter" />
+
+									<h:outputLabel for="razonSocialTercero"
+										value="#{msg.MSG_PANELGRID_FACTURA_TERCERO_RAZON_SOCIAL}" />
+									<p:inputText id="razonSocialTercero"
+										value="#{crearFactura.razonSocialTercero}"
+										converter="toUpperCaseConverter" />
+
+								</h:panelGrid>
+							</div>
+						</p:panel>
+					</div>
+				</p:panel>
+			</h:form>
+
+			<p:dialog id="dialogFactura" appendTo="@(body)" draggable="true"
+				closable="false" widgetVar="dialogFactura" resizable="false"
+				modal="true" width="500"
+				visible="#{crearFactura.showDialogAdicionarItem}">
+
+				<h:form id="formDialogFactura">
+
+					<p:messages id="menMod" globalOnly="false" showDetail="false"
+						severity="info error fatal" />
+					<p:messages id="menCategoriasProducto" showDetail="false"
+						severity="warn" />
+
+					<p:panel id="panelDialogFactura"
+						header="#{msg.MSG_HEADER_PANEL_DIALOG_ITEM_FACTURA}">
+						<div align="left">
+
+							<h:panelGrid id="panelGridInfoFactura" columns="2"
+								cellpadding="5" styleClass="ui-grid">
+								<h:outputLabel for="categoriaModProducto"
+									value="#{msg.MSG_DATATABLE_COLUMN_CATEGORIA}" />
+								<p:selectOneMenu id="categoriaModProducto" filter="true"
+									filterMatchMode="contains" style="width:260px"
+									value="#{crearFactura.categoriaProducto}"
+									converter="#{categoriaProductoConverter}"
+									disabled="#{empty crearFactura.categorias}">
+									<p:ajax event="change" update="formDialogFactura"
+										process="@this" listener="#{crearFactura.initProductos}" />
+									<f:selectItems value="#{crearFactura.categorias}" />
+								</p:selectOneMenu>
+
+								<h:outputLabel for="nombreModProducto"
+									value="#{msg.MSG_DATATABLE_COLUMN_PRODUCTO}" />
+								<p:selectOneMenu id="nombreModProducto" filter="true"
+									filterMatchMode="contains" style="width:260px"
+									value="#{crearFactura.facturaModDetalle.producto}"
+									converter="#{productoConverter}"
+									disabled="#{empty crearFactura.categorias or empty crearFactura.productos}">
+									<p:ajax event="change" update="formDialogFactura"
+										process="@this" listener="#{crearFactura.initStockProducto}" />
+									<f:selectItems value="#{crearFactura.productos}" />
+								</p:selectOneMenu>
+
+								<h:outputLabel for="precioModProducto"
+									value="#{msg.MSG_DATATABLE_COLUMN_PRECIO}"
+									rendered="#{not empty crearFactura.categorias and not empty crearFactura.productos}" />
+								<h:outputText id="precioModProducto"
+									value="#{crearFactura.stockProducto.precioVenta}"
+									disabled="#{empty crearFactura.categorias or empty crearFactura.productos}"
+									rendered="#{not empty crearFactura.categorias and not empty crearFactura.productos}">
+									<f:convertNumber locale="es_CO" currencySymbol="$"
+										type="currency" />
+								</h:outputText>
+
+								<h:outputLabel for="cantidadModProducto"
+									value="#{msg.MSG_DATATABLE_COLUMN_CANTIDAD}" />
+								<p:spinner id="cantidadModProducto"
+									value="#{crearFactura.cantidad}" min="1" />
+
+							</h:panelGrid>
+
+							<div align="center">
+								<h:panelGrid id="panelGridModBotones" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_ADICIONAR}"
+										id="btnModAdicionar"
+										actionListener="#{crearFactura.actionAdicionarItem}"
+										update="menMod formFactura:panelFactura dialogFactura dialogActualizarItem"
+										icon="ui-icon-disk"
+										disabled="#{empty crearFactura.categorias or empty crearFactura.productos}" />
+									<p:commandButton value="#{msg.MSG_BUTTON_CANCELAR}"
+										id="btnCancelar" update="formFactura dialogFactura"
+										process="@this"
+										actionListener="#{crearFactura.actionCancelar}" />
+								</h:panelGrid>
+							</div>
+						</div>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+			<p:dialog id="dialogActualizarItem" appendTo="@(body)"
+				draggable="true" closable="false" widgetVar="dialogActualizarItem"
+				resizable="false" modal="true" width="300"
+				visible="#{crearFactura.showDialogConfirmacionActualizacion}"
+				header="#{msg.MSG_HEADER_DIALOG_MODIFICAR_CANTIDAD_ITEM}">
+
+				<div align="center">
+					<h:outputLabel value="#{msg.MSG_CONFIRM_MODIFICAR_CANTIDAD_ITEM}" />
+
+					<h:panelGrid id="panelGridConfirmBotones" columns="2"
+						cellpadding="5" styleClass="ui-grid">
+						<p:commandButton
+							value="#{msg.MSG_BUTTON_MODIFICAR_CANTIDAD_ITEM_YES}"
+							id="btnActualizar" action="#{crearFactura.actionActualizarItem}"
+							update="formFactura:panelFactura dialogFactura dialogActualizarItem"
+							icon="ui-icon-check" />
+						<p:commandButton
+							value="#{msg.MSG_BUTTON_MODIFICAR_CANTIDAD_ITEM_NO}"
+							id="btnCancelarActualizacion"
+							actionListener="#{crearFactura.actionCancelar}"
+							update="dialogActualizarItem" process="@this"
+							icon="ui-icon-close" />
+					</h:panelGrid>
+
+				</div>
+
+			</p:dialog>
+
+			<p:dialog id="dialogGenerar" appendTo="@(body)" draggable="false"
+				closable="false" widgetVar="dialogGenerar" resizable="false"
+				modal="false" width="500"
+				visible="#{crearFactura.showDialogResumenFactura}"
+				header="#{msg.MSG_HEADER_DIALOG_GENERAR_FACTURA}">
+
+				<h:form id="formDialogResumenFactura">
+
+					<div align="center">
+						<p:messages id="menMetodoPago" showDetail="false" severity="warn" />
+						<p:messages id="menMetodoPagoGlobal" globalOnly="true"
+							showDetail="false" severity="info error fatal" />
+
+						<h:panelGrid id="panelGridResumenFacturaConfirmacion" columns="2"
+							cellpadding="5" styleClass="ui-grid">
+
+							<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_NETO}" />
+							<h:outputText value="#{crearFactura.facturaCabecera.valorNeto}">
+								<f:convertNumber locale="es_CO" currencySymbol="$"
+									type="currency" />
+							</h:outputText>
+
+							<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_IVA}" />
+							<h:outputText value="#{crearFactura.facturaCabecera.valorIva}">
+								<f:convertNumber locale="es_CO" currencySymbol="$"
+									type="currency" />
+							</h:outputText>
+
+							<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_TOTAL}" />
+							<h:outputText value="#{crearFactura.facturaCabecera.valorTotal}">
+								<f:convertNumber locale="es_CO" currencySymbol="$"
+									type="currency" />
+							</h:outputText>
+
+						</h:panelGrid>
+
+						<h:panelGrid id="panelGridMetodoPago" columns="2" cellpadding="5"
+							styleClass="ui-grid" rendered="#{crearFactura.cambio == null}">
+							<h:outputText value="#{msg.MSG_RESUMEN_FACTURA_METODO_PAGO}" />
+							<h:inputText id="metodoPagoFactura"
+								value="#{crearFactura.metodoPago}"
+								onkeydown="return event.keyCode &gt;= 48 &amp;&amp; event.keyCode &lt;= 57 || event.keyCode &gt;= 96 &amp;&amp; event.keyCode &lt;= 105 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37  || event.keyCode == 39 || event.keyCode == 13">
+								<f:validateLongRange minimum="0" />
+								<f:convertNumber locale="es_CO" />
+							</h:inputText>
+						</h:panelGrid>
+
+						<h:panelGrid id="panelGridCambio" columns="2" cellpadding="5"
+							styleClass="ui-grid" rendered="#{crearFactura.cambio != null}">
+							<h:outputText value="#{msg.MSG_RESUMEN_FACTURA_METODO_PAGO}" />
+							<h:outputText value="#{crearFactura.metodoPago}">
+								<f:convertNumber locale="es_CO" currencySymbol="$"
+									type="currency" />
+							</h:outputText>
+
+							<h:outputText value="#{msg.MSG_RESUMEN_FACTURA_CAMBIO}" />
+							<h:outputText value="$ #{crearFactura.cambio}">
+								<f:convertNumber locale="es_CO" currencySymbol="$"
+									type="currency" />
+							</h:outputText>
+						</h:panelGrid>
+
+						<h:panelGrid id="panelGridConfirmResumenFacturaBotones"
+							columns="2" cellpadding="5" styleClass="ui-grid"
+							rendered="#{crearFactura.cambio == null}">
+							<p:commandButton value="#{msg.MSG_BUTTON_GUARDAR}"
+								id="btnGuardar" actionListener="#{crearFactura.actionGuardar}"
+								update="menMetodoPago dialogGenerar menMetodoPagoGlobal"
+								icon="ui-icon-disk">
+							</p:commandButton>
+							<p:commandButton value="#{msg.MSG_BUTTON_CANCELAR}"
+								id="btnCancelarResumenFactura"
+								actionListener="#{crearFactura.actionCancelar}"
+								update="dialogGenerar" process="@this" />
+						</h:panelGrid>
+
+						<h:panelGrid id="panelGridPrintResumenFacturaBotones" columns="2"
+							cellpadding="5" styleClass="ui-grid"
+							rendered="#{crearFactura.cambio != null}">
+							<p:commandButton value="#{msg.MSG_BUTTON_IMPRIMIR}"
+								id="btnImprimir" actionListener="#{crearFactura.actionImprimir}"
+								update="dialogGenerar dialogFactura formFactura" process="@this"
+								icon="ui-icon-print"
+								disabled="#{!crearFactura.showButtonImprimir}">
+							</p:commandButton>
+							<p:commandButton value="#{msg.MSG_BUTTON_CERRAR}" id="btnCerrar"
+								actionListener="#{crearFactura.actionLimpiar}"
+								update="dialogGenerar dialogFactura formFactura" process="@this" />
+						</h:panelGrid>
+
+					</div>
+				</h:form>
+			</p:dialog>
+		</f:view>
+	</ui:define>
+</ui:composition>

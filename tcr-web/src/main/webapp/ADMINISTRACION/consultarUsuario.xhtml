@@ -1,0 +1,108 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.consultarUsuario" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formUsuario" enctype="multipart/form-data">
+
+				<p:panel id="panelUsuario" header="#{msg.MSG_HEADER_PANEL_USUARIO}">
+
+					<div align="center">
+						<p:messages id="men" globalOnly="true" showDetail="false"
+							severity="info error fatal" />
+						<p:growl id="growl" showDetail="false" severity="warn" />
+
+						<p:panel id="panelConsultarUsuario">
+							<div align="left">
+
+								<h:panelGrid id="panelGridConsultarUsuario" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+
+									<h:outputLabel for="idUsuario" value="#{msg.MSG_VALUE_USUARIO}" />
+									<p:inputText id="idUsuario"
+										value="#{consultarUsuario.usuarioApp.idUsuarioApp}"
+										required="true"
+										requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+										converter="toUpperCaseConverter" />
+
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotonesConsultar" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_CONSULTAR}"
+										id="btnConsultar"
+										actionListener="#{consultarUsuario.actionConsultar}"
+										update="men panelModificarUsuario growl" icon="ui-icon-search"
+										process="panelConsultarUsuario" />
+									<p:commandButton value="#{msg.MSG_BUTTON_LIMPIAR}"
+										id="btnLimpiar" update="@form" process="@this"
+										actionListener="#{consultarUsuario.actionLimpiar}" />
+								</h:panelGrid>
+							</div>
+						</p:panel>
+
+						<div class="EmptyBox10" />
+
+						<p:panel id="panelModificarUsuario"
+							visible="#{consultarUsuario.showPanelModificarUsuario and consultarUsuario.usuarioModApp != null}"
+							header="#{msg.MSG_VALUE_INFORMACION_USUARIO}">
+							<div align="left">
+
+								<h:panelGrid id="panelGridModificarUsuario" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+
+									<h:outputLabel for="idModUsuario"
+										value="#{msg.MSG_VALUE_USUARIO}" />
+									<h:outputText id="idModUsuario"
+										value="#{consultarUsuario.usuarioModApp.idUsuarioApp}" />
+
+									<h:outputLabel for="nombreModUsuario"
+										value="#{msg.MSG_VALUE_NOMBRE}" />
+									<p:inputText id="nombreModUsuario"
+										value="#{consultarUsuario.usuarioModApp.nombre}"
+										required="true"
+										requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+										converter="toUpperCaseConverter" />
+
+									<h:outputLabel for="estadoModUsuario"
+										value="#{msg.MSG_VALUE_ESTADO}" />
+									<h:selectOneMenu id="estadoModUsuario"
+										value="#{consultarUsuario.usuarioModApp.estado}"
+										converter="#{estadoAppConverter}">
+										<f:selectItems value="#{consultarUsuario.estadosApp}" />
+									</h:selectOneMenu>
+
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotonesModificar" columns="1"
+									cellpadding="5" styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_MODIFICAR}"
+										id="btnModificar"
+										actionListener="#{consultarUsuario.actionModificar}"
+										update="men panelModificarUsuario growl" icon="ui-icon-check"
+										process="panelModificarUsuario" />
+								</h:panelGrid>
+							</div>
+						</p:panel>
+					</div>
+				</p:panel>
+			</h:form>
+		</f:view>
+	</ui:define>
+</ui:composition>

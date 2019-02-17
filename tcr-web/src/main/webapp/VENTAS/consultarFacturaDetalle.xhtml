@@ -1,0 +1,159 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
+	xmlns:P="http://java.sun.com/jsf/html">
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.consultarFacturaDetalle" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formFactura" enctype="multipart/form-data">
+
+				<p:panel id="panelFactura" header="#{msg.MSG_HEADER_PANEL_FACTURA}">
+
+					<div align="center">
+						<p:messages id="men" globalOnly="true" showDetail="false"
+							severity="info error fatal" />
+						<p:growl id="growl" showDetail="false" severity="warn error" />
+
+						<p:panel id="panelInfoFactura">
+							<div align="center">
+
+								<h:panelGrid id="panelGridInfoCabecera" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+
+									<h:outputLabel value="#{msg.MSG_PANEL_HEADER_FACTURA}" />
+									<h:outputText
+										value="#{consultarFacturaDetalle.facturaCabecera.idFactura}" />
+
+								</h:panelGrid>
+							</div>
+
+							<div align="left">
+
+								<h:panelGrid id="panelGridInfoFactura" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+
+									<p:dataTable
+										value="#{consultarFacturaDetalle.facturaCabecera.facturaDetalles}"
+										var="item" paginator="false" editable="true" editMode="row"
+										emptyMessage="#{msg.MSG_DATATABLE_DATA_NO_FOUND}">
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CATEGORIA}" />
+											</f:facet>
+											<h:outputText
+												value="#{item.producto.categoriaProducto.categoria}" />
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_PRODUCTO}" />
+											</f:facet>
+											<h:outputText value="#{item.producto.producto}" />
+										</p:column>
+
+										<p:column style="width: 100px">
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CANTIDAD}" />
+											</f:facet>
+											<h:outputText value="#{item.cantidad}" />
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_VENTA_UNIDAD}" />
+											</f:facet>
+											<h:outputText value="#{item.precioVenta}">
+												<f:convertNumber locale="es_CO" maxFractionDigits="2" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_IVA}" />
+											</f:facet>
+											<h:outputText value="#{item.valorIva}">
+												<f:convertNumber locale="es_CO" maxFractionDigits="2" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_VENTA_TOTAL}" />
+											</f:facet>
+											<h:outputText
+												value="#{(item.precioVenta + item.valorIva) * item.cantidad}">
+												<f:convertNumber locale="es_CO" maxFractionDigits="2" />
+											</h:outputText>
+										</p:column>
+									</p:dataTable>
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridDevoluciones" columns="1" cellpadding="5"
+									styleClass="ui-grid"
+									rendered="#{consultarFacturaDetalle.devolucionCabecera ne null}">
+									<p:outputLabel value="#{msg.MSG_INFO_DEVOLUCIONES}"
+										styleClass="Fs16 softgray"></p:outputLabel>
+									<p:commandButton
+										value="#{msg.MSG_BUTTON_CONSULTAR_DEVOLUCIONES}"
+										id="btnConsultarDevoluciones" icon="ui-icon-search"
+										action="#{consultarFacturaDetalle.actionConsultarDevoluciones}"
+										update="@form" process="@this" styleClass="Fs16" />
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridResumenFactura" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+
+									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_NETO}" />
+									<h:outputText
+										value="#{consultarFacturaDetalle.facturaCabecera.valorNeto}">
+										<f:convertNumber locale="es_CO" currencySymbol="$"
+											type="currency" />
+									</h:outputText>
+
+									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_IVA}" />
+									<h:outputText
+										value="#{consultarFacturaDetalle.facturaCabecera.valorIva}">
+										<f:convertNumber locale="es_CO" currencySymbol="$"
+											type="currency" />
+									</h:outputText>
+
+									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_TOTAL}" />
+									<h:outputText
+										value="#{consultarFacturaDetalle.facturaCabecera.valorTotal}">
+										<f:convertNumber locale="es_CO" currencySymbol="$"
+											type="currency" />
+									</h:outputText>
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotones" columns="1" cellpadding="5"
+									styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_ATRAS}" id="btnAtras"
+										action="goConsultarFactura" />
+								</h:panelGrid>
+
+							</div>
+						</p:panel>
+					</div>
+				</p:panel>
+			</h:form>
+		</f:view>
+	</ui:define>
+</ui:composition>

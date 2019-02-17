@@ -1,0 +1,141 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.consultarFactura" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formFactura" enctype="multipart/form-data">
+
+				<p:panel id="panelFactura" header="#{msg.MSG_HEADER_PANEL_FACTURA}">
+
+					<div align="center">
+						<p:messages id="men" globalOnly="true" showDetail="false"
+							severity="info error fatal" />
+						<p:growl id="growl" showDetail="false" severity="warn" />
+
+						<p:panel id="panelConsultarFactura">
+							<div align="left">
+
+								<h:panelGrid id="panelGridConsultarFactura" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+									<h:outputLabel for="numeroFactura"
+										value="#{msg.MSG_DIALOG_FACTURA}" />
+									<p:inputText id="numeroFactura"
+										value="#{consultarFactura.facturaCabecera.idFactura}"
+										label="#{msg.MSG_DIALOG_FACTURA}" maxlength="20" />
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotonesConsultar" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_CONSULTAR}"
+										id="btnConsultar"
+										actionListener="#{consultarFactura.actionConsultar}"
+										update="men panelConsultarCabeceraFactura growl"
+										icon="ui-icon-search" process="panelConsultarFactura" />
+									<p:commandButton value="#{msg.MSG_BUTTON_LIMPIAR}"
+										id="btnLimpiar" update="@form" process="@this"
+										actionListener="#{consultarFactura.actionLimpiar}" />
+								</h:panelGrid>
+							</div>
+						</p:panel>
+
+						<div class="EmptyBox10" />
+
+						<p:panel id="panelConsultarCabeceraFactura">
+							<div align="left">
+
+								<p:dataTable value="#{consultarFactura.facturaCabeceras}"
+									var="factura" paginator="true" rows="10"
+									emptyMessage="#{msg.MSG_DATATABLE_DATA_NO_FOUND}"
+									sortBy="#{factura.fechaCreacion}" sortOrder="descending">
+
+									<p:column filterBy="#{factura.idFactura}"
+										sortBy="#{factura.idFactura}" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_FACTURA}" />
+										</f:facet>
+										<h:outputText value="#{factura.idFactura}" />
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_VALOR_NETO}" />
+										</f:facet>
+										<h:outputText value="#{factura.valorNeto}">
+											<f:convertNumber locale="es_CO" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_VALOR_IVA}" />
+										</f:facet>
+										<h:outputText value="#{factura.valorIva}">
+											<f:convertNumber locale="es_CO" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_VALOR_TOTAL}" />
+										</f:facet>
+										<h:outputText value="#{factura.valorTotal}">
+											<f:convertNumber locale="es_CO" />
+										</h:outputText>
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText
+												value="#{msg.MSG_DATATABLE_COLUMN_FECHA_CREACION}" />
+										</f:facet>
+										<h:outputText value="#{factura.fechaCreacion}">
+											<f:convertDateTime locale="es_CO" />
+										</h:outputText>
+									</p:column>
+
+									<p:column headerText="#{msg.MSG_DATATABLE_COLUMN_ACCIONES}"
+										style="width: 100px">
+										<p:commandButton id="btnConsultarDetalle"
+											icon="ui-icon-search"
+											action="#{consultarFactura.actionConsultarDetalle}"
+											update="@form" process="@this">
+											<f:setPropertyActionListener value="#{factura}"
+												target="#{consultarFactura.facturaCabecera}" />
+										</p:commandButton>
+										<p:tooltip id="toolTipDetalle" for="btnConsultarDetalle"
+											value="#{msgGlobal.MSG_TOOLTIP_DATATABLE_DETALLE}" />
+
+										<p:commandButton id="btnImprimirCopia" icon="ui-icon-print"
+											action="#{consultarFactura.actionImprimir}" update="@form"
+											process="@this">
+											<f:setPropertyActionListener value="#{factura}"
+												target="#{consultarFactura.facturaCabecera}" />
+										</p:commandButton>
+										<p:tooltip id="toolTipImprimir" for="btnImprimirCopia"
+											value="#{msgGlobal.MSG_TOOLTIP_DATATABLE_IMPRIMIR}" />
+									</p:column>
+								</p:dataTable>
+							</div>
+						</p:panel>
+					</div>
+				</p:panel>
+			</h:form>
+		</f:view>
+	</ui:define>
+</ui:composition>

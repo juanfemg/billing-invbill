@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#*" PATH="/*" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#*:0" NAME="item" PATH="/*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="logout::#j_spring_security_logout?faces-redirect=true"
+    NAME="output" PATH="/j_spring_security_logout?faces-redirect=true"
+    TARGET="rules:#j_spring_security_logout?faces-redirect=true"
+    TITLE="logout" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="dashboard::#dashboard.xhtml" NAME="output1"
+    PATH="/dashboard.xhtml" TARGET="rules:#dashboard.xhtml"
+    TITLE="dashboard" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goConfiguracion::#CONFIGURACION#gestionConfiguracion.xhtml"
+    NAME="output2" PATH="/CONFIGURACION/gestionConfiguracion.xhtml"
+    TARGET="rules:#CONFIGURACION#gestionConfiguracion.xhtml"
+    TITLE="goConfiguracion" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goCrearUsuario::#ADMINISTRACION#crearUsuario.xhtml"
+    NAME="output3" PATH="/ADMINISTRACION/crearUsuario.xhtml"
+    TARGET="rules:#ADMINISTRACION#crearUsuario.xhtml"
+    TITLE="goCrearUsuario" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goConsultarUsuario::#ADMINISTRACION#consultarUsuario.xhtml"
+    NAME="output4" PATH="/ADMINISTRACION/consultarUsuario.xhtml"
+    TARGET="rules:#ADMINISTRACION#consultarUsuario.xhtml"
+    TITLE="goConsultarUsuario" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goCrearCategoria::#ADMINISTRACION#crearCategoria.xhtml"
+    NAME="output5" PATH="/ADMINISTRACION/crearCategoria.xhtml"
+    TARGET="rules:#ADMINISTRACION#crearCategoria.xhtml"
+    TITLE="goCrearCategoria" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goConsultarCategoria::#ADMINISTRACION#consultarCategoria.xhtml"
+    NAME="output6" PATH="/ADMINISTRACION/consultarCategoria.xhtml"
+    TARGET="rules:#ADMINISTRACION#consultarCategoria.xhtml"
+    TITLE="goConsultarCategoria" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goCrearProducto::#ADMINISTRACION#crearProducto.xhtml"
+    NAME="output7" PATH="/ADMINISTRACION/crearProducto.xhtml"
+    TARGET="rules:#ADMINISTRACION#crearProducto.xhtml"
+    TITLE="goCrearProducto" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goConsultarProducto::#ADMINISTRACION#consultarProducto.xhtml"
+    NAME="output8" PATH="/ADMINISTRACION/consultarProducto.xhtml"
+    TARGET="rules:#ADMINISTRACION#consultarProducto.xhtml"
+    TITLE="goConsultarProducto" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goCrearProveedor::#ADMINISTRACION#crearProveedor.xhtml"
+    NAME="output9" PATH="/ADMINISTRACION/crearProveedor.xhtml"
+    TARGET="rules:#ADMINISTRACION#crearProveedor.xhtml"
+    TITLE="goCrearProveedor" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goConsultarProveedor::#ADMINISTRACION#consultarProveedor.xhtml"
+    NAME="output10" PATH="/ADMINISTRACION/consultarProveedor.xhtml"
+    TARGET="rules:#ADMINISTRACION#consultarProveedor.xhtml"
+    TITLE="goConsultarProveedor" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goGestionProductos::#INVENTARIO#gestionProductos.xhtml"
+    NAME="output11" PATH="/INVENTARIO/gestionProductos.xhtml"
+    TARGET="rules:#INVENTARIO#gestionProductos.xhtml"
+    TITLE="goGestionProductos" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="goCrearFactura::#VENTAS#crearFactura.xhtml"
+    NAME="output12" PATH="/VENTAS/crearFactura.xhtml"
+    TARGET="rules:#VENTAS#crearFactura.xhtml" TITLE="goCrearFactura" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goConsultarFactura::#VENTAS#consultarFactura.xhtml"
+    NAME="output13" PATH="/VENTAS/consultarFactura.xhtml"
+    TARGET="rules:#VENTAS#consultarFactura.xhtml"
+    TITLE="goConsultarFactura" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goRegistrarDevolucion::#VENTAS#registrarDevolucion.xhtml"
+    NAME="output14" PATH="/VENTAS/registrarDevolucion.xhtml"
+    TARGET="rules:#VENTAS#registrarDevolucion.xhtml"
+    TITLE="goRegistrarDevolucion" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goRegistrarCompra::#COMPRAS#registrarCompra.xhtml"
+    NAME="output15" PATH="/COMPRAS/registrarCompra.xhtml"
+    TARGET="rules:#COMPRAS#registrarCompra.xhtml"
+    TITLE="goRegistrarCompra" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goReporteProductos::#REPORTES#reporteProductos.xhtml"
+    NAME="output16" PATH="/REPORTES/reporteProductos.xhtml"
+    TARGET="rules:#REPORTES#reporteProductos.xhtml"
+    TITLE="goReporteProductos" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#login.xhtml" PATH="/login.xhtml"
+  SHAPE="32,273,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#login.xhtml:0" NAME="item"
+   PATH="/login.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="exito::#dashboard.xhtml" NAME="output"
+    PATH="/dashboard.xhtml" TARGET="rules:#dashboard.xhtml"
+    TITLE="exito" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="error::#login.xhtml?authfailed=true"
+    NAME="output1" PATH="/login.xhtml?authfailed=true"
+    TARGET="rules:#login.xhtml?authfailed=true" TITLE="error" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#dashboard.xhtml" PATH="/dashboard.xhtml"
+  SHAPE="256,289,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#login.xhtml?authfailed=true"
+  PATH="/login.xhtml?authfailed=true" SHAPE="256,433,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#ADMINISTRACION#crearCategoria.xhtml"
+  PATH="/ADMINISTRACION/crearCategoria.xhtml" SHAPE="288,609,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#ADMINISTRACION#consultarUsuario.xhtml"
+  PATH="/ADMINISTRACION/consultarUsuario.xhtml" SHAPE="288,241,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#ADMINISTRACION#crearUsuario.xhtml"
+  PATH="/ADMINISTRACION/crearUsuario.xhtml" SHAPE="288,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#ADMINISTRACION#consultarCategoria.xhtml"
+  PATH="/ADMINISTRACION/consultarCategoria.xhtml" SHAPE="304,273,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#ADMINISTRACION#consultarProducto.xhtml"
+  PATH="/ADMINISTRACION/consultarProducto.xhtml" SHAPE="304,705,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#ADMINISTRACION#crearProducto.xhtml"
+  PATH="/ADMINISTRACION/crearProducto.xhtml" SHAPE="304,337,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#INVENTARIO#gestionProductos.xhtml"
+  PATH="/INVENTARIO/gestionProductos.xhtml" SHAPE="304,369,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#VENTAS#crearFactura.xhtml"
+  PATH="/VENTAS/crearFactura.xhtml" SHAPE="304,401,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#COMPRAS#*" PATH="/COMPRAS/*"
+  SHAPE="32,2273,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#COMPRAS#*:0" NAME="item" PATH="/COMPRAS/*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="goConsultarCompraDetalle::#COMPRAS#consultarCompraDetalle.xhtml"
+    NAME="output" PATH="/COMPRAS/consultarCompraDetalle.xhtml"
+    TARGET="rules:#COMPRAS#consultarCompraDetalle.xhtml"
+    TITLE="goConsultarCompraDetalle" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goConsultarCompra::#COMPRAS#consultarCompra.xhtml"
+    NAME="output1" PATH="/COMPRAS/consultarCompra.xhtml"
+    TARGET="rules:#COMPRAS#consultarCompra.xhtml"
+    TITLE="goConsultarCompra" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#VENTAS#*" PATH="/VENTAS/*"
+  SHAPE="32,1505,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#VENTAS#*:0" NAME="item" PATH="/VENTAS/*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="goConsultarDevolucionDetalle::#VENTAS#consultarDevolucionDetalle.xhtml"
+    NAME="output" PATH="/VENTAS/consultarDevolucionDetalle.xhtml"
+    TARGET="rules:#VENTAS#consultarDevolucionDetalle.xhtml"
+    TITLE="goConsultarDevolucionDetalle" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goConsultarDevolucion::#VENTAS#consultarDevolucion.xhtml"
+    NAME="output1" PATH="/VENTAS/consultarDevolucion.xhtml"
+    TARGET="rules:#VENTAS#consultarDevolucion.xhtml"
+    TITLE="goConsultarDevolucion" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goConsultarFacturaDetalle::#VENTAS#consultarFacturaDetalle.xhtml"
+    NAME="output2" PATH="/VENTAS/consultarFacturaDetalle.xhtml"
+    TARGET="rules:#VENTAS#consultarFacturaDetalle.xhtml"
+    TITLE="goConsultarFacturaDetalle" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="goConsultarFactura::#VENTAS#consultarFactura.xhtml"
+    NAME="output3" PATH="/VENTAS/consultarFactura.xhtml"
+    TARGET="rules:#VENTAS#consultarFactura.xhtml"
+    TITLE="goConsultarFactura" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#j_spring_security_logout?faces-redirect=true"
+  PATH="/j_spring_security_logout?faces-redirect=true"
+  SHAPE="304,593,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#ADMINISTRACION#crearProveedor.xhtml"
+  PATH="/ADMINISTRACION/crearProveedor.xhtml" SHAPE="304,1297,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#COMPRAS#registrarCompra.xhtml"
+  PATH="/COMPRAS/registrarCompra.xhtml" SHAPE="304,2177,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#COMPRAS#consultarCompra.xhtml"
+  PATH="/COMPRAS/consultarCompra.xhtml" SHAPE="256,2433,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#ADMINISTRACION#consultarProveedor.xhtml"
+  PATH="/ADMINISTRACION/consultarProveedor.xhtml" SHAPE="304,1409,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#VENTAS#consultarFactura.xhtml"
+  PATH="/VENTAS/consultarFactura.xhtml" SHAPE="304,1521,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#VENTAS#registrarDevolucion.xhtml"
+  PATH="/VENTAS/registrarDevolucion.xhtml" SHAPE="304,2065,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#VENTAS#consultarFacturaDetalle.xhtml"
+  PATH="/VENTAS/consultarFacturaDetalle.xhtml" SHAPE="304,1953,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#VENTAS#consultarDevolucion.xhtml"
+  PATH="/VENTAS/consultarDevolucion.xhtml" SHAPE="304,1841,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#CONFIGURACION#gestionConfiguracion.xhtml"
+  PATH="/CONFIGURACION/gestionConfiguracion.xhtml" SHAPE="304,961,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#COMPRAS#consultarCompraDetalle.xhtml"
+  PATH="/COMPRAS/consultarCompraDetalle.xhtml" SHAPE="256,2289,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#VENTAS#consultarDevolucionDetalle.xhtml"
+  PATH="/VENTAS/consultarDevolucionDetalle.xhtml" SHAPE="304,1729,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#REPORTES#reporteProductos.xhtml"
+  PATH="/REPORTES/reporteProductos.xhtml" SHAPE="240,3137,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

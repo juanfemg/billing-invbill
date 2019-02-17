@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>TCR Web</title>
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+</h:head>
+
+<h:body>
+
+	<f:loadBundle basename="messages.login" var="msg" />
+	<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+	<p:ajaxStatus onstart="PF('statusDialog').show()"
+		onsuccess="PF('statusDialog').hide()" />
+	<p:dialog modal="true" widgetVar="statusDialog"
+		header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+		closable="false" resizable="false">
+		<p:graphicImage
+			value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+	</p:dialog>
+
+	<h:form id="formLogin">
+		<p:growl id="growl" showDetail="false" severity="warn error" />
+
+		<p:dialog id="dialogLogin" header="#{msg.MSG_HEADER_LOGIN}"
+			resizable="false" closable="false" visible="true">
+
+			<h:panelGrid id="panelGridLogin" columns="1" cellpadding="5"
+				styleClass="ui-grid">
+				<!-- LOGIN BOX COVER START -->
+				<div>
+					<div id="login-box">
+						<div id="TAB1">
+							<p:inputText id="usernameField" name="j_username"
+								value="#{login.userId}" placeholder="#{msg.MSG_VALUE_USUARIO}" />
+
+							<p:password id="passwordField" name="j_password"
+								value="#{login.password}"
+								placeholder="#{msg.MSG_VALUE_CONTRASEGNA}" feedback="false" />
+
+							<p:commandButton value="#{msg.MSG_BUTTON_INGRESAR}" ajax="false"
+								action="#{login.actionLogin}" update="growl" />
+						</div>
+					</div>
+				</div>
+				<!-- LOGIN BOX COVER END -->
+			</h:panelGrid>
+		</p:dialog>
+	</h:form>
+</h:body>
+</html>

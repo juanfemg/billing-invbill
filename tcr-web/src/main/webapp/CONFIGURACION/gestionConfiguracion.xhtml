@@ -1,0 +1,118 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.gestionarConfiguracion" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formConfiguracion" enctype="multipart/form-data">
+
+				<p:panel id="panelGestionConfiguracion"
+					header="#{msg.MSG_HEADER_PANEL_CONFIGURACION}">
+
+					<div align="justify">
+						<p:messages id="men" globalOnly="true" showDetail="false"
+							severity="info error fatal" />
+						<p:growl id="growl" showDetail="false" severity="warn error" />
+
+						<p:tabView id="tabViewConfiguracion" orientation="top">
+							<p:tab title="#{msg.MSG_TAB_TITLE_IMPRESORA}">
+								<h:outputText value="#{msg.MSG_TAB_TEXT_IMPRESORA}" />
+
+								<div class="EmptyBox10" />
+
+								<h:panelGrid id="panelGridConfigImpresora" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+									<h:outputLabel for="impresora"
+										value="#{msg.MSG_TAB_TITLE_IMPRESORA}" />
+
+									<h:selectOneMenu id="impresora"
+										value="#{gestionConfiguracion.impresora.valor}">
+										<f:selectItem value="#{null}"
+											itemLabel="#{msgGlobal.MSG_ITEM_SELECT_DEFAULT}"
+											noSelectionOption="true" itemDisabled="true" />
+										<f:selectItems value="#{gestionConfiguracion.impresoras}" />
+									</h:selectOneMenu>
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotonesImpresora" columns="1"
+									cellpadding="5" styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_GUARDAR}"
+										id="btnGuardarImpresora"
+										actionListener="#{gestionConfiguracion.actionGuardarConfigImpresora}"
+										update="@form:men @form:growl" icon="ui-icon-disk">
+									</p:commandButton>
+								</h:panelGrid>
+							</p:tab>
+
+							<p:tab title="#{msg.MSG_TAB_TITLE_IVA}">
+								<h:outputText value="#{msg.MSG_TAB_TEXT_IVA}" />
+
+								<div class="EmptyBox10" />
+
+								<h:panelGrid id="panelGridConfigIva" columns="2" cellpadding="5"
+									styleClass="ui-grid">
+									<h:outputLabel for="iva" value="#{msg.MSG_TAB_TITLE_IVA}" />
+
+									<p:inputNumber id="iva"
+										value="#{gestionConfiguracion.iva.valor}" placeholder="%"
+										decimalPlaces="1" decimalSeparator="," thousandSeparator="."
+										symbol=" %" symbolPosition="s" />
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotonesIva" columns="1"
+									cellpadding="5" styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_GUARDAR}"
+										id="btnGuardarIva"
+										actionListener="#{gestionConfiguracion.actionGuardarConfigIva}"
+										update="@form:men @form:growl" icon="ui-icon-disk">
+									</p:commandButton>
+								</h:panelGrid>
+							</p:tab>
+
+							<p:tab title="#{msg.MSG_TAB_TITLE_TOPE_STOCK}">
+								<h:outputText value="#{msg.MSG_TAB_TEXT_TOPE_STOCK}" />
+
+								<div class="EmptyBox10" />
+
+								<h:panelGrid id="panelGridConfigTopeStock" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+									<h:outputLabel for="topeStock"
+										value="#{msg.MSG_TAB_TITLE_TOPE_STOCK}" />
+
+									<p:inputNumber id="topeStock"
+										value="#{gestionConfiguracion.topeStock.valor}"
+										converter="javax.faces.Integer"
+										decimalPlaces="0" thousandSeparator="" maxValue="2147483647" />
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotonesTopeStock" columns="1"
+									cellpadding="5" styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_GUARDAR}"
+										id="btnGuardarTopeStock"
+										actionListener="#{gestionConfiguracion.actionGuardarConfigTopeStock}"
+										update="@form:men @form:growl" icon="ui-icon-disk">
+									</p:commandButton>
+								</h:panelGrid>
+							</p:tab>
+						</p:tabView>
+					</div>
+				</p:panel>
+			</h:form>
+		</f:view>
+	</ui:define>
+</ui:composition>

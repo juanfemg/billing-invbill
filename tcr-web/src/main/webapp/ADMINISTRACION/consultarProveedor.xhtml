@@ -1,0 +1,183 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.consultarProveedor" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formProveedor" enctype="multipart/form-data">
+
+				<p:panel id="panelProveedor"
+					header="#{msg.MSG_HEADER_PANEL_PROVEEDOR}">
+
+					<div align="center">
+						<p:messages id="men" globalOnly="true" showDetail="false"
+							severity="info error fatal" />
+						<p:growl id="growl" showDetail="false" severity="warn" />
+
+						<p:panel id="panelConsultarProveedor">
+							<div align="left">
+
+								<p:dataTable value="#{consultarProveedor.proveedoresApp}"
+									var="proveedor" paginator="true" rows="10"
+									emptyMessage="#{msg.MSG_DATATABLE_DATA_NO_FOUND}"
+									sortBy="#{proveedor.idProveedorApp}">
+
+									<p:column filterBy="#{proveedor.idProveedorApp}"
+										sortBy="#{proveedor.idProveedorApp}"
+										filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_NIT}" />
+										</f:facet>
+										<h:outputText value="#{proveedor.idProveedorApp}" />
+									</p:column>
+
+									<p:column filterBy="#{proveedor.razonSocial}"
+										sortBy="#{proveedor.razonSocial}" filterMatchMode="contains">
+										<f:facet name="header">
+											<h:outputText
+												value="#{msg.MSG_DATATABLE_COLUMN_RAZON_SOCIAL}" />
+										</f:facet>
+										<h:outputText value="#{proveedor.razonSocial}" />
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText
+												value="#{msg.MSG_DATATABLE_COLUMN_FECHA_CREACION}" />
+										</f:facet>
+										<h:outputText value="#{proveedor.fechaCreacion}" />
+									</p:column>
+
+									<p:column style="width: 100px">
+										<f:facet name="header">
+											<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_ESTADO}" />
+										</f:facet>
+										<h:outputText value="#{proveedor.estado.estado}" />
+									</p:column>
+
+									<p:column headerText="#{msg.MSG_DATATABLE_COLUMN_ACCIONES}"
+										style="width: 100px">
+										<p:commandButton id="btnEditar" icon="ui-icon-pencil"
+											actionListener="#{consultarProveedor.actionEditar}"
+											update="dialogProveedor">
+											<f:setPropertyActionListener value="#{proveedor}"
+												target="#{consultarProveedor.proveedorModApp}" />
+										</p:commandButton>
+										<p:tooltip id="toolTipEditar" for="btnEditar"
+											value="#{msgGlobal.MSG_TOOLTIP_DATATABLE_EDITAR}" />
+
+									</p:column>
+								</p:dataTable>
+							</div>
+						</p:panel>
+					</div>
+				</p:panel>
+			</h:form>
+
+			<p:dialog id="dialogProveedor" appendTo="@(body)" draggable="true"
+				closable="false"
+				visible="#{consultarProveedor.showDialogModificarProveedor}"
+				resizable="false" modal="true" width="500">
+
+				<h:form id="formDialogProveedor">
+
+					<p:messages id="menMod" globalOnly="false" showDetail="false"
+						severity="info error fatal" />
+
+					<p:panel id="panelDialogProveedor"
+						header="#{msg.MSG_HEADER_PANEL_DIALOG_PROVEEDOR}">
+						<div align="left">
+
+							<h:panelGrid id="panelGridInfoProveedor" columns="2"
+								cellpadding="5" styleClass="ui-grid">
+								<h:outputLabel for="nitModProveedor"
+									value="#{msg.MSG_DATATABLE_COLUMN_NIT}" />
+								<h:panelGroup id="panelGroupModNit">
+									<h:outputText id="nitModProveedor"
+										value="#{consultarProveedor.proveedorModApp.idProveedorApp}" />
+									<h:outputText id="guionNit" value="-" />
+									<h:outputText id="codVerificacionModProveedor"
+										value="#{consultarProveedor.proveedorModApp.codVerificacion}" />
+								</h:panelGroup>
+
+								<h:outputLabel for="razonSocialModProveedor"
+									value="#{msg.MSG_DATATABLE_COLUMN_RAZON_SOCIAL}" />
+								<p:inputText id="razonSocialModProveedor"
+									value="#{consultarProveedor.proveedorModApp.razonSocial}"
+									required="true"
+									requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+									converter="toUpperCaseConverter" />
+
+								<h:outputLabel for="direccionModProveedor"
+									value="#{msg.MSG_DATATABLE_COLUMN_DIRECCION}" />
+								<p:inputText id="direccionModProveedor"
+									value="#{consultarProveedor.proveedorModApp.direccion}"
+									converter="toUpperCaseConverter" />
+
+								<h:outputLabel for="telefonoModProveedor"
+									value="#{msg.MSG_DATATABLE_COLUMN_TELEFONO}" />
+								<h:panelGroup id="panelGroupModTelefono">
+									<p:inputText id="telefonoModProveedor"
+										value="#{consultarProveedor.proveedorModApp.telefono}"
+										label="#{msg.MSG_DATATABLE_COLUMN_TELEFONO}"
+										onkeydown="return event.keyCode &gt;= 48 &amp;&amp; event.keyCode &lt;= 57 || event.keyCode &gt;= 96 &amp;&amp; event.keyCode &lt;= 105 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37  || event.keyCode == 39 || event.keyCode == 13" />
+									<h:outputLabel for="telefonoExtModProveedor"
+										value="#{msg.MSG_DATATABLE_COLUMN_TELEFONO_EXT}" />
+									<p:inputText id="telefonoExtModProveedor"
+										value="#{consultarProveedor.proveedorModApp.telefonoExt}"
+										maxlength="6" size="6"
+										label="#{msg.MSG_DATATABLE_COLUMN_TELEFONO_EXT}"
+										onkeydown="return event.keyCode &gt;= 48 &amp;&amp; event.keyCode &lt;= 57 || event.keyCode &gt;= 96 &amp;&amp; event.keyCode &lt;= 105 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37  || event.keyCode == 39 || event.keyCode == 13" />
+								</h:panelGroup>
+
+								<h:outputLabel for="celularModProveedor"
+									value="#{msg.MSG_DATATABLE_COLUMN_CELULAR}" />
+								<p:inputText id="celularModProveedor"
+									value="#{consultarProveedor.proveedorModApp.celular}"
+									label="#{msg.MSG_DATATABLE_COLUMN_CELULAR}"
+									onkeydown="return event.keyCode &gt;= 48 &amp;&amp; event.keyCode &lt;= 57 || event.keyCode &gt;= 96 &amp;&amp; event.keyCode &lt;= 105 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37  || event.keyCode == 39 || event.keyCode == 13" />
+
+								<h:outputLabel for="estadoModProveedor"
+									value="#{msg.MSG_DATATABLE_COLUMN_ESTADO}" />
+								<h:selectOneMenu id="estadoModProveedor"
+									value="#{consultarProveedor.proveedorModApp.estado}"
+									converter="#{estadoAppConverter}">
+									<f:selectItems value="#{consultarProveedor.estadosApp}" />
+								</h:selectOneMenu>
+
+							</h:panelGrid>
+
+							<h:panelGrid id="panelGridModBotones" columns="2" cellpadding="5"
+								styleClass="ui-grid">
+								<p:commandButton value="#{msg.MSG_BUTTON_GUARDAR}"
+									id="btnModGuardar"
+									actionListener="#{consultarProveedor.actionModificar}"
+									update="menMod formProveedor:panelProveedor dialogProveedor"
+									icon="ui-icon-disk" />
+								<p:commandButton value="#{msg.MSG_BUTTON_CANCELAR}"
+									id="btnCancelar" update="formProveedor dialogProveedor"
+									process="@this"
+									actionListener="#{consultarProveedor.actionCancelar}" />
+							</h:panelGrid>
+						</div>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+		</f:view>
+	</ui:define>
+</ui:composition>

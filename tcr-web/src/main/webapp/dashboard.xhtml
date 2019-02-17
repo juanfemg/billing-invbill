@@ -1,0 +1,258 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="head">
+		<script type="text/javascript">
+			function customExtender() {
+				this.cfg.grid = {
+					drawGridLines : false,
+					background : '#FFFFFF'
+				};
+				this.cfg.legend = {
+					show : false
+				};
+			}
+		</script>
+	</ui:define>
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.dashBoard" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formDashBoard" enctype="multipart/form-data">
+				<div class="Container100">
+					<p:messages id="men" globalOnly="true" showDetail="false"
+						severity="info error fatal" />
+					<p:growl id="growl" showDetail="false" severity="warn error" />
+
+					<div class="ContainerIndent" id="containerInfoDiaria">
+						<div class="EmptyBox20" />
+
+						<div class="Container25 Responsive">
+							<div class="ContainerIndent">
+								<p:panel id="panelInfoUsuario" style="min-height: 250px;">
+									<div>
+										<i class="fa fa-user Fs60 Fleft Wid25 red TexAlCenter" />
+										<div class="Fs22 Fright MarTop10 leaden Wid70">
+											<p:outputLabel styleClass="hardblue"
+												value="#{dashBoard.usuarioApp.nombre}" />
+											<p:outputLabel value=", #{msg.MSG_VALUE_BIENVENIDO}" />
+										</div>
+										<div class="EmptyBox10" />
+
+										<p:separator />
+
+										<div class="EmptyBox10" />
+										<i class="fa fa-wrench softgray MarRight10 Fs30 Fleft" />
+										<p:outputLabel styleClass="Fright"
+											value="#{dashBoard.usuarioApp.rolApp.rol}" />
+										<div class="EmptyBox10" />
+
+										<p:separator />
+
+										<div class="EmptyBox10" />
+										<p:outputLabel styleClass="Fright Fs12"
+											value="#{msg.MSG_VALUE_ULTIMO_LOGIN} - #{dashBoard.loginApp.ultimoLogin}" />
+										<div class="EmptyBox10" />
+									</div>
+								</p:panel>
+							</div>
+						</div>
+
+						<div class="Container25 Responsive">
+							<div class="ContainerIndent">
+								<p:panel id="panelInfoVentasDiarias" style="min-height: 250px;">
+									<div>
+										<div class="Container">
+											<i
+												class="fa fa-balance-scale Fs50 Fleft Wid25 orange TexAlCenter"></i>
+											<div class="Fs24 Fright MarTop10 leaden Wid60">
+												<p:outputLabel value="#{msg.MSG_VALUE_REPORTE_VENTAS}" />
+											</div>
+											<div class="EmptyBox10" />
+
+											<p:separator />
+
+											<div class="EmptyBox10" />
+											<div class="Fs12 Fright leaden Wid100 TexAlCenter">
+												<p:outputLabel styleClass="Fs12"
+													value="#{msg.MSG_VALUE_TOTAL_VENTAS_DIARIAS}" />
+												<br />
+												<p:outputLabel styleClass="Fs24 orange"
+													value="#{dashBoard.reporteVentaDiaria.valorTotal ne null ? dashBoard.reporteVentaDiaria.valorTotal : 0}">
+													<f:convertNumber locale="es_CO" currencySymbol="$"
+														type="currency" />
+												</p:outputLabel>
+											</div>
+
+											<div class="EmptyBox5" />
+											<div class="Fs12 Fright leaden Wid100 TexAlCenter">
+												<p:outputLabel styleClass="Fs12"
+													value="#{msg.MSG_VALUE_CANTIDAD_PRODUCTOS}" />
+												<br />
+												<p:outputLabel styleClass="Fs24 hardblue"
+													value="#{dashBoard.reporteVentaDiaria.cantidadProductos ne null ? dashBoard.reporteVentaDiaria.cantidadProductos : 0}" />
+											</div>
+											<div class="EmptyBox10" />
+										</div>
+									</div>
+								</p:panel>
+							</div>
+						</div>
+
+						<div class="Container25 Responsive">
+							<div class="ContainerIndent">
+								<p:panel id="panelInfoDevolucionesDiarias"
+									style="min-height: 250px;">
+									<div>
+										<div class="Container">
+											<i class="fa fa-history Fs50 Fleft Wid10 yellow TexAlCenter"></i>
+											<div class="Fs24 Fright MarTop10 leaden Wid70">
+												<p:outputLabel value="#{msg.MSG_VALUE_REPORTE_DEVOLUCIONES}" />
+											</div>
+											<div class="EmptyBox10" />
+
+											<p:separator />
+
+											<div class="EmptyBox10" />
+											<div class="Fs12 Fright leaden Wid100 TexAlCenter">
+												<p:outputLabel styleClass="Fs12"
+													value="#{msg.MSG_VALUE_TOTAL_DEVOLUCIONES_DIARIAS}" />
+												<br />
+												<p:outputLabel styleClass="Fs24 yellow"
+													value="#{dashBoard.reporteDevolucionDiaria.valorTotal ne null ? dashBoard.reporteDevolucionDiaria.valorTotal : 0}">
+													<f:convertNumber locale="es_CO" currencySymbol="$"
+														type="currency" />
+												</p:outputLabel>
+											</div>
+
+											<div class="EmptyBox5" />
+											<div class="Fs12 Fright leaden Wid100 TexAlCenter">
+												<p:outputLabel styleClass="Fs12"
+													value="#{msg.MSG_VALUE_CANTIDAD_PRODUCTOS}" />
+												<br />
+												<p:outputLabel styleClass="Fs24 hardblue"
+													value="#{dashBoard.reporteDevolucionDiaria.cantidadProductos ne null ? dashBoard.reporteDevolucionDiaria.cantidadProductos : 0}" />
+											</div>
+											<div class="EmptyBox10" />
+										</div>
+									</div>
+								</p:panel>
+							</div>
+						</div>
+
+						<div class="Container25 Responsive">
+							<div class="ContainerIndent">
+								<p:panel id="panelInfoComprasDiarias" style="min-height: 250px;">
+									<div>
+										<div class="Container">
+											<i
+												class="fa fa-shopping-cart Fs50 Fleft Wid10 softblue TexAlCenter"></i>
+											<div class="Fs24 Fright MarTop10 leaden Wid70">
+												<p:outputLabel value="#{msg.MSG_VALUE_REPORTE_COMPRAS}" />
+											</div>
+											<div class="EmptyBox10" />
+
+											<p:separator />
+
+											<div class="EmptyBox10" />
+											<div class="Fs12 Fright leaden Wid100 TexAlCenter">
+												<p:outputLabel styleClass="Fs12"
+													value="#{msg.MSG_VALUE_TOTAL_COMPRAS_DIARIAS}" />
+												<br />
+												<p:outputLabel styleClass="Fs24 softblue"
+													value="#{dashBoard.reporteCompraDiaria.valorTotal ne null ? dashBoard.reporteCompraDiaria.valorTotal : 0}">
+													<f:convertNumber locale="es_CO" currencySymbol="$"
+														type="currency" />
+												</p:outputLabel>
+											</div>
+
+											<div class="EmptyBox5" />
+											<div class="Fs12 Fright leaden Wid100 TexAlCenter">
+												<p:outputLabel styleClass="Fs12"
+													value="#{msg.MSG_VALUE_CANTIDAD_PRODUCTOS}" />
+												<br />
+												<p:outputLabel styleClass="Fs24 hardblue"
+													value="#{dashBoard.reporteCompraDiaria.cantidadProductos ne null ? dashBoard.reporteCompraDiaria.cantidadProductos : 0}" />
+											</div>
+											<div class="EmptyBox10" />
+										</div>
+									</div>
+								</p:panel>
+							</div>
+						</div>
+					</div>
+
+					<div class="ContainerIndent" id="containerReporteMensual">
+						<div class="EmptyBox20" />
+
+						<div class="Container100 Responsive">
+							<div class="ContainerIndent">
+								<p:panel id="panelInfoReporteMensual">
+									<div>
+										<i class="fa fa-bar-chart Fs40 Fleft Wid5 red TexAlCenter" />
+										<div class="Fs24 Fleft MarTop10 leaden Wid85">
+											<p:outputLabel
+												value="#{msg.MSG_HEADER_PANEL_REPORTE_MENSUAL}" />
+										</div>
+										<div class="EmptyBox10" />
+
+										<h:panelGrid id="panelGridInfoReporteMensual" columns="2"
+											cellpadding="5" styleClass="ui-grid">
+
+											<p:outputLabel for="reporteMensual"
+												value="#{msg.MSG_VALUE_REPORTE_MENSUAL}" />
+											<p:selectOneMenu id="reporteMensual"
+												value="#{dashBoard.reporteMensualEnum}"
+												converter="#{reporteMensualConverter}">
+												<p:ajax listener="#{dashBoard.graficarReporteMensual}"
+													update="panelInfoReporteMensual" />
+												<f:selectItem value="#{null}"
+													itemLabel="#{msgGlobal.MSG_ITEM_SELECT_DEFAULT}"
+													noSelectionOption="true" itemDisabled="true" />
+												<f:selectItems value="#{dashBoard.reporteMensuales}" />
+											</p:selectOneMenu>
+										</h:panelGrid>
+									</div>
+									<div class="EmptyBox10" />
+
+									<p:separator />
+
+									<div class="EmptyBox10" />
+									<div>
+										<p:chart type="bar" model="#{dashBoard.barModelVentas}"
+											style="height:300px;"
+											rendered="#{dashBoard.barChartModel eq dashBoard.barModelVentas}" />
+									</div>
+									<div>
+										<p:chart type="bar" model="#{dashBoard.barModelDevoluciones}"
+											style="height:300px;"
+											rendered="#{dashBoard.barChartModel eq dashBoard.barModelDevoluciones}" />
+									</div>
+									<div>
+										<p:chart type="bar" model="#{dashBoard.barModelCompras}"
+											style="height:300px;"
+											rendered="#{dashBoard.barChartModel eq dashBoard.barModelCompras}" />
+									</div>
+								</p:panel>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</f:view>
+	</ui:define>
+</ui:composition>

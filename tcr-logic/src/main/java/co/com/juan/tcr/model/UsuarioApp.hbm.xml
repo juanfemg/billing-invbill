@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 11-feb-2017 9:50:57 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping package="co.com.juan.tcr.model">
+	<class catalog="tcr" name="UsuarioApp" table="usuario_app">
+		<id name="idUsuarioApp" type="string">
+			<column length="20" name="id_usuario_app" />
+			<generator class="assigned" />
+		</id>
+		<many-to-one class="RolApp" fetch="select" name="rolApp"
+			lazy="proxy">
+			<column name="id_rol_app" not-null="true" />
+		</many-to-one>
+		<property generated="never" lazy="true" name="nombre" type="string">
+			<column length="50" name="nombre" not-null="true" />
+		</property>
+		<property generated="never" lazy="true" name="password"
+			type="string">
+			<column length="45" name="password" not-null="true" />
+		</property>
+		<property generated="never" lazy="true" name="estado">
+			<column length="1" name="estado" not-null="true" />
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">co.com.juan.tcr.enums.EstadosAppEnum</param>
+				<param name="type">1</param>
+			</type>
+		</property>
+		<property generated="never" lazy="true" name="fechaCreacion"
+			type="timestamp" not-null="false" insert="false">
+			<column length="0" name="fecha_creacion" />
+		</property>
+	</class>
+</hibernate-mapping>

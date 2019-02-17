@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10/07/2017 10:38:43 PM by Hibernate Tools 4.0.1.Final -->
+<hibernate-mapping package="co.com.juan.tcr.model">
+	<class name="CompraCabecera" table="compra_cabecera" catalog="tcr">
+		<composite-id name="id" class="CompraCabeceraId">
+			<key-property name="idFacturaCompra" type="string">
+				<column name="id_factura_compra" length="20" />
+			</key-property>
+			<key-property name="idProveedorApp" type="int">
+				<column name="id_proveedor_app" />
+			</key-property>
+		</composite-id>
+		<many-to-one name="proveedorApp" class="ProveedorApp"
+			update="false" insert="false" fetch="select" lazy="false">
+			<column name="id_proveedor_app" not-null="true" />
+		</many-to-one>
+		<property name="valorNeto" type="double">
+			<column name="valor_neto" precision="22" scale="2" not-null="true" />
+		</property>
+		<property name="valorIva" type="double">
+			<column name="valor_iva" precision="22" scale="2" not-null="true" />
+		</property>
+		<property name="valorTotal" type="int">
+			<column name="valor_total" not-null="true" />
+		</property>
+		<property name="usuarioCreacion" type="string">
+			<column name="usuario_creacion" length="20" not-null="true" />
+		</property>
+		<property name="fechaCreacion" type="timestamp" not-null="false"
+			insert="false">
+			<column name="fecha_creacion" length="0" />
+		</property>
+		<set name="compraDetalles" table="compra_detalle" inverse="true"
+			fetch="select" sort="unsorted" lazy="true">
+			<key>
+				<column name="id_factura_compra" not-null="true" />
+				<column name="id_proveedor_app" not-null="true" />
+			</key>
+			<one-to-many class="CompraDetalle" />
+		</set>
+	</class>
+</hibernate-mapping>

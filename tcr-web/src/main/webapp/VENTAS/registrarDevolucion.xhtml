@@ -1,0 +1,354 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.registrarDevolucion" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formDevolucion" enctype="multipart/form-data">
+
+				<p:panel id="panelDevolucion"
+					header="#{msg.MSG_HEADER_PANEL_DEVOLUCION}">
+
+					<div align="center">
+						<p:messages id="men" globalOnly="true" showDetail="false"
+							severity="info error fatal" />
+						<p:growl id="growl" showDetail="false" severity="warn error" />
+
+						<p:panel id="panelConsultarFactura">
+							<div align="left">
+
+								<h:panelGrid id="panelGridConsultarFactura" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+
+									<h:outputLabel for="idFactura" value="#{msg.MSG_VALUE_FACTURA}" />
+									<p:inputNumber id="idFactura"
+										value="#{registrarDevolucion.facturaCabecera.idFactura}"
+										required="true"
+										requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+										converter="javax.faces.Integer" decimalPlaces="0"
+										thousandSeparator="" maxValue="2147483647" />
+
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotonesConsultar" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_CONSULTAR}"
+										id="btnConsultar"
+										actionListener="#{registrarDevolucion.actionConsultar}"
+										update="men panelDetalleFactura panelDetalleDevoluciones growl"
+										icon="ui-icon-search" process="panelConsultarFactura" />
+									<p:commandButton value="#{msg.MSG_BUTTON_LIMPIAR}"
+										id="btnLimpiar" update="@form" process="@this"
+										actionListener="#{registrarDevolucion.actionLimpiar}" />
+								</h:panelGrid>
+							</div>
+						</p:panel>
+
+						<div class="EmptyBox10" />
+
+						<p:panel id="panelDetalleFactura"
+							visible="#{registrarDevolucion.showPanelRegistrarDevolucion and not empty registrarDevolucion.facturaDetalles}"
+							header="#{msg.MSG_VALUE_DETALLE_FACTURA}">
+
+							<div align="left">
+
+								<h:panelGrid id="panelGridInfoFactura" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+
+									<p:dataTable value="#{registrarDevolucion.facturaDetalles}"
+										var="item" paginator="false" editable="true" editMode="row">
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CATEGORIA}" />
+											</f:facet>
+											<h:outputText
+												value="#{item.producto.categoriaProducto.categoria}" />
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_PRODUCTO}" />
+											</f:facet>
+											<h:outputText value="#{item.producto.producto}" />
+										</p:column>
+
+										<p:column style="width: 100px">
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CANTIDAD}" />
+											</f:facet>
+											<h:outputText value="#{item.cantidad}" />
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_VENTA_UNIDAD}" />
+											</f:facet>
+											<h:outputText value="#{item.precioVenta}">
+												<f:convertNumber locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_VENTA_TOTAL}" />
+											</f:facet>
+											<h:outputText value="#{item.precioVenta * item.cantidad}">
+												<f:convertNumber locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="#{msg.MSG_DATATABLE_COLUMN_ACCIONES}"
+											style="width: 100px">
+											<p:commandButton id="btnDevolver"
+												icon="ui-icon-arrowreturnthick-1-e"
+												actionListener="#{registrarDevolucion.actionDevolver}"
+												update="dialogDevolverProducto">
+												<f:setPropertyActionListener value="#{item}"
+													target="#{registrarDevolucion.facturaDevDetalle}" />
+											</p:commandButton>
+
+										</p:column>
+									</p:dataTable>
+								</h:panelGrid>
+							</div>
+						</p:panel>
+
+						<div class="EmptyBox10" />
+
+						<p:panel id="panelDetalleDevoluciones"
+							visible="#{registrarDevolucion.showPanelDetalleDevoluciones and not empty registrarDevolucion.facturaDevDetalles}"
+							header="#{msg.MSG_VALUE_DETALLE_DEVOLUCION}">
+
+							<div align="left">
+
+								<h:panelGrid id="panelGridInfoDevolucion" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+
+									<p:dataTable value="#{registrarDevolucion.facturaDevDetalles}"
+										var="item" paginator="false" editable="true" editMode="row">
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CATEGORIA}" />
+											</f:facet>
+											<h:outputText
+												value="#{item.producto.categoriaProducto.categoria}" />
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_PRODUCTO}" />
+											</f:facet>
+											<h:outputText value="#{item.producto.producto}" />
+										</p:column>
+
+										<p:column style="width: 100px">
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_CANTIDAD_DEVOLUCION}" />
+											</f:facet>
+											<h:outputText value="#{item.cantidad}" />
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_VENTA_UNIDAD}" />
+											</f:facet>
+											<h:outputText value="#{item.precioVenta}">
+												<f:convertNumber locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_VENTA_TOTAL}" />
+											</f:facet>
+											<h:outputText value="#{item.precioVenta * item.cantidad}">
+												<f:convertNumber locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="#{msg.MSG_DATATABLE_COLUMN_ACCIONES}"
+											style="width: 100px">
+											<p:commandButton id="btnEliminar" icon="ui-icon-close"
+												action="#{registrarDevolucion.actionEliminar}"
+												update=":formDevolucion:panelDetalleDevoluciones">
+												<f:setPropertyActionListener value="#{item}"
+													target="#{registrarDevolucion.facturaDelDetalle}" />
+											</p:commandButton>
+										</p:column>
+									</p:dataTable>
+
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridResumenDevolucion" columns="2"
+									cellpadding="5" styleClass="ui-grid"
+									rendered="#{not empty registrarDevolucion.facturaDevDetalles}">
+
+									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_NETO}" />
+									<h:outputText
+										value="#{registrarDevolucion.devolucionCabeceraResumen.valorNeto}">
+										<f:convertNumber locale="es_CO" currencySymbol="$"
+											type="currency" />
+									</h:outputText>
+
+									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_IVA}" />
+									<h:outputText
+										value="#{registrarDevolucion.devolucionCabeceraResumen.valorIva}">
+										<f:convertNumber locale="es_CO" currencySymbol="$"
+											type="currency" />
+									</h:outputText>
+
+									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_TOTAL}" />
+									<h:outputText
+										value="#{registrarDevolucion.devolucionCabeceraResumen.valorTotal}">
+										<f:convertNumber locale="es_CO" currencySymbol="$"
+											type="currency" />
+									</h:outputText>
+
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotones" columns="2" cellpadding="5"
+									styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_REGISTRAR}"
+										id="btnRegistrar"
+										actionListener="#{registrarDevolucion.actionRegistrarDevolucion}"
+										update="men panelDevolucion growl dialogRegistrar"
+										icon="ui-icon-disk" />
+								</h:panelGrid>
+							</div>
+						</p:panel>
+					</div>
+				</p:panel>
+			</h:form>
+
+			<p:dialog id="dialogDevolverProducto" appendTo="@(body)"
+				draggable="true" closable="false"
+				visible="#{registrarDevolucion.showDialogDevolverProducto}"
+				resizable="false" modal="true" width="500">
+
+				<h:form id="formDialogDevolucionProducto">
+
+					<p:messages id="menDev" globalOnly="true" showDetail="false"
+						severity="info error fatal" />
+
+					<p:panel id="panelDialogDevolucionProducto"
+						header="#{msg.MSG_HEADER_PANEL_DIALOG_DEVOLUCION_PRODUCTO}">
+						<div align="left">
+
+							<h:panelGrid id="panelGridInfoProducto" columns="2"
+								cellpadding="5" styleClass="ui-grid">
+								<h:outputLabel for="categoriaProducto"
+									value="#{msg.MSG_DATATABLE_COLUMN_CATEGORIA}" />
+								<h:outputText id="categoriaProducto"
+									value="#{registrarDevolucion.facturaDevDetalle.producto.categoriaProducto.categoria}" />
+
+								<h:outputLabel for="producto"
+									value="#{msg.MSG_DATATABLE_COLUMN_PRODUCTO}" />
+								<h:outputText id="producto"
+									value="#{registrarDevolucion.facturaDevDetalle.producto.producto}" />
+
+								<h:outputLabel for="cantidadProducto"
+									value="#{msg.MSG_DATATABLE_COLUMN_CANTIDAD_DEVOLUCION}" />
+								<p:spinner id="cantidadProducto"
+									value="#{registrarDevolucion.facturaDevDetalle.cantidad}"
+									min="1" max="#{registrarDevolucion.facturaDevDetalle.cantidad}" />
+
+							</h:panelGrid>
+
+							<h:panelGrid id="panelGridDevBotones" columns="2" cellpadding="5"
+								styleClass="ui-grid">
+								<p:commandButton value="#{msg.MSG_BUTTON_DEVOLVER}"
+									id="btnDevGuardar"
+									actionListener="#{registrarDevolucion.actionDevolverProducto}"
+									update="menDev formDevolucion:panelDetalleDevoluciones formDevolucion:panelDetalleFactura dialogDevolverProducto dialogActualizarItem"
+									icon="ui-icon-disk" />
+								<p:commandButton value="#{msg.MSG_BUTTON_CANCELAR}"
+									id="btnCancelar" update="dialogDevolverProducto"
+									process="@this"
+									actionListener="#{registrarDevolucion.actionCancelar}" />
+							</h:panelGrid>
+						</div>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+
+			<p:dialog id="dialogActualizarItem" appendTo="@(body)"
+				draggable="true" closable="false" widgetVar="dialogActualizarItem"
+				resizable="false" modal="true" width="300"
+				visible="#{registrarDevolucion.showDialogConfirmacionActualizacion}"
+				header="#{msg.MSG_HEADER_DIALOG_MODIFICAR_CANTIDAD_ITEM}">
+
+				<div align="center">
+					<h:outputLabel value="#{msg.MSG_CONFIRM_MODIFICAR_CANTIDAD_ITEM}" />
+
+					<h:panelGrid id="panelGridConfirmBotones" columns="2"
+						cellpadding="5" styleClass="ui-grid">
+						<p:commandButton
+							value="#{msg.MSG_BUTTON_MODIFICAR_CANTIDAD_ITEM_YES}"
+							id="btnActualizar"
+							action="#{registrarDevolucion.actionActualizarItem}"
+							update="formDevolucion:panelDetalleDevoluciones dialogDevolverProducto dialogActualizarItem"
+							icon="ui-icon-check" />
+						<p:commandButton
+							value="#{msg.MSG_BUTTON_MODIFICAR_CANTIDAD_ITEM_NO}"
+							id="btnCancelarActualizacion"
+							actionListener="#{registrarDevolucion.actionCancelar}"
+							update="dialogActualizarItem dialogDevolverProducto"
+							process="@this" icon="ui-icon-close" />
+					</h:panelGrid>
+				</div>
+			</p:dialog>
+
+			<p:dialog id="dialogRegistrar" appendTo="@(body)" draggable="false"
+				closable="false" widgetVar="dialogRegistrar" resizable="false"
+				modal="false" width="500"
+				visible="#{registrarDevolucion.showDialogRegistroDevolucion}"
+				header="#{msg.MSG_HEADER_DIALOG_REGISTRAR_DEVOLUCION}">
+
+				<h:form id="formDialogRegistroDevolucion">
+
+					<div align="center">
+
+						<h:outputLabel value="#{msg.MSG_CONFIRM_REGISTRO_DEVOLUCION}" />
+
+						<h:panelGrid id="panelGridConfirmRegistroDevolucionBotones"
+							columns="2" cellpadding="5" styleClass="ui-grid">
+							<p:commandButton value="#{msg.MSG_BUTTON_GUARDAR}"
+								id="btnGuardar"
+								actionListener="#{registrarDevolucion.actionGuardar}"
+								update="formDevolucion:panelDevolucion formDevolucion:men dialogRegistrar"
+								icon="ui-icon-disk" process="@this">
+							</p:commandButton>
+							<p:commandButton value="#{msg.MSG_BUTTON_CANCELAR}"
+								id="btnCancelarResumenDevolucion"
+								actionListener="#{registrarDevolucion.actionCancelar}"
+								update="dialogRegistrar" process="@this" />
+						</h:panelGrid>
+
+					</div>
+				</h:form>
+			</p:dialog>
+		</f:view>
+	</ui:define>
+</ui:composition>

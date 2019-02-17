@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+	<div id="layout-menubar">
+		<!-- <div class="layout-menubarinner-box" id="buttonArea">
+			<a href="#" id="layout-menubar-resize" title="Menu"><i></i></a> <a
+				href="#" id="layout-menubar-resize2" title="Abrir Menu"><i></i></a>
+		</div> -->
+		<h:form id="formMenu">
+			<p:panelMenu id="menuLeftmenu"  model="#{leftMenu.model}" />
+		</h:form>
+	</div>
+</ui:composition>

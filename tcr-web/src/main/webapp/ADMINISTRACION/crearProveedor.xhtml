@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.crearProveedor" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formProveedor" enctype="multipart/form-data">
+
+				<p:panel id="panelProveedor"
+					header="#{msg.MSG_HEADER_PANEL_PROVEEDOR}">
+
+					<div align="center">
+						<p:messages id="men" globalOnly="true" showDetail="false"
+							severity="info error fatal" />
+						<p:growl id="growl" showDetail="false" severity="warn" />
+
+						<p:panel id="panelInfoProveedor">
+							<div align="left">
+
+								<h:panelGrid id="panelGridInfoProveedor" columns="2"
+									cellpadding="5" styleClass="ui-grid">
+									<h:outputLabel for="nitProveedor"
+										value="#{msg.MSG_VALUE_NIT_PROVEEDOR}" />
+									<h:panelGroup id="panelGroupNit">
+										<p:inputText id="nitProveedor"
+											value="#{crearProveedor.proveedorApp.idProveedorApp}"
+											required="true"
+											requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+											label="#{msg.MSG_VALUE_NIT_PROVEEDOR}"
+											onkeydown="return event.keyCode &gt;= 48 &amp;&amp; event.keyCode &lt;= 57 || event.keyCode &gt;= 96 &amp;&amp; event.keyCode &lt;= 105 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37  || event.keyCode == 39 || event.keyCode == 13" />
+										<p:outputLabel id="guionNit" value="-"></p:outputLabel>
+										<p:inputText id="nitCodVerificacionProveedor"
+											value="#{crearProveedor.proveedorApp.codVerificacion}"
+											required="true"
+											requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+											maxlength="1" size="1"
+											label="#{msg.MSG_VALUE_CODIGO_VERIFICACION_PROVEEDOR}"
+											onkeydown="return event.keyCode &gt;= 48 &amp;&amp; event.keyCode &lt;= 57 || event.keyCode &gt;= 96 &amp;&amp; event.keyCode &lt;= 105 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37  || event.keyCode == 39 || event.keyCode == 13" />
+									</h:panelGroup>
+
+									<h:outputLabel for="razonSocialProveedor"
+										value="#{msg.MSG_VALUE_RAZON_SOCIAL_PROVEEDOR}" />
+									<p:inputText id="razonSocialProveedor"
+										value="#{crearProveedor.proveedorApp.razonSocial}"
+										required="true"
+										requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+										converter="toUpperCaseConverter" />
+
+									<h:outputLabel for="direccionProveedor"
+										value="#{msg.MSG_VALUE_DIRECCION_PROVEEDOR}" />
+									<p:inputText id="direccionProveedor"
+										value="#{crearProveedor.proveedorApp.direccion}"
+										converter="toUpperCaseConverter" />
+
+									<h:outputLabel for="telefonoProveedor"
+										value="#{msg.MSG_VALUE_TELEFONO_PROVEEDOR}" />
+									<h:panelGroup id="panelGroupTelefono">
+										<p:inputText id="telefonoProveedor"
+											value="#{crearProveedor.proveedorApp.telefono}"
+											label="#{msg.MSG_VALUE_TELEFONO_PROVEEDOR}"
+											onkeydown="return event.keyCode &gt;= 48 &amp;&amp; event.keyCode &lt;= 57 || event.keyCode &gt;= 96 &amp;&amp; event.keyCode &lt;= 105 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37  || event.keyCode == 39 || event.keyCode == 13" />
+										<h:outputLabel for="telefonoExtProveedor"
+											value="#{msg.MSG_VALUE_TELEFONO_EXT_PROVEEDOR}" />
+										<p:inputText id="telefonoExtProveedor"
+											value="#{crearProveedor.proveedorApp.telefonoExt}"
+											maxlength="6" size="6"
+											label="#{msg.MSG_VALUE_TELEFONO_EXT_PROVEEDOR}"
+											onkeydown="return event.keyCode &gt;= 48 &amp;&amp; event.keyCode &lt;= 57 || event.keyCode &gt;= 96 &amp;&amp; event.keyCode &lt;= 105 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37  || event.keyCode == 39 || event.keyCode == 13" />
+									</h:panelGroup>
+
+									<h:outputLabel for="celularProveedor"
+										value="#{msg.MSG_VALUE_CELULAR_PROVEEDOR}" />
+									<p:inputText id="celularProveedor"
+										value="#{crearProveedor.proveedorApp.celular}"
+										label="#{msg.MSG_VALUE_CELULAR_PROVEEDOR}"
+										onkeydown="return event.keyCode &gt;= 48 &amp;&amp; event.keyCode &lt;= 57 || event.keyCode &gt;= 96 &amp;&amp; event.keyCode &lt;= 105 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37  || event.keyCode == 39 || event.keyCode == 13" />
+
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotones" columns="2" cellpadding="5"
+									styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_GUARDAR}"
+										id="btnGuardar"
+										actionListener="#{crearProveedor.actionGuardar}"
+										update="men panelInfoProveedor growl" icon="ui-icon-disk" />
+									<p:commandButton value="#{msg.MSG_BUTTON_LIMPIAR}"
+										id="btnLimpiar" update="@form" process="@this"
+										actionListener="#{crearProveedor.actionLimpiar}" />
+								</h:panelGrid>
+							</div>
+						</p:panel>
+					</div>
+				</p:panel>
+			</h:form>
+		</f:view>
+	</ui:define>
+</ui:composition>
