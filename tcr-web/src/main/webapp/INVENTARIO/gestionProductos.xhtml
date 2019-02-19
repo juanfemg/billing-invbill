@@ -248,6 +248,16 @@
 										<p:column>
 											<f:facet name="header">
 												<h:outputText
+													value="#{msg.MSG_DATATABLE_HISTORICO_COMPRA_COLUMN_CANTIDAD}" />
+											</f:facet>
+											<h:outputText value="#{compraDetalle.cantidad}">
+												<f:convertNumber locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
 													value="#{msg.MSG_DATATABLE_HISTORICO_COMPRA_COLUMN_PRECIO_COMPRA_UNIDAD}" />
 											</f:facet>
 											<h:outputText value="#{compraDetalle.precioCompra}">
