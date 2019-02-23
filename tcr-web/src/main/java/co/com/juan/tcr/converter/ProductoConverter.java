@@ -40,6 +40,9 @@ public class ProductoConverter implements Converter {
 	 */
 	@Override
 	public Object getAsObject(FacesContext ctx, UIComponent component, String value) {
+		if (value == null)
+			return "";
+
 		try {
 			List<Producto> productos = businessDelegate.getProductos();
 
@@ -67,6 +70,9 @@ public class ProductoConverter implements Converter {
 	 */
 	@Override
 	public String getAsString(FacesContext fc, UIComponent uic, Object o) {
+		if (o == null)
+			return null;
+
 		producto = (Producto) o;
 		return producto.getProducto();
 	}

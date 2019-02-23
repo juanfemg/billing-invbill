@@ -205,6 +205,9 @@
 									disabled="#{empty crearFactura.categorias}">
 									<p:ajax event="change" update="formDialogFactura"
 										process="@this" listener="#{crearFactura.initProductos}" />
+									<f:selectItem value="#{null}"
+										itemLabel="#{msgGlobal.MSG_ITEM_SELECT_DEFAULT}"
+										noSelectionOption="true" itemDisabled="true" />
 									<f:selectItems value="#{crearFactura.categorias}" />
 								</p:selectOneMenu>
 
@@ -217,6 +220,9 @@
 									disabled="#{empty crearFactura.categorias or empty crearFactura.productos}">
 									<p:ajax event="change" update="formDialogFactura"
 										process="@this" listener="#{crearFactura.initStockProducto}" />
+									<f:selectItem value="#{null}"
+										itemLabel="#{msgGlobal.MSG_ITEM_SELECT_DEFAULT}"
+										noSelectionOption="true" itemDisabled="true" />
 									<f:selectItems value="#{crearFactura.productos}" />
 								</p:selectOneMenu>
 
@@ -229,6 +235,16 @@
 									rendered="#{not empty crearFactura.categorias and not empty crearFactura.productos}">
 									<f:convertNumber locale="es_CO" currencySymbol="$"
 										type="currency" />
+								</h:outputText>
+
+								<h:outputLabel for="stockModProducto"
+									value="#{msg.MSG_DATATABLE_COLUMN_STOCK}"
+									rendered="#{not empty crearFactura.categorias and not empty crearFactura.productos}" />
+								<h:outputText id="stockModProducto"
+									value="#{crearFactura.stockProducto.stock}"
+									disabled="#{empty crearFactura.categorias or empty crearFactura.productos}"
+									rendered="#{not empty crearFactura.categorias and not empty crearFactura.productos}">
+									<f:convertNumber locale="es_CO" type="number" />
 								</h:outputText>
 
 								<h:outputLabel for="cantidadModProducto"
