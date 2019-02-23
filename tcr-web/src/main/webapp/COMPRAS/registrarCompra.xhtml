@@ -200,14 +200,24 @@
 					<div align="center">
 						<h:panelGrid id="panelGridProveedor" columns="2" cellpadding="5"
 							styleClass="ui-grid">
-							<h:outputLabel for="nitProveedor"
-								value="#{msg.MSG_DIALOG_PROVEEDOR_NIT}" />
-							<p:inputText id="nitProveedor"
-								value="#{registrarCompra.compraCabeceraId.idProveedorApp}"
-								required="true"
-								requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
-								label="#{msg.MSG_DIALOG_PROVEEDOR_NIT}"
-								onkeydown="return event.keyCode &gt;= 48 &amp;&amp; event.keyCode &lt;= 57 || event.keyCode &gt;= 96 &amp;&amp; event.keyCode &lt;= 105 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37  || event.keyCode == 39 || event.keyCode == 13" />
+							<h:outputLabel for="proveedor"
+								value="#{msg.MSG_DIALOG_PROVEEDOR}" />
+							<p:autoComplete id="proveedor"
+								value="#{registrarCompra.proveedorApp}"
+								completeMethod="#{registrarCompra.completeProveedorApp}"
+								var="proveedorApp" itemLabel="#{proveedorApp.razonSocial}"
+								itemValue="#{proveedorApp}" converter="#{proveedorAppConverter}"
+								forceSelection="true" required="true"
+								requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}">
+
+								<p:column>
+									<h:outputText value="#{proveedorApp.idProveedorApp}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{proveedorApp.razonSocial}" />
+								</p:column>
+							</p:autoComplete>
 
 							<h:outputLabel for="numeroFactura"
 								value="#{msg.MSG_DIALOG_PROVEEDOR_FACTURA}" />

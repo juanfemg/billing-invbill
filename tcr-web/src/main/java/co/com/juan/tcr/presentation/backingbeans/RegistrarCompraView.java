@@ -169,20 +169,32 @@ public class RegistrarCompraView implements Serializable {
 		}
 	}
 
+	public List<ProveedorApp> completeProveedorApp(String proveedorApp) {
+		List<ProveedorApp> allProveedoresApp = businessDelegate.getProveedores();
+		List<ProveedorApp> filteredProveedoresApp = new ArrayList<ProveedorApp>();
+
+		for (ProveedorApp proveedorAppTemp : allProveedoresApp) {
+			if (proveedorAppTemp.getRazonSocial().toLowerCase().contains(proveedorApp.toLowerCase())) {
+				filteredProveedoresApp.add(proveedorAppTemp);
+			}
+		}
+
+		return filteredProveedoresApp;
+	}
+
 	public void actionAdicionarProveedor() {
 		showDialogProveedor = true;
 	}
 
 	public void actionIngresarProveedor() {
 		try {
-			proveedorApp = businessDelegate.findProveedorByID(compraCabeceraId.getIdProveedorApp());
-
 			if (proveedorApp == null) {
 				addWarnMessage(properties.getParametroString("MSG_PROVEEDOR_NO_EXISTE"));
 			} else {
 				if (proveedorApp.getEstado().equals(EstadosAppEnum.I)) {
 					addWarnMessage(properties.getParametroString("MSG_PROVEEDOR_INACTIVO"));
 				} else {
+					compraCabeceraId.setIdProveedorApp(proveedorApp.getIdProveedorApp());
 					findCompraCabeceraByID();
 				}
 			}
@@ -190,7 +202,7 @@ public class RegistrarCompraView implements Serializable {
 			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_PROVEEDOR"),
 					ID_DIALOG_MESSAGES_PROVEEDOR);
 			log.error("=== Consulta de Proovedor: Fallo la consulta del proveedor {}. Se ha producido un error: {}",
-					compraCabeceraId.getIdProveedorApp(), e.getMessage());
+					proveedorApp.getIdProveedorApp(), e.getMessage());
 		}
 
 	}
