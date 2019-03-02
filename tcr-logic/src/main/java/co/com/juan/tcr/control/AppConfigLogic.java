@@ -227,14 +227,6 @@ public class AppConfigLogic implements IAppConfigLogic {
 			throw new EntityException().new NotValidFormatException(Constant.FIELD_ID_ENTITY);
 		}
 
-		if (entity.getValor() == null) {
-			throw new EntityException().new EmptyFieldException(Constant.FIELD_VALOR);
-		}
-
-		if ((entity.getValor() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getValor(), 200))) {
-			throw new EntityException().new NotValidFormatException(Constant.FIELD_VALOR);
-		}
-
 		if (entity.getDescripcion() == null) {
 			throw new EntityException().new EmptyFieldException(Constant.FIELD_DESCRIPCION);
 		}
