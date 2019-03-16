@@ -32,7 +32,7 @@ import co.com.juan.tcr.util.Properties;
 public class ConsultarFacturaView implements Serializable {
 
 	private static final String FILE_MESSAGES = "bundles.msg_ConsultaFactura";
-	private static final String REPORTE_FACTURA_VENTA_COPIA = "reportFacturaVentaCopia";
+	private static final String REPORTE_FACTURA_VENTA = "reportFacturaVenta";
 	private static final long serialVersionUID = 4670229557589957806L;
 	private static final Logger log = LoggerFactory.getLogger(ConsultarFacturaView.class);
 
@@ -130,7 +130,8 @@ public class ConsultarFacturaView implements Serializable {
 		try {
 			Map<String, Object> parameters = new HashMap<>();
 			parameters.put("NUMERO_FACTURA_VENTA", facturaCabecera.getIdFactura());
-			reportController.printReport(REPORTE_FACTURA_VENTA_COPIA, parameters);
+			parameters.put("FACTURA_ORIGINAL", Boolean.FALSE);
+			reportController.printReport(REPORTE_FACTURA_VENTA, parameters);
 		} catch (Exception e) {
 			addErrorMessage(properties.getParametroString("MSG_ERROR_IMPRESION"));
 			log.error(

@@ -341,6 +341,7 @@ public class CrearFacturaView implements Serializable {
 			parameters.put("NUMERO_FACTURA_VENTA", facturaCabecera.getIdFactura());
 			parameters.put("EFECTIVO", metodoPago);
 			parameters.put("CAMBIO", cambio);
+			parameters.put("FACTURA_ORIGINAL", Boolean.TRUE);
 			if (nitTercero == null) {
 				parameters.put("NIT_TERCERO", nitTercero);
 			} else {
