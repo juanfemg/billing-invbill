@@ -198,6 +198,11 @@ public class BusinessDelegate implements IBusinessDelegate {
 	}
 
 	@Override
+	public List<CategoriaProducto> getCategoriasProductoSortByCategoria() {
+		return categoriaProductoLogic.findPageCategoriaProducto("categoria", true);
+	}
+
+	@Override
 	public void save(Producto entity) {
 		if (entity.getEstado() == null) {
 			entity.setEstado(EstadosAppEnum.A);
@@ -269,6 +274,11 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public List<Producto> getProductosByCategoriaProducto(CategoriaProducto categoriaProducto) {
 		return productoLogic.findByProperty("categoriaProducto", categoriaProducto);
+	}
+
+	@Override
+	public List<Producto> getProductosByCategoriaProductoSortByProducto(CategoriaProducto categoriaProducto) {
+		return productoLogic.findByPropertySort("categoriaProducto", categoriaProducto, "producto", true);
 	}
 
 	@Override

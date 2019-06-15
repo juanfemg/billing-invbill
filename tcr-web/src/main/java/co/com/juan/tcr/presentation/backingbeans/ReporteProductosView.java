@@ -109,7 +109,7 @@ public class ReporteProductosView implements Serializable {
 
 	public void initCategoriasProducto() {
 		try {
-			categoria = businessDelegate.getCategoriasProducto();
+			categoria = businessDelegate.getCategoriasProductoSortByCategoria();
 
 			for (CategoriaProducto categoriaProductoTemp : categoria) {
 				categorias.add(new SelectItem(categoriaProductoTemp, categoriaProductoTemp.getCategoria()));

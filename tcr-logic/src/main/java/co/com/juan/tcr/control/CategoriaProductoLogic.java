@@ -146,6 +146,20 @@ public class CategoriaProductoLogic implements ICategoriaProductoLogic {
 
 	@Override
 	@Transactional(readOnly = true)
+	public List<CategoriaProducto> findPageCategoriaProducto(String sortColumnName, boolean sortAscending) {
+		List<CategoriaProducto> entity = null;
+
+		try {
+			entity = categoriaProductoDao.findPage(sortColumnName, sortAscending);
+		} catch (Exception e) {
+			throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+		}
+
+		return entity;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public Long findTotalNumberCategoriaProducto() {
 		Long entity = null;
 

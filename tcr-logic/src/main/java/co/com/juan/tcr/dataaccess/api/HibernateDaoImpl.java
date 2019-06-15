@@ -669,6 +669,38 @@ public class HibernateDaoImpl<T, P extends Serializable> implements Dao<T, P> {
 	}
 
 	@Override
+	public List<T> findPage(String sortColumnName, boolean sortAscending) {
+		log.debug("findPage {}", entityClass.getName());
+
+		String queryString = "";
+		if ((sortColumnName != null) && (sortColumnName.length() > 0)) {
+			try {
+				if (sortAscending) {
+					queryString = String.format("from %s model order by model.%s asc", entityClass.getName(),
+							sortColumnName);
+				} else {
+					queryString = String.format("from %s model order by model.%s desc", entityClass.getName(),
+							sortColumnName);
+				}
+
+				return sessionFactory.getCurrentSession().createQuery(queryString).list();
+			} catch (RuntimeException re) {
+				log.error(String.format("findPage %s failed", entityClass.getName()), re);
+				throw re;
+			}
+		} else {
+			try {
+				queryString = String.format("from %s model", entityClass.getName());
+
+				return sessionFactory.getCurrentSession().createQuery(queryString).list();
+			} catch (RuntimeException re) {
+				log.error(String.format("findPage %s failed", entityClass.getName()), re);
+				throw re;
+			}
+		}
+	}
+
+	@Override
 	public List<T> findByCriteria(String whereCondition) {
 		log.debug("finding {} {}", entityClass.getName(), whereCondition);
 
@@ -719,6 +751,36 @@ public class HibernateDaoImpl<T, P extends Serializable> implements Dao<T, P> {
 	}
 
 	@Override
+	public List<T> findByPropertySort(String propertyName, Object value, String sortColumnName, boolean sortAscending) {
+		log.debug("finding {} instance with property: {}, value: {}, sortColumnName: {}, sortAscending: {}",
+				entityClass.getName(), propertyName, value, sortColumnName, sortAscending);
+
+		try {
+			String queryString = "";
+			if ((sortColumnName != null) && (sortColumnName.length() > 0)) {
+				if (sortAscending) {
+					queryString = String.format("from %s model where model.%s = :%s order by model.%s asc",
+							entityClass.getName(), propertyName, propertyName, sortColumnName);
+				} else {
+					queryString = String.format("from %s model where model.%s = :%s order by model.%s desc",
+							entityClass.getName(), propertyName, propertyName, sortColumnName);
+				}
+			} else {
+				queryString = String.format("from %s model where model.%s = :%s", entityClass.getName(), propertyName,
+						propertyName);
+			}
+
+			Query queryObject = sessionFactory.getCurrentSession().createQuery(queryString);
+			applyNamedParameterToQuery(queryObject, propertyName, value);
+
+			return queryObject.list();
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
+
+	@Override
 	public List<T> findByProperty(String propertyName, Collection<?> values) {
 		log.debug("finding {} instance with property: {}, value: {}", entityClass.getName(), propertyName, values);
 
@@ -753,4 +815,5 @@ public class HibernateDaoImpl<T, P extends Serializable> implements Dao<T, P> {
 			throw re;
 		}
 	}
+
 }

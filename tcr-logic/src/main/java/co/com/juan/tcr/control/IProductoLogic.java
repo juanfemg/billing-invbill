@@ -72,6 +72,13 @@ public interface IProductoLogic {
 	public List<Producto> findByProperty(String propertyName, Object value);
 
 	/**
+	 * Find by Property an sort existing Producto entity
+	 * 
+	 */
+	public List<Producto> findByPropertySort(String propertyName, Object value, String sortColumnName,
+			boolean sortAscending);
+
+	/**
 	 * Find by Property an existing Producto entity
 	 * 
 	 */

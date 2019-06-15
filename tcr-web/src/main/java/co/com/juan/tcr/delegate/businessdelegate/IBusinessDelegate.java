@@ -111,6 +111,8 @@ public interface IBusinessDelegate {
 
 	public List<CategoriaProducto> getCategoriasProducto();
 
+	public List<CategoriaProducto> getCategoriasProductoSortByCategoria();
+
 	public void save(Producto entity);
 
 	public Producto findProductoByID(Integer id);
@@ -136,6 +138,8 @@ public interface IBusinessDelegate {
 	public Object getPromedioStockProductoByPropertyName(String propertyName);
 
 	public List<Producto> getProductosByCategoriaProducto(CategoriaProducto categoriaProducto);
+
+	public List<Producto> getProductosByCategoriaProductoSortByProducto(CategoriaProducto categoriaProducto);
 
 	public List<Producto> getProductosByCategoriasProducto(List<CategoriaProducto> categoriasProducto);
 

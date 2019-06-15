@@ -83,7 +83,7 @@ public class ConsultarProductoView implements Serializable {
 
 	public void initCategoriasProducto() {
 		try {
-			categoriasProducto = businessDelegate.getCategoriasProducto();
+			categoriasProducto = businessDelegate.getCategoriasProductoSortByCategoria();
 
 			for (CategoriaProducto categoriaProductoTemp : categoriasProducto) {
 				if (categoriaProductoTemp.getEstado().equals(EstadosAppEnum.A)) {

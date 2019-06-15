@@ -101,7 +101,7 @@ public class CrearFacturaView implements Serializable {
 
 	public void initCategoriasProducto() {
 		try {
-			categoria = businessDelegate.getCategoriasProducto();
+			categoria = businessDelegate.getCategoriasProductoSortByCategoria();
 
 			for (CategoriaProducto categoriaProductoTemp : categoria) {
 				if (categoriaProductoTemp.getEstado().equals(EstadosAppEnum.A))
@@ -124,7 +124,7 @@ public class CrearFacturaView implements Serializable {
 
 	public void initProductos() {
 		try {
-			producto = businessDelegate.getProductosByCategoriaProducto(categoriaProducto);
+			producto = businessDelegate.getProductosByCategoriaProductoSortByProducto(categoriaProducto);
 
 			productos.clear();
 

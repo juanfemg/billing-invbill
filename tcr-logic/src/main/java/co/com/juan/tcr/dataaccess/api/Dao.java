@@ -133,6 +133,19 @@ public interface Dao<T, P extends Serializable> {
 
 	/**
 	 * Busca un objeto por una propiedad con valor de tipo string. Este metodo es
+	 * util para buscar por columnas que poseen valores unicos. Este metodo ordena
+	 * por una columna de manera ascendente o descendente
+	 * 
+	 * @param propertyName
+	 * @param value
+	 * @param sortColumnName
+	 * @param sortAscending
+	 * @return
+	 */
+	List<T> findByPropertySort(String propertyName, Object value, String sortColumnName, boolean sortAscending);
+
+	/**
+	 * Busca un objeto por una propiedad con valor de tipo string. Este metodo es
 	 * util para buscar por columnas que poseen multiples valores.
 	 * 
 	 * @param propertyName
@@ -470,6 +483,14 @@ public interface Dao<T, P extends Serializable> {
 	 * @return
 	 */
 	List<T> findPage(String sortColumnName, boolean sortAscending, int startRow, int maxResults);
+
+	/**
+	 * 
+	 * @param sortColumnName
+	 * @param sortAscending
+	 * @return
+	 */
+	List<T> findPage(String sortColumnName, boolean sortAscending);
 
 	/**
 	 * 

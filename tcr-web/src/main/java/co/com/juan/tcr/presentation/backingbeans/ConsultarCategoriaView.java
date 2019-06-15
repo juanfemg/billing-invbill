@@ -64,7 +64,7 @@ public class ConsultarCategoriaView implements Serializable {
 
 	public void initCategoriasProducto() {
 		try {
-			categoriasProducto = businessDelegate.getCategoriasProducto();
+			categoriasProducto = businessDelegate.getCategoriasProductoSortByCategoria();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_CATEGORIAS"));
 			log.error("=== Consulta de Categorias: Fallo la consulta de las categorias", e);

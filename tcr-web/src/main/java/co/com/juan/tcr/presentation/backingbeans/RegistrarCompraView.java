@@ -122,7 +122,7 @@ public class RegistrarCompraView implements Serializable {
 
 	public void initCategoriasProducto() {
 		try {
-			categoria = businessDelegate.getCategoriasProducto();
+			categoria = businessDelegate.getCategoriasProductoSortByCategoria();
 
 			categorias.clear();
 
@@ -147,7 +147,7 @@ public class RegistrarCompraView implements Serializable {
 
 	public void initProductos() {
 		try {
-			producto = businessDelegate.getProductosByCategoriaProducto(categoriaProducto);
+			producto = businessDelegate.getProductosByCategoriaProductoSortByProducto(categoriaProducto);
 
 			productos.clear();
 

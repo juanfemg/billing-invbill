@@ -213,6 +213,24 @@ public class ProductoLogic implements IProductoLogic {
 
 	@Override
 	@Transactional(readOnly = true)
+	public List<Producto> findByPropertySort(String propertyName, Object value, String sortColumnName,
+			boolean sortAscending) {
+		log.debug("finding {} instance", Constant.ENTITY_NAME);
+
+		List<Producto> list = new ArrayList<>();
+
+		try {
+			list = productoDao.findByPropertySort(propertyName, value, sortColumnName, sortAscending);
+		} catch (Exception e) {
+			log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+			throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+		}
+
+		return list;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public List<Producto> findByProperty(String propertyName, Collection<?> values) {
 		log.debug("finding {} instance", Constant.ENTITY_NAME);
 

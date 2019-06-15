@@ -48,6 +48,12 @@ public interface ICategoriaProductoLogic {
 			int maxResults);
 
 	/**
+	 * List sort existing CategoriaProducto entity
+	 * 
+	 */
+	public List<CategoriaProducto> findPageCategoriaProducto(String sortColumnName, boolean sortAscending);
+
+	/**
 	 * Get rows existing CategoriaProducto entity
 	 * 
 	 */
