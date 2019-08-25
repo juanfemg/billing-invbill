@@ -1,0 +1,151 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<f:view>
+
+			<f:loadBundle basename="messages.reporteVentas" var="msg" />
+			<f:loadBundle basename="messages.global" var="msgGlobal" />
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+			<p:dialog modal="true" widgetVar="statusDialog"
+				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
+				closable="false" resizable="false">
+				<p:graphicImage
+					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
+			</p:dialog>
+
+			<h:form id="formReporteVentas" enctype="multipart/form-data">
+
+				<p:panel id="panelReporteVentas"
+					header="#{msg.MSG_HEADER_PANEL_REPORTE_VENTAS}">
+
+					<div align="center">
+						<p:messages id="men" globalOnly="true" showDetail="false"
+							severity="info error fatal" />
+						<p:growl id="growl" showDetail="false" severity="warn" />
+
+						<p:panel id="panelFiltrosVenta">
+							<div align="left">
+
+								<h:outputText id="descripcionReporte"
+									value="#{msg.MSG_DESCRIPCION_REPORTE}" />
+
+								<div class="EmptyBox20" />
+
+								<h:panelGrid id="panelGridFiltrosVentaTiposPeriodos" columns="3"
+									cellpadding="5" styleClass="ui-grid, ui-update">
+									<h:outputLabel for="anio" value="#{msg.MSG_VALUE_ANIO}" />
+									<h:panelGroup id="panelGroupAnios">
+										<p:selectOneMenu id="anio" value="#{reporteVentas.anioFiltro}"
+											disabled="#{empty reporteVentas.anios}" filter="true"
+											filterMatchMode="startsWith" label="#{msg.MSG_VALUE_ANIOS}">
+											<f:selectItem value="#{null}"
+												itemLabel="#{msgGlobal.MSG_ITEM_SELECT_DEFAULT}"
+												noSelectionOption="true" itemDisabled="true" />
+											<f:selectItems value="#{reporteVentas.anios}" />
+										</p:selectOneMenu>
+										<p:messages id="menAnios" showDetail="false" severity="warn" />
+									</h:panelGroup>
+									<p:message for="anio" display="text" />
+
+									<h:outputLabel for="periodo" value="#{msg.MSG_VALUE_PERIODO}" />
+									<h:panelGroup id="panelGroupPeriodos">
+										<p:selectOneMenu id="periodo"
+											value="#{reporteVentas.tipoPeriodoFiltro}"
+											converter="#{tipoPeriodoConverter}"
+											disabled="#{empty reporteVentas.tiposPeriodo}" filter="true"
+											filterMatchMode="startsWith"
+											label="#{msg.MSG_VALUE_PERIODOS}">
+											<p:ajax event="change" update="panelGridFiltrosVentaPeriodos"
+												process="@this" listener="#{reporteVentas.initPeriodos}" />
+											<f:selectItem value="#{null}"
+												itemLabel="#{msgGlobal.MSG_ITEM_SELECT_DEFAULT}"
+												noSelectionOption="true" itemDisabled="true" />
+											<f:selectItems value="#{reporteVentas.tiposPeriodo}" />
+										</p:selectOneMenu>
+										<p:messages id="menPeriodos" showDetail="false"
+											severity="warn" />
+									</h:panelGroup>
+									<p:message for="periodo" display="text" />
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridFiltrosVentaPeriodos" columns="3"
+									cellpadding="5" styleClass="ui-grid, ui-update">
+									<h:outputLabel for="semestre" value="#{msg.MSG_VALUE_SEMESTRE}"
+										rendered="#{reporteVentas.showSemestres}" />
+									<h:panelGroup id="panelGroupSemestres"
+										rendered="#{reporteVentas.showSemestres}">
+										<p:selectCheckboxMenu id="semestre"
+											value="#{reporteVentas.semestresFiltro}"
+											disabled="#{empty reporteVentas.semestres}" filter="true"
+											filterMatchMode="startsWith"
+											label="#{msg.MSG_VALUE_SEMESTRES}">
+											<f:selectItems value="#{reporteVentas.semestres}" />
+										</p:selectCheckboxMenu>
+										<p:messages id="menSemestres" showDetail="false"
+											severity="warn" />
+									</h:panelGroup>
+									<p:message for="semestre" display="text"
+										rendered="#{reporteVentas.showSemestres}" />
+
+									<h:outputLabel for="trimestre"
+										value="#{msg.MSG_VALUE_TRIMESTRE}"
+										rendered="#{reporteVentas.showTrimestres}" />
+									<h:panelGroup id="panelGroupTrimestres"
+										rendered="#{reporteVentas.showTrimestres}">
+										<p:selectCheckboxMenu id="trimestre"
+											value="#{reporteVentas.trimestresFiltro}"
+											disabled="#{empty reporteVentas.trimestres}" filter="true"
+											filterMatchMode="startsWith"
+											label="#{msg.MSG_VALUE_TRIMESTRES}">
+											<f:selectItems value="#{reporteVentas.trimestres}" />
+										</p:selectCheckboxMenu>
+										<p:messages id="menTrimestres" showDetail="false"
+											severity="warn" />
+									</h:panelGroup>
+									<p:message for="trimestre" display="text"
+										rendered="#{reporteVentas.showTrimestres}" />
+
+									<h:outputLabel for="mes" value="#{msg.MSG_VALUE_MES}"
+										rendered="#{reporteVentas.showMeses}" />
+									<h:panelGroup id="panelGroupMeses"
+										rendered="#{reporteVentas.showMeses}">
+										<p:selectCheckboxMenu id="mes"
+											value="#{reporteVentas.mesesFiltro}"
+											disabled="#{empty reporteVentas.meses}" filter="true"
+											filterMatchMode="startsWith" label="#{msg.MSG_VALUE_MESES}">
+											<f:selectItems value="#{reporteVentas.meses}" />
+										</p:selectCheckboxMenu>
+										<p:messages id="menMeses" showDetail="false" severity="warn" />
+									</h:panelGroup>
+									<p:message for="mes" display="text"
+										rendered="#{reporteVentas.showMeses}" />
+								</h:panelGrid>
+								
+								<h:panelGrid id="panelGridBotones" columns="2" cellpadding="5"
+									styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_GENERAR}"
+										id="btnGenerar"
+										actionListener="#{reporteVentas.actionGenerarReporte}"
+										ajax="false" update="men panelGridFiltrosVentaTiposPeriodos panelGridFiltrosVentaPeriodos growl"
+										icon="fa fa-file"
+										onclick="PrimeFces.monitorDownload(PF('statusDialog').show(), PF('statusDialog').hide());">
+										<p:fileDownload value="#{reporteVentas.content}" />
+									</p:commandButton>
+									<p:commandButton value="#{msg.MSG_BUTTON_LIMPIAR}"
+										id="btnLimpiar" update="@(.ui-update)" process="@this"
+										actionListener="#{reporteVentas.actionLimpiar}" />
+								</h:panelGrid>
+							</div>
+						</p:panel>
+					</div>
+				</p:panel>
+			</h:form>
+		</f:view>
+	</ui:define>
+</ui:composition>

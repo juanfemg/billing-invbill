@@ -77,4 +77,23 @@ public interface IFacturaCabeceraLogic {
 	 * 
 	 */
 	public void checkFields(FacturaCabecera entity);
+
+	/**
+	 * Find by Criteria with Projection MAX an existing object
+	 * 
+	 */
+	public Object findMaxObjectByCriteria(String propertyName);
+
+	/**
+	 * Find by Criteria with Projection MIN an existing object
+	 * 
+	 */
+	public Object findMinObjectByCriteria(String propertyName);
+
+	/**
+	 * Find by Criteria with Projection AVG an existing object
+	 * 
+	 */
+	public Object findAvgObjectByCriteria(String propertyName);
+
 }

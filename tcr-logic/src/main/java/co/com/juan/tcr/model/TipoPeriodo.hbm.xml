@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 16/06/2019 09:33:47 PM by Hibernate Tools 4.0.1.Final -->
+<hibernate-mapping package="co.com.juan.tcr.model">
+	<class name="TipoPeriodo" table="tipo_periodo" catalog="tcr">
+		<id name="idPeriodo" type="java.lang.Integer">
+			<column name="id_periodo" />
+			<generator class="assigned" />
+		</id>
+		<property generated="never" lazy="true" name="periodo"
+			type="string">
+			<column name="periodo" length="45" not-null="true" />
+		</property>
+		<property generated="never" lazy="true" name="numeroMeses"
+			type="java.lang.Integer">
+			<column name="numero_meses" not-null="true" />
+		</property>
+		<property generated="never" lazy="true" name="estado">
+			<column length="1" name="estado" not-null="true" />
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">co.com.juan.tcr.enums.EstadosAppEnum</param>
+				<param name="type">1</param>
+			</type>
+		</property>
+	</class>
+</hibernate-mapping>

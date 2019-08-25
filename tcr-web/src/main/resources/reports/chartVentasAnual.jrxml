@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2019-07-20T12:08:27 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="chartVentasAnual" pageWidth="802" pageHeight="555" orientation="Landscape" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4d18bdad-1c09-47ea-90c4-86f629b3f398">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Mysql DB"/>
+	<subDataset name="Table Ventas Mensuales" uuid="5e786d54-c232-4a67-a220-fa9e4adbfad5">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Mysql DB"/>
+		<parameter name="ANIO" class="java.lang.Integer"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT 
+    idMes,
+    CONVERTIRIDIOMANOMBREMES(idMes, 'es_CL') Mes,
+    valorTotal,
+    CALCULARVENTAMINIMAMESANIO(idMes, idAnio) valorVentaMinima,
+    CALCULARVENTAMAXIMAMESANIO(idMes, idAnio) valorVentaMaxima,
+    CALCULARVENTAPROMEDIOMESANIO(idMes, idAnio) valorVentaPromedio
+FROM
+    (SELECT 
+        YEAR(venta.fecha_creacion) AS IdAnio,
+            MONTH(venta.fecha_creacion) AS IdMes,
+            (SUM(venta.valor_total) - IFNULL(SUM(devolucion.valor_total), 0)) AS valorTotal
+    FROM
+        tcr.factura_cabecera venta
+    LEFT JOIN tcr.devolucion_cabecera devolucion ON (venta.id_factura = devolucion.id_factura)
+    WHERE
+        YEAR(CAST(venta.fecha_creacion AS DATE)) = $P{ANIO} 
+    GROUP BY YEAR(venta.fecha_creacion) , MONTH(venta.fecha_creacion)
+    ORDER BY MONTH(venta.fecha_creacion)) A]]>
+		</queryString>
+		<field name="idMes" class="java.lang.Integer"/>
+		<field name="Mes" class="java.lang.String"/>
+		<field name="valorTotal" class="java.math.BigDecimal"/>
+		<field name="valorVentaMinima" class="java.lang.Integer"/>
+		<field name="valorVentaMaxima" class="java.lang.Integer"/>
+		<field name="valorVentaPromedio" class="java.lang.Integer"/>
+		<variable name="VALOR_VENTAS_SUM" class="java.lang.Integer" calculation="Sum">
+			<variableExpression><![CDATA[$F{valorTotal}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="ANIO" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 1 
+FROM DUAL]]>
+	</queryString>
+	<detail>
+		<band height="211" splitType="Stretch">
+			<barChart>
+				<chart isShowLegend="true" evaluationTime="Report">
+					<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="802" height="210" uuid="1f52f105-ac73-484a-8841-1cc5b45444b4"/>
+					<box topPadding="0"/>
+					<chartTitle>
+						<font size="18" isBold="true"/>
+						<titleExpression><![CDATA["Distribución de Ventas Mensual " + $P{ANIO}]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="Table Ventas Mensuales" uuid="e3958fb0-8819-411a-b350-0173a070139e">
+							<datasetParameter name="ANIO">
+								<datasetParameterExpression><![CDATA[$P{ANIO}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{Mes}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{Mes}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{valorTotal}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot backgroundAlpha="1.0" foregroundAlpha="1.0" labelRotation="0.0">
+						<seriesColor seriesOrder="0" color="#FA6969"/>
+						<seriesColor seriesOrder="1" color="#FAB169"/>
+						<seriesColor seriesOrder="2" color="#F2E857"/>
+						<seriesColor seriesOrder="3" color="#A772F7"/>
+						<seriesColor seriesOrder="4" color="#7581FF"/>
+						<seriesColor seriesOrder="5" color="#20AAF5"/>
+						<seriesColor seriesOrder="6" color="#93C9F5"/>
+						<seriesColor seriesOrder="7" color="#55B563"/>
+						<seriesColor seriesOrder="8" color="#0ACC48"/>
+						<seriesColor seriesOrder="9" color="#A008C9"/>
+						<seriesColor seriesOrder="10" color="#C16ACE"/>
+						<seriesColor seriesOrder="11" color="#4F75D7"/>
+					</plot>
+					<itemLabel>
+						<font size="10" isBold="false"/>
+					</itemLabel>
+					<categoryAxisFormat labelRotation="0.0">
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000">
+							<labelFont>
+								<font size="10"/>
+							</labelFont>
+							<tickLabelFont>
+								<font size="10"/>
+							</tickLabelFont>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000">
+							<labelFont>
+								<font size="10"/>
+							</labelFont>
+							<tickLabelFont>
+								<font size="10"/>
+							</tickLabelFont>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</detail>
+</jasperReport>

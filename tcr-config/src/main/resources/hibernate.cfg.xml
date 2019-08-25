@@ -26,5 +26,6 @@
 		<mapping resource="co/com/juan/tcr/model/AppConfig.hbm.xml" />
 		<mapping resource="co/com/juan/tcr/model/AppMenu.hbm.xml" />
 		<mapping resource="co/com/juan/tcr/model/TipoUnidadMedida.hbm.xml" />
+		<mapping resource="co/com/juan/tcr/model/TipoPeriodo.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>

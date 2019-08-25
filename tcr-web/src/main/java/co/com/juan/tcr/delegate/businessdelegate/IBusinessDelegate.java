@@ -24,6 +24,7 @@ import co.com.juan.tcr.model.LoginApp;
 import co.com.juan.tcr.model.Producto;
 import co.com.juan.tcr.model.ProveedorApp;
 import co.com.juan.tcr.model.StockProducto;
+import co.com.juan.tcr.model.TipoPeriodo;
 import co.com.juan.tcr.model.TipoUnidadMedida;
 import co.com.juan.tcr.model.UsuarioApp;
 
@@ -151,6 +152,12 @@ public interface IBusinessDelegate {
 
 	public List<FacturaCabecera> getFacturaCabeceras();
 
+	public Object getMaximaFacturaCabeceraByPropertyName(String propertyName);
+
+	public Object getMinimaFacturaCabeceraByPropertyName(String propertyName);
+
+	public Object getPromedioFacturaCabeceraByPropertyName(String propertyName);
+
 	public void save(FacturaDetalle entity);
 
 	public FacturaDetalle findFacturaDetalleByID(FacturaDetalleId id);
@@ -236,5 +243,13 @@ public interface IBusinessDelegate {
 	public void update(TipoUnidadMedida entity);
 
 	public List<TipoUnidadMedida> getTiposUnidadMedida();
+
+	public void save(TipoPeriodo entity);
+
+	public TipoPeriodo findTipoPeriodoByID(Integer id);
+
+	public void update(TipoPeriodo entity);
+
+	public List<TipoPeriodo> getTiposPeriodo();
 
 }

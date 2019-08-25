@@ -251,6 +251,60 @@ public class FacturaCabeceraLogic implements IFacturaCabeceraLogic {
 		}
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public Object findMaxObjectByCriteria(String propertyName) {
+		log.debug("getting {} instance", Constant.ENTITY_NAME);
+
+		Object object = null;
+
+		try {
+			object = facturaCabeceraDao.maxByCriteria(propertyName);
+
+		} catch (Exception e) {
+			log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+			throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+		}
+
+		return object;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Object findMinObjectByCriteria(String propertyName) {
+		log.debug("getting {} instance", Constant.ENTITY_NAME);
+
+		Object object = null;
+
+		try {
+			object = facturaCabeceraDao.minByCriteria(propertyName);
+
+		} catch (Exception e) {
+			log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+			throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+		}
+
+		return object;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Object findAvgObjectByCriteria(String propertyName) {
+		log.debug("getting {} instance", Constant.ENTITY_NAME);
+
+		Object object = null;
+
+		try {
+			object = facturaCabeceraDao.avgByCriteria(propertyName);
+
+		} catch (Exception e) {
+			log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+			throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+		}
+
+		return object;
+	}
+
 	private static class Constant {
 
 		private static final String ENTITY_NAME = "FacturaCabecera";

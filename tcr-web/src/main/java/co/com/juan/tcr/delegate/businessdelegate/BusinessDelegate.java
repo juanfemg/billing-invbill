@@ -21,6 +21,7 @@ import co.com.juan.tcr.control.ILoginAppLogic;
 import co.com.juan.tcr.control.IProductoLogic;
 import co.com.juan.tcr.control.IProveedorAppLogic;
 import co.com.juan.tcr.control.IStockProductoLogic;
+import co.com.juan.tcr.control.ITipoPeriodoLogic;
 import co.com.juan.tcr.control.ITipoUnidadMedidaLogic;
 import co.com.juan.tcr.control.IUsuarioAppLogic;
 import co.com.juan.tcr.dto.ReporteCompraDiaria;
@@ -54,6 +55,7 @@ import co.com.juan.tcr.model.Producto;
 import co.com.juan.tcr.model.ProveedorApp;
 import co.com.juan.tcr.model.RolApp;
 import co.com.juan.tcr.model.StockProducto;
+import co.com.juan.tcr.model.TipoPeriodo;
 import co.com.juan.tcr.model.TipoUnidadMedida;
 import co.com.juan.tcr.model.UsuarioApp;
 import co.com.juan.tcr.util.Encrypt;
@@ -128,6 +130,9 @@ public class BusinessDelegate implements IBusinessDelegate {
 
 	@Autowired
 	private ITipoUnidadMedidaLogic tipoUnidadMedidaLogic;
+
+	@Autowired
+	private ITipoPeriodoLogic tipoPeriodoLogic;
 
 	@Override
 	public void save(LoginApp entity) {
@@ -304,6 +309,21 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public List<FacturaCabecera> getFacturaCabeceras() {
 		return facturaCabeceraLogic.getDataFacturaCabecera();
+	}
+
+	@Override
+	public Object getMaximaFacturaCabeceraByPropertyName(String propertyName) {
+		return facturaCabeceraLogic.findMaxObjectByCriteria(propertyName);
+	}
+
+	@Override
+	public Object getMinimaFacturaCabeceraByPropertyName(String propertyName) {
+		return facturaCabeceraLogic.findMinObjectByCriteria(propertyName);
+	}
+
+	@Override
+	public Object getPromedioFacturaCabeceraByPropertyName(String propertyName) {
+		return facturaCabeceraLogic.findAvgObjectByCriteria(propertyName);
 	}
 
 	@Override
@@ -559,6 +579,30 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public List<TipoUnidadMedida> getTiposUnidadMedida() {
 		return tipoUnidadMedidaLogic.getTipoUnidadMedida();
+	}
+
+	@Override
+	public void save(TipoPeriodo entity) {
+		if (entity.getEstado() == null) {
+			entity.setEstado(EstadosAppEnum.A);
+		}
+
+		tipoPeriodoLogic.saveTipoPeriodo(entity);
+	}
+
+	@Override
+	public TipoPeriodo findTipoPeriodoByID(Integer id) {
+		return tipoPeriodoLogic.getTipoPeriodo(id);
+	}
+
+	@Override
+	public void update(TipoPeriodo entity) {
+		tipoPeriodoLogic.updateTipoPeriodo(entity);
+	}
+
+	@Override
+	public List<TipoPeriodo> getTiposPeriodo() {
+		return tipoPeriodoLogic.getTipoPeriodo();
 	}
 
 }
