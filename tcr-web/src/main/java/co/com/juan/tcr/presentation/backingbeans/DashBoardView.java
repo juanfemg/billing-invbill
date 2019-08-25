@@ -119,7 +119,7 @@ public class DashBoardView implements Serializable {
 		} catch (Exception e) {
 			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_REPORTE_VENTA_DIARIA"));
 			log.error(
-					"=== Consulta de reporte de venta diaria: Fallo la consulta del reporte. Se ha prdocido un error: {}",
+					"=== Consulta de reporte de venta diaria: Fallo la consulta del reporte. Se ha producido un error: {}",
 					e.getMessage());
 		}
 	}

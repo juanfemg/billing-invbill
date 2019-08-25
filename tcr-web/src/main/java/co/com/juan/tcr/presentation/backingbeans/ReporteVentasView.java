@@ -163,11 +163,17 @@ public class ReporteVentasView implements Serializable {
 
 			if (rangoPeriodos == 2) {
 				semestres.clear();
+				trimestres.clear();
+				meses.clear();
 				initSemestres(rangoPeriodos);
 			} else if (rangoPeriodos == 4) {
+				semestres.clear();
 				trimestres.clear();
+				meses.clear();
 				initTrimestres(rangoPeriodos);
 			} else if (rangoPeriodos == 12) {
+				semestres.clear();
+				trimestres.clear();
 				meses.clear();
 				initMeses(rangoPeriodos);
 			} else {
@@ -186,6 +192,8 @@ public class ReporteVentasView implements Serializable {
 		showSemestres = true;
 		showTrimestres = false;
 		showMeses = false;
+		trimestresFiltro.clear();
+		mesesFiltro.clear();
 	}
 
 	public void initTrimestres(Integer numeroTrimestres) {
@@ -196,6 +204,8 @@ public class ReporteVentasView implements Serializable {
 		showSemestres = false;
 		showTrimestres = true;
 		showMeses = false;
+		semestresFiltro.clear();
+		mesesFiltro.clear();
 	}
 
 	public void initMeses(Integer numeroMeses) {
@@ -203,26 +213,50 @@ public class ReporteVentasView implements Serializable {
 
 		for (int i = 0; i < numeroMeses; i++) {
 			calendar.set(Calendar.MONTH, i);
-			meses.add(new SelectItem(i, calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())));
+			meses.add(new SelectItem((i + 1),
+					calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())));
 		}
 
 		showSemestres = false;
 		showTrimestres = false;
 		showMeses = true;
+		semestresFiltro.clear();
+		trimestresFiltro.clear();
 	}
 
 	public void actionGenerarReporte() {
 		InputStream stream;
 		List<String> subReports;
+		Map<String, Integer> rangoSemestre1 = new HashMap<>();
+		Map<String, Integer> rangoSemestre2 = new HashMap<>();
+		Map<String, Integer> rangoTrimestre1 = new HashMap<>();
+		Map<String, Integer> rangoTrimestre2 = new HashMap<>();
+		Map<String, Integer> rangoTrimestre3 = new HashMap<>();
+		Map<String, Integer> rangoTrimestre4 = new HashMap<>();
 
 		try {
 			Map<String, Object> parameters = new HashMap<>();
 			parameters.put("ANIO", anioFiltro);
-			parameters.put("PERIODO", tipoPeriodoFiltro != null ? tipoPeriodoFiltro.getIdPeriodo() : null);
-			parameters.put("LISTA_SEMESTRES", semestresFiltro);
-			parameters.put("LISTA_TRIMESTRES", trimestresFiltro);
-			parameters.put("LISTA_MESES", mesesFiltro);
+
+			if (semestresFiltro.isEmpty() && trimestresFiltro.isEmpty() && mesesFiltro.isEmpty()) {
+				filterEmpty(semestresFiltro, 2);
+				filterEmpty(trimestresFiltro, 4);
+				filterEmpty(mesesFiltro, 12);
+			}
+
+			parameters.put("RANGO_SEMESTRE_1", filterNestedTypeMap(rangoSemestre1, semestresFiltro, 1, 5));
+			parameters.put("RANGO_SEMESTRE_2", filterNestedTypeMap(rangoSemestre2, semestresFiltro, 2, 5));
+			parameters.put("RANGO_TRIMESTRE_1", filterNestedTypeMap(rangoTrimestre1, trimestresFiltro, 1, 2));
+			parameters.put("RANGO_TRIMESTRE_2", filterNestedTypeMap(rangoTrimestre2, trimestresFiltro, 2, 2));
+			parameters.put("RANGO_TRIMESTRE_3", filterNestedTypeMap(rangoTrimestre3, trimestresFiltro, 3, 2));
+			parameters.put("RANGO_TRIMESTRE_4", filterNestedTypeMap(rangoTrimestre4, trimestresFiltro, 4, 2));
+
+			mesesFiltro.add(0);
+			parameters.put("MESES", mesesFiltro);
 			parameters.put("LOGO_APP", ImageIO.read(getClass().getResource("/images/logoApp.png")));
+
+			semestresFiltro.clear();
+			trimestresFiltro.clear();
 
 			subReports = new ArrayList<>();
 			subReports.add(SUB_REPORTE_VENTAS_ANUAL);
@@ -238,6 +272,31 @@ public class ReporteVentasView implements Serializable {
 			addErrorMessage(properties.getParametroString("MSG_ERROR_GENERACION_REPORTE"));
 			log.error("=== Generacion Reporte Productos : Fallo la generacion del reporte", e);
 		}
+	}
+
+	public List<Integer> filterEmpty(List<Integer> periodo, Integer cantidadPeriodos) {
+		if (periodo.isEmpty()) {
+			for (int count = 0; count < cantidadPeriodos; count++) {
+				periodo.add(count);
+			}
+		}
+		return periodo;
+
+	}
+
+	public Map<String, Integer> filterNestedTypeMap(Map<String, Integer> hash, List<Integer> periodos, Integer periodo,
+			Integer factor) {
+		Object maxValue = hash.get("MAX");
+		Object minValue = hash.get("MIN");
+
+		if (maxValue == null && minValue == null) {
+			if (periodos.contains(periodo)) {
+				hash.put("MIN", (periodo + (factor * (periodo) - factor)));
+				hash.put("MAX", (periodo * (factor + 1)));
+			}
+		}
+
+		return hash;
 	}
 
 	public void actionLimpiar() {
