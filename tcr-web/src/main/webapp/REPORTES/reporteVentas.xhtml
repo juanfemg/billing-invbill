@@ -82,6 +82,63 @@
 										rendered="#{reporteVentas.showSemestres}">
 										<p:selectCheckboxMenu id="semestre"
 											value="#{reporteVentas.semestresFiltro}"
+<<<<<<< HEAD
+											converter="javax.faces.Integer"
+											disabled="#{empty reporteVentas.semestres}" filter="true"
+											filterMatchMode="startsWith"
+											label="#{msg.MSG_VALUE_SEMESTRES}">
+											<f:selectItems value="#{reporteVentas.semestres}" />
+										</p:selectCheckboxMenu>
+										<p:messages id="menSemestres" showDetail="false"
+											severity="warn" />
+									</h:panelGroup>
+									<p:message for="semestre" display="text"
+										rendered="#{reporteVentas.showSemestres}" />
+
+									<h:outputLabel for="trimestre"
+										value="#{msg.MSG_VALUE_TRIMESTRE}"
+										rendered="#{reporteVentas.showTrimestres}" />
+									<h:panelGroup id="panelGroupTrimestres"
+										rendered="#{reporteVentas.showTrimestres}">
+										<p:selectCheckboxMenu id="trimestre"
+											value="#{reporteVentas.trimestresFiltro}"
+											converter="javax.faces.Integer"
+											disabled="#{empty reporteVentas.trimestres}" filter="true"
+											filterMatchMode="startsWith"
+											label="#{msg.MSG_VALUE_TRIMESTRES}">
+											<f:selectItems value="#{reporteVentas.trimestres}" />
+										</p:selectCheckboxMenu>
+										<p:messages id="menTrimestres" showDetail="false"
+											severity="warn" />
+									</h:panelGroup>
+									<p:message for="trimestre" display="text"
+										rendered="#{reporteVentas.showTrimestres}" />
+
+									<h:outputLabel for="mes" value="#{msg.MSG_VALUE_MES}"
+										rendered="#{reporteVentas.showMeses}" />
+									<h:panelGroup id="panelGroupMeses"
+										rendered="#{reporteVentas.showMeses}">
+										<p:selectCheckboxMenu id="mes"
+											value="#{reporteVentas.mesesFiltro}"
+											converter="javax.faces.Integer"
+											disabled="#{empty reporteVentas.meses}" filter="true"
+											filterMatchMode="startsWith" label="#{msg.MSG_VALUE_MESES}">
+											<f:selectItems value="#{reporteVentas.meses}" />
+										</p:selectCheckboxMenu>
+										<p:messages id="menMeses" showDetail="false" severity="warn" />
+									</h:panelGroup>
+									<p:message for="mes" display="text"
+										rendered="#{reporteVentas.showMeses}" />
+								</h:panelGrid>
+
+								<h:panelGrid id="panelGridBotones" columns="2" cellpadding="5"
+									styleClass="ui-grid">
+									<p:commandButton value="#{msg.MSG_BUTTON_GENERAR}"
+										id="btnGenerar"
+										actionListener="#{reporteVentas.actionGenerarReporte}"
+										ajax="false"
+										update="men panelGridFiltrosVentaTiposPeriodos panelGridFiltrosVentaPeriodos growl"
+=======
 											disabled="#{empty reporteVentas.semestres}" filter="true"
 											filterMatchMode="startsWith"
 											label="#{msg.MSG_VALUE_SEMESTRES}">
@@ -133,6 +190,7 @@
 										id="btnGenerar"
 										actionListener="#{reporteVentas.actionGenerarReporte}"
 										ajax="false" update="men panelGridFiltrosVentaTiposPeriodos panelGridFiltrosVentaPeriodos growl"
+>>>>>>> refs/remotes/origin/reporte_ventas
 										icon="fa fa-file"
 										onclick="PrimeFces.monitorDownload(PF('statusDialog').show(), PF('statusDialog').hide());">
 										<p:fileDownload value="#{reporteVentas.content}" />

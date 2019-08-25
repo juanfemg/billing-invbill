@@ -1,4 +1,267 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportVentas" pageWidth="842" pageHeight="995" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
+	<property name="template.engine" value="tabular_template"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Mysql DB"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#EEEFF0"/>
+		</conditionalStyle>
+	</style>
+	<style name="Table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Ventas Mensuales" uuid="58170cb7-cb63-4ee9-add2-df052b863cf7">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Mysql DB"/>
+		<parameter name="ANIO" class="java.lang.Integer"/>
+		<parameter name="SEMESTRE_2_MIN" class="java.lang.Integer"/>
+		<parameter name="SEMESTRE_1_MIN" class="java.lang.Integer"/>
+		<parameter name="SEMESTRE_1_MAX" class="java.lang.Integer"/>
+		<parameter name="SEMESTRE_2_MAX" class="java.lang.Integer"/>
+		<parameter name="TRIMESTRE_1_MIN" class="java.lang.Integer"/>
+		<parameter name="TRIMESTRE_1_MAX" class="java.lang.Integer"/>
+		<parameter name="TRIMESTRE_2_MIN" class="java.lang.Integer"/>
+		<parameter name="TRIMESTRE_2_MAX" class="java.lang.Integer"/>
+		<parameter name="TRIMESTRE_3_MIN" class="java.lang.Integer"/>
+		<parameter name="TRIMESTRE_3_MAX" class="java.lang.Integer"/>
+		<parameter name="TRIMESTRE_4_MIN" class="java.lang.Integer"/>
+		<parameter name="TRIMESTRE_4_MAX" class="java.lang.Integer"/>
+		<parameter name="MESES" class="java.util.List" nestedType="java.lang.Integer"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT 
+    idMes,
+    CONVERTIRIDIOMANOMBREMES(idMes, 'es_CL') Mes,
+    valorTotal,
+    CALCULARVENTAMINIMAMESANIO(idMes, idAnio) valorVentaMinima,
+    CALCULARVENTAMAXIMAMESANIO(idMes, idAnio) valorVentaMaxima,
+    CALCULARVENTAPROMEDIOMESANIO(idMes, idAnio) valorVentaPromedio
+FROM
+    (SELECT 
+        	YEAR(venta.fecha_creacion) AS IdAnio,
+            MONTH(venta.fecha_creacion) AS IdMes,
+            (SUM(venta.valor_total) - IFNULL(SUM(devolucion.valor_total), 0)) AS valorTotal
+    FROM
+        tcr.factura_cabecera venta
+    LEFT JOIN tcr.devolucion_cabecera devolucion ON (venta.id_factura = devolucion.id_factura)
+    WHERE
+    	YEAR(CAST(venta.fecha_creacion AS DATE)) = $P{ANIO}
+        AND (
+        	(
+        		(MONTH(venta.fecha_creacion) BETWEEN $P{SEMESTRE_1_MIN} AND $P{SEMESTRE_1_MAX}) 
+        		OR (MONTH(venta.fecha_creacion) BETWEEN $P{SEMESTRE_2_MIN} AND $P{SEMESTRE_2_MAX})
+        	)
+        	OR (
+        		(MONTH(venta.fecha_creacion) BETWEEN $P{TRIMESTRE_1_MIN} AND $P{TRIMESTRE_1_MAX}) 
+        		OR (MONTH(venta.fecha_creacion) BETWEEN $P{TRIMESTRE_2_MIN} AND $P{TRIMESTRE_2_MAX})
+        		OR (MONTH(venta.fecha_creacion) BETWEEN $P{TRIMESTRE_3_MIN} AND $P{TRIMESTRE_3_MAX}) 
+        		OR (MONTH(venta.fecha_creacion) BETWEEN $P{TRIMESTRE_4_MIN} AND $P{TRIMESTRE_4_MAX})
+        	) 
+        	OR (
+        		($X{IN, MONTH(venta.fecha_creacion), MESES})
+        	)
+        ) 
+    GROUP BY YEAR(venta.fecha_creacion) , MONTH(venta.fecha_creacion)
+    ORDER BY MONTH(venta.fecha_creacion)) A]]>
+		</queryString>
+		<field name="idMes" class="java.lang.Integer"/>
+		<field name="Mes" class="java.lang.String"/>
+		<field name="valorTotal" class="java.math.BigDecimal"/>
+		<field name="valorVentaMinima" class="java.lang.Integer"/>
+		<field name="valorVentaMaxima" class="java.lang.Integer"/>
+		<field name="valorVentaPromedio" class="java.lang.Integer"/>
+		<variable name="VALOR_VENTAS_SUM" class="java.lang.Integer" calculation="Sum">
+			<variableExpression><![CDATA[$F{valorTotal}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="LOGO_APP" class="java.awt.image.BufferedImage" isForPrompting="false"/>
+	<parameter name="ANIO" class="java.lang.Integer"/>
+	<parameter name="SUB_REPORT_PARAMETER_CHARTVENTASANUAL" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="RANGO_SEMESTRE_1" class="java.util.HashMap"/>
+	<parameter name="RANGO_SEMESTRE_2" class="java.util.HashMap"/>
+	<parameter name="RANGO_TRIMESTRE_1" class="java.util.HashMap"/>
+	<parameter name="RANGO_TRIMESTRE_2" class="java.util.HashMap"/>
+	<parameter name="RANGO_TRIMESTRE_3" class="java.util.HashMap"/>
+	<parameter name="RANGO_TRIMESTRE_4" class="java.util.HashMap"/>
+	<parameter name="MESES" class="java.util.List" nestedType="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT 1
+FROM DUAL]]>
+	</queryString>
+	<title>
+		<band height="146" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<line>
+				<reportElement x="0" y="80" width="800" height="1" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="0" y="90" width="50" height="20" uuid="0f86baff-6386-4f3f-b3fe-2388707babe8"/>
+				<box rightPadding="4"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy h:mm a">
+				<reportElement x="50" y="90" width="130" height="20" uuid="bb10dbe1-0a4f-4722-9953-c163b63cf979"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center">
+				<reportElement x="0" y="0" width="65" height="60" uuid="94883631-a913-43e2-b182-ab8d77d0181e"/>
+				<imageExpression><![CDATA[$P{LOGO_APP}]]></imageExpression>
+			</image>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="50" y="110" width="130" height="20" uuid="3836ce65-eca3-4cad-a6de-b1818def0a2b"/>
+				<textFieldExpression><![CDATA["VENTAS " + $P{ANIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="110" width="50" height="20" uuid="0b3f9342-da78-4cfa-9fc5-2301c4749678"/>
+				<box rightPadding="4"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Reporte:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="95" y="0" width="705" height="25" uuid="e622555d-198b-4ccd-a4a1-c59c53304058">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="19" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ALMACEN Y TALLER DE CERRAJERIA RUBENCHO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="95" y="55" width="705" height="15" uuid="b8cc42fd-b569-497d-834d-7e854040ad18">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Tel: 6655231 - 6839255 Cel: 3104918719 - 3155439589]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="95" y="25" width="705" height="15" uuid="c226e44d-3bb5-4145-b0b3-903bf1d79fde">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Carrera 5N No. 46CN - 30]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="95" y="40" width="705" height="15" uuid="b96f7183-44f8-43ad-ba60-43d8fbf50b6e">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[B/ Popular - Cali - Colombia]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="334">
+			<subreport isUsingCache="true" runToBottom="true">
+				<reportElement positionType="Float" x="0" y="110" width="802" height="224" uuid="3657a5a5-7c95-41ec-8692-c0e93205ae43"/>
+				<subreportParameter name="ANIO">
+					<subreportParameterExpression><![CDATA[$P{ANIO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUB_REPORT_PARAMETER_CHARTVENTASANUAL}]]></subreportExpression>
+			</subreport>
+			<componentElement>
+				<reportElement x="131" y="0" width="540" height="90" uuid="f8658706-f812-4572-bc53-8484c364e1d8">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Ventas Mensuales"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Ventas Mensuales" uuid="b07e9385-a767-49d4-8a3b-4793a670fd23">
+						<datasetParameter name="ANIO">
+							<datasetParameterExpression><![CDATA[$P{ANIO}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="SEMESTRE_1_MIN">
+							<datasetParameterExpression><![CDATA[$P{RANGO_SEMESTRE_1}.get( "MIN" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="SEMESTRE_1_MAX">
+							<datasetParameterExpression><![CDATA[$P{RANGO_SEMESTRE_1}.get( "MAX" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="SEMESTRE_2_MIN">
+							<datasetParameterExpression><![CDATA[$P{RANGO_SEMESTRE_2}.get( "MIN" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="SEMESTRE_2_MAX">
+							<datasetParameterExpression><![CDATA[$P{RANGO_SEMESTRE_2}.get( "MAX" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="TRIMESTRE_1_MIN">
+							<datasetParameterExpression><![CDATA[$P{RANGO_TRIMESTRE_1}.get( "MIN" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="TRIMESTRE_1_MAX">
+							<datasetParameterExpression><![CDATA[$P{RANGO_TRIMESTRE_1}.get( "MAX" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="TRIMESTRE_2_MIN">
+							<datasetParameterExpression><![CDATA[$P{RANGO_TRIMESTRE_2}.get( "MIN" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="TRIMESTRE_2_MAX">
+							<datasetParameterExpression><![CDATA[$P{RANGO_TRIMESTRE_2}.get( "MAX" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="TRIMESTRE_3_MIN">
+							<datasetParameterExpression><![CDATA[$P{RANGO_TRIMESTRE_3}.get( "MIN" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="TRIMESTRE_3_MAX">
+							<datasetParameterExpression><![CDATA[$P{RANGO_TRIMESTRE_3}.get( "MAX" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="TRIMESTRE_4_MIN">
+							<datasetParameterExpression><![CDATA[$P{RANGO_TRIMESTRE_4}.get( "MIN" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="TRIMESTRE_4_MAX">
+							<datasetParameterExpression><![CDATA[$P{RANGO_TRIMESTRE_4}.get( "MAX" )]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="MESES">
+							<datasetParameterExpression><![CDATA[$P{MESES}]]></datasetParameterExpression>
+=======
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
 <!-- 2019-07-20T12:08:46 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportProductos" pageWidth="842" pageHeight="995" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
@@ -187,6 +450,7 @@ FROM DUAL]]>
 					<datasetRun subDataset="Table Ventas Mensuales" uuid="85469470-8d1c-45a2-b457-297402a5ccbc">
 						<datasetParameter name="ANIO">
 							<datasetParameterExpression><![CDATA[$P{ANIO}]]></datasetParameterExpression>
+>>>>>>> refs/remotes/origin/reporte_ventas
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
