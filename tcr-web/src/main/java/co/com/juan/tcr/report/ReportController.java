@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -55,6 +56,7 @@ public class ReportController implements IReportController {
 	private Connection connection;
 	private InputStream file;
 	private JasperReport jasperReport;
+	private JasperReport jasperSubReport;
 	private JasperPrint jasperPrint;
 
 	@Resource
@@ -167,6 +169,66 @@ public class ReportController implements IReportController {
 		file = ReportController.class.getResourceAsStream("/reports/" + reportName + ".jrxml");
 
 		jasperReport = JasperCompileManager.compileReport(file);
+		jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+	}
+
+	@Override
+	public InputStream getReportWithSubReports(String reportName, Map<String, Object> parameters,
+			List<String> subReportNames) throws JRException, SQLException, IOException {
+		InputStream stream;
+		File file;
+		JRPdfExporter exporter;
+		SimplePdfExporterConfiguration configuration;
+
+		try {
+			printReportWithSubReports(reportName, parameters, subReportNames);
+
+			file = File.createTempFile(reportName, SUFFIX_PDF);
+
+			exporter = new JRPdfExporter();
+			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+			exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(file));
+
+			configuration = new SimplePdfExporterConfiguration();
+			configuration.setMetadataAuthor(METADATA_AUTHOR);
+			configuration.setPermissions(PdfWriter.ALLOW_COPY | PdfWriter.ALLOW_PRINTING);
+
+			exporter.setConfiguration(configuration);
+			exporter.exportReport();
+
+			stream = new FileInputStream(file);
+		} catch (SQLException se) {
+			log.error("An error has occurred obtaining the connection", se);
+			throw se;
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException se) {
+					log.error("An error has occurred closing the connection", se);
+				}
+			}
+		}
+
+		return stream;
+	}
+
+	@Override
+	public void printReportWithSubReports(String reportName, Map<String, Object> parameters,
+			List<String> subReportNames) throws JRException, SQLException {
+		connection = dataSource.getConnection();
+
+		for (String reportNameTemp : subReportNames) {
+			file = ReportController.class.getResourceAsStream("/reports/" + reportNameTemp + ".jrxml");
+			if (file != null) {
+				jasperSubReport = JasperCompileManager.compileReport(file);
+				parameters.put("SUB_REPORT_PARAMETER_" + reportNameTemp.toUpperCase(), jasperSubReport);
+			}
+		}
+
+		file = ReportController.class.getResourceAsStream("/reports/" + reportName + ".jrxml");
+		jasperReport = JasperCompileManager.compileReport(file);
+
 		jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
 	}
 

@@ -92,6 +92,10 @@
 			<from-outcome>goReporteProductos</from-outcome>
 			<to-view-id>/REPORTES/reporteProductos.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>goReporteVentas</from-outcome>
+			<to-view-id>/REPORTES/reporteVentas.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>/COMPRAS/*</from-view-id>

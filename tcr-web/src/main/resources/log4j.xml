@@ -54,6 +54,10 @@
 	<category name="org.hibernate.SQL">
 		<priority value="ERROR" />
 	</category>
+	
+	<category name="net.sf.jasperreports">
+		<priority value="ERROR" />
+	</category>
 
 	<!-- ======================= -->
 	<!-- Setup the Root category -->
