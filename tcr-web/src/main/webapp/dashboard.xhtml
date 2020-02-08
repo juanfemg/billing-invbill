@@ -7,252 +7,345 @@
 	<ui:define name="head">
 		<script type="text/javascript">
 			function customExtender() {
+				this.cfg.shadow = false;
+				this.cfg.title = '';
+				this.cfg.seriesColors = [ '#FF4081', '#FB8C00', '#43A047',
+						'#8E24AA' ];
 				this.cfg.grid = {
-					drawGridLines : false,
-					background : '#FFFFFF'
+					background : '#ffffff',
+					borderColor : '#ffffff',
+					gridLineColor : '#F5F5F5',
+					shadow : false
 				};
-				this.cfg.legend = {
-					show : false
+				this.cfg.axesDefaults = {
+					rendererOptions : {
+						textColor : '#666F77'
+					}
 				};
+				this.cfg.seriesDefaults = {
+					shadow : false,
+					lineWidth : 1,
+					markerOptions : {
+						shadow : false,
+						size : 7,
+						style : 'circle'
+					}
+				}
 			}
 		</script>
 	</ui:define>
 
 	<ui:define name="content">
 		<f:view>
-
 			<f:loadBundle basename="messages.dashBoard" var="msg" />
 			<f:loadBundle basename="messages.global" var="msgGlobal" />
-			<p:ajaxStatus onstart="PF('statusDialog').show()"
-				onsuccess="PF('statusDialog').hide()" />
-			<p:dialog modal="true" widgetVar="statusDialog"
-				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
-				closable="false" resizable="false">
-				<p:graphicImage
-					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
-			</p:dialog>
 
-			<h:form id="formDashBoard" enctype="multipart/form-data">
-				<div class="Container100">
-					<p:messages id="men" globalOnly="true" showDetail="false"
-						severity="info error fatal" />
-					<p:growl id="growl" showDetail="false" severity="warn error" />
+			<div class="Container100">
+				<div class="ContainerIndent">
+					<h:form>
+						<p:splitButton
+							value="#{msg.MSG_VALUE_BIENVENIDO}, #{dashBoard.usuarioApp.nombre}"
+							icon="fa fa-slideshare" styleClass="Fleft"
+							onclick="PF('dialogInfoUsuario').show();">
+							<p:menuitem value="#{msg.MSG_VALUE_CHANGE_PASSWORD}"
+								icon="fa fa-lock" update="dialogCambiarPassword"
+								actionListener="#{dashBoard.actionCambiarPass}" />
+						</p:splitButton>
+					</h:form>
+				</div>
+			</div>
 
-					<div class="ContainerIndent" id="containerInfoDiaria">
-						<div class="EmptyBox20" />
-
-						<div class="Container25 Responsive">
-							<div class="ContainerIndent">
-								<p:panel id="panelInfoUsuario" style="min-height: 250px;">
-									<div>
-										<i class="fa fa-user Fs60 Fleft Wid25 red TexAlCenter" />
-										<div class="Fs22 Fright MarTop10 leaden Wid70">
-											<p:outputLabel styleClass="hardblue"
-												value="#{dashBoard.usuarioApp.nombre}" />
-											<p:outputLabel value=", #{msg.MSG_VALUE_BIENVENIDO}" />
-										</div>
-										<div class="EmptyBox10" />
-
-										<p:separator />
-
-										<div class="EmptyBox10" />
-										<i class="fa fa-wrench softgray MarRight10 Fs30 Fleft" />
-										<p:outputLabel styleClass="Fright"
-											value="#{dashBoard.usuarioApp.rolApp.rol}" />
-										<div class="EmptyBox10" />
-
-										<p:separator />
-
-										<div class="EmptyBox10" />
-										<p:outputLabel styleClass="Fright Fs12"
-											value="#{msg.MSG_VALUE_ULTIMO_LOGIN} - #{dashBoard.loginApp.ultimoLogin}" />
-										<div class="EmptyBox10" />
-									</div>
-								</p:panel>
+			<div class="Container75 Responsive100">
+				<div class="Container33">
+					<div class="ContainerIndent">
+						<div class="Card">
+							<div class="Wid40 TexAlCenter Fleft">
+								<i class="icon-store Pink Fs50 DispBlock MarBot20"></i> <span
+									class="FontAdamantiumBold Fs14 Pink DispBlock">#{msg.MSG_VALUE_REPORTE_VENTAS}</span>
 							</div>
-						</div>
-
-						<div class="Container25 Responsive">
-							<div class="ContainerIndent">
-								<p:panel id="panelInfoVentasDiarias" style="min-height: 250px;">
-									<div>
-										<div class="Container">
-											<i
-												class="fa fa-balance-scale Fs50 Fleft Wid25 orange TexAlCenter"></i>
-											<div class="Fs24 Fright MarTop10 leaden Wid60">
-												<p:outputLabel value="#{msg.MSG_VALUE_REPORTE_VENTAS}" />
-											</div>
-											<div class="EmptyBox10" />
-
-											<p:separator />
-
-											<div class="EmptyBox10" />
-											<div class="Fs12 Fright leaden Wid100 TexAlCenter">
-												<p:outputLabel styleClass="Fs12"
-													value="#{msg.MSG_VALUE_TOTAL_VENTAS_DIARIAS}" />
-												<br />
-												<p:outputLabel styleClass="Fs24 orange"
-													value="#{dashBoard.reporteVentaDiaria.valorTotal ne null ? dashBoard.reporteVentaDiaria.valorTotal : 0}">
-													<f:convertNumber locale="es_CO" currencySymbol="$"
-														type="currency" />
-												</p:outputLabel>
-											</div>
-
-											<div class="EmptyBox5" />
-											<div class="Fs12 Fright leaden Wid100 TexAlCenter">
-												<p:outputLabel styleClass="Fs12"
-													value="#{msg.MSG_VALUE_CANTIDAD_PRODUCTOS}" />
-												<br />
-												<p:outputLabel styleClass="Fs24 hardblue"
-													value="#{dashBoard.reporteVentaDiaria.cantidadProductos ne null ? dashBoard.reporteVentaDiaria.cantidadProductos : 0}" />
-											</div>
-											<div class="EmptyBox10" />
-										</div>
-									</div>
-								</p:panel>
+							<div class="Wid50 Fright">
+								<span class="FontAdamantiumBold Fs14 DispBlock MarBot10">#{msg.MSG_VALUE_TOTAL_VENTAS_DIARIAS}</span>
+								<p:outputLabel
+									styleClass="FontAdamantiumBold Fs24 DispBlock Pink"
+									value="#{dashBoard.reporteVentaDiaria.valorTotal ne null ? dashBoard.reporteVentaDiaria.valorTotal : 0}">
+									<f:convertNumber locale="es_CO" currencySymbol="$"
+										type="currency" />
+								</p:outputLabel>
+								<div class="EmptyBox20"></div>
+								<span class="FontAdamantiumBold Fs14 DispBlock MarBot10">#{msg.MSG_VALUE_CANTIDAD_PRODUCTOS}</span>
+								<p:outputLabel
+									styleClass="FontAdamantiumBold Fs24 DispBlock Pink"
+									value="#{dashBoard.reporteVentaDiaria.cantidadProductos ne null ? dashBoard.reporteVentaDiaria.cantidadProductos : 0}" />
 							</div>
-						</div>
-
-						<div class="Container25 Responsive">
-							<div class="ContainerIndent">
-								<p:panel id="panelInfoDevolucionesDiarias"
-									style="min-height: 250px;">
-									<div>
-										<div class="Container">
-											<i class="fa fa-history Fs50 Fleft Wid10 yellow TexAlCenter"></i>
-											<div class="Fs24 Fright MarTop10 leaden Wid70">
-												<p:outputLabel value="#{msg.MSG_VALUE_REPORTE_DEVOLUCIONES}" />
-											</div>
-											<div class="EmptyBox10" />
-
-											<p:separator />
-
-											<div class="EmptyBox10" />
-											<div class="Fs12 Fright leaden Wid100 TexAlCenter">
-												<p:outputLabel styleClass="Fs12"
-													value="#{msg.MSG_VALUE_TOTAL_DEVOLUCIONES_DIARIAS}" />
-												<br />
-												<p:outputLabel styleClass="Fs24 yellow"
-													value="#{dashBoard.reporteDevolucionDiaria.valorTotal ne null ? dashBoard.reporteDevolucionDiaria.valorTotal : 0}">
-													<f:convertNumber locale="es_CO" currencySymbol="$"
-														type="currency" />
-												</p:outputLabel>
-											</div>
-
-											<div class="EmptyBox5" />
-											<div class="Fs12 Fright leaden Wid100 TexAlCenter">
-												<p:outputLabel styleClass="Fs12"
-													value="#{msg.MSG_VALUE_CANTIDAD_PRODUCTOS}" />
-												<br />
-												<p:outputLabel styleClass="Fs24 hardblue"
-													value="#{dashBoard.reporteDevolucionDiaria.cantidadProductos ne null ? dashBoard.reporteDevolucionDiaria.cantidadProductos : 0}" />
-											</div>
-											<div class="EmptyBox10" />
-										</div>
-									</div>
-								</p:panel>
-							</div>
-						</div>
-
-						<div class="Container25 Responsive">
-							<div class="ContainerIndent">
-								<p:panel id="panelInfoComprasDiarias" style="min-height: 250px;">
-									<div>
-										<div class="Container">
-											<i
-												class="fa fa-shopping-cart Fs50 Fleft Wid10 softblue TexAlCenter"></i>
-											<div class="Fs24 Fright MarTop10 leaden Wid70">
-												<p:outputLabel value="#{msg.MSG_VALUE_REPORTE_COMPRAS}" />
-											</div>
-											<div class="EmptyBox10" />
-
-											<p:separator />
-
-											<div class="EmptyBox10" />
-											<div class="Fs12 Fright leaden Wid100 TexAlCenter">
-												<p:outputLabel styleClass="Fs12"
-													value="#{msg.MSG_VALUE_TOTAL_COMPRAS_DIARIAS}" />
-												<br />
-												<p:outputLabel styleClass="Fs24 softblue"
-													value="#{dashBoard.reporteCompraDiaria.valorTotal ne null ? dashBoard.reporteCompraDiaria.valorTotal : 0}">
-													<f:convertNumber locale="es_CO" currencySymbol="$"
-														type="currency" />
-												</p:outputLabel>
-											</div>
-
-											<div class="EmptyBox5" />
-											<div class="Fs12 Fright leaden Wid100 TexAlCenter">
-												<p:outputLabel styleClass="Fs12"
-													value="#{msg.MSG_VALUE_CANTIDAD_PRODUCTOS}" />
-												<br />
-												<p:outputLabel styleClass="Fs24 hardblue"
-													value="#{dashBoard.reporteCompraDiaria.cantidadProductos ne null ? dashBoard.reporteCompraDiaria.cantidadProductos : 0}" />
-											</div>
-											<div class="EmptyBox10" />
-										</div>
-									</div>
-								</p:panel>
-							</div>
-						</div>
-					</div>
-
-					<div class="ContainerIndent" id="containerReporteMensual">
-						<div class="EmptyBox20" />
-
-						<div class="Container100 Responsive">
-							<div class="ContainerIndent">
-								<p:panel id="panelInfoReporteMensual">
-									<div>
-										<i class="fa fa-bar-chart Fs40 Fleft Wid5 red TexAlCenter" />
-										<div class="Fs24 Fleft MarTop10 leaden Wid85">
-											<p:outputLabel
-												value="#{msg.MSG_HEADER_PANEL_REPORTE_MENSUAL}" />
-										</div>
-										<div class="EmptyBox10" />
-
-										<h:panelGrid id="panelGridInfoReporteMensual" columns="2"
-											cellpadding="5" styleClass="ui-grid">
-
-											<p:outputLabel for="reporteMensual"
-												value="#{msg.MSG_VALUE_REPORTE_MENSUAL}" />
-											<p:selectOneMenu id="reporteMensual"
-												value="#{dashBoard.reporteMensualEnum}"
-												converter="#{reporteMensualConverter}">
-												<p:ajax listener="#{dashBoard.graficarReporteMensual}"
-													update="panelInfoReporteMensual" />
-												<f:selectItem value="#{null}"
-													itemLabel="#{msgGlobal.MSG_ITEM_SELECT_DEFAULT}"
-													noSelectionOption="true" itemDisabled="true" />
-												<f:selectItems value="#{dashBoard.reporteMensuales}" />
-											</p:selectOneMenu>
-										</h:panelGrid>
-									</div>
-									<div class="EmptyBox10" />
-
-									<p:separator />
-
-									<div class="EmptyBox10" />
-									<div>
-										<p:chart type="bar" model="#{dashBoard.barModelVentas}"
-											style="height:300px;"
-											rendered="#{dashBoard.barChartModel eq dashBoard.barModelVentas}" />
-									</div>
-									<div>
-										<p:chart type="bar" model="#{dashBoard.barModelDevoluciones}"
-											style="height:300px;"
-											rendered="#{dashBoard.barChartModel eq dashBoard.barModelDevoluciones}" />
-									</div>
-									<div>
-										<p:chart type="bar" model="#{dashBoard.barModelCompras}"
-											style="height:300px;"
-											rendered="#{dashBoard.barChartModel eq dashBoard.barModelCompras}" />
-									</div>
-								</p:panel>
+							<div class="EmptyBox30"></div>
+							<div class="Container100 TexAlCenter">
+								<p:button value="#{msg.MSG_BUTTON_VER_DETALLES}"
+									styleClass="PinkButton" />
 							</div>
 						</div>
 					</div>
 				</div>
-			</h:form>
+
+				<div class="Container33">
+					<div class="ContainerIndent">
+						<div class="Card">
+							<div class="Wid40 TexAlCenter Fleft">
+								<i class="icon-loop Purple Fs50 DispBlock MarBot20"></i> <span
+									class="FontAdamantiumBold Fs14 Purple DispBlock">#{msg.MSG_VALUE_REPORTE_DEVOLUCIONES}</span>
+							</div>
+							<div class="Wid50 Fright">
+								<span class="FontAdamantiumBold Fs14 DispBlock MarBot10">#{msg.MSG_VALUE_TOTAL_DEVOLUCIONES_DIARIAS}</span>
+								<p:outputLabel
+									styleClass="FontAdamantiumBold Fs24 DispBlock Purple"
+									value="#{dashBoard.reporteDevolucionDiaria.valorTotal ne null ? dashBoard.reporteDevolucionDiaria.valorTotal : 0}">
+									<f:convertNumber locale="es_CO" currencySymbol="$"
+										type="currency" />
+								</p:outputLabel>
+								<div class="EmptyBox20"></div>
+								<span class="FontAdamantiumBold Fs14 DispBlock MarBot10">#{msg.MSG_VALUE_CANTIDAD_PRODUCTOS}</span>
+								<p:outputLabel
+									styleClass="FontAdamantiumBold Fs24 DispBlock Purple"
+									value="#{dashBoard.reporteDevolucionDiaria.cantidadProductos ne null ? dashBoard.reporteDevolucionDiaria.cantidadProductos : 0}" />
+							</div>
+							<div class="EmptyBox30"></div>
+							<div class="Container100 TexAlCenter">
+								<p:button value="#{msg.MSG_BUTTON_VER_DETALLES}"
+									styleClass="PurpleButton" />
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="Container33">
+					<div class="ContainerIndent">
+						<div class="Card">
+							<div class="Wid40 TexAlCenter Fleft">
+								<i class="fa fa-shopping-cart Green Fs50 DispBlock MarBot20"></i>
+								<span class="FontAdamantiumBold Fs14 Green DispBlock">#{msg.MSG_VALUE_REPORTE_COMPRAS}</span>
+							</div>
+							<div class="Wid50 Fright">
+								<span class="FontAdamantiumBold Fs14 DispBlock MarBot10">#{msg.MSG_VALUE_TOTAL_COMPRAS_DIARIAS}</span>
+								<p:outputLabel
+									styleClass="FontAdamantiumBold Fs24 DispBlock Green"
+									value="#{dashBoard.reporteCompraDiaria.valorTotal ne null ? dashBoard.reporteCompraDiaria.valorTotal : 0}">
+									<f:convertNumber locale="es_CO" currencySymbol="$"
+										type="currency" />
+								</p:outputLabel>
+								<div class="EmptyBox20"></div>
+								<span class="FontAdamantiumBold Fs14 DispBlock MarBot10">#{msg.MSG_VALUE_CANTIDAD_PRODUCTOS}</span>
+								<p:outputLabel
+									styleClass="FontAdamantiumBold Fs24 DispBlock Green"
+									value="#{dashBoard.reporteCompraDiaria.cantidadProductos ne null ? dashBoard.reporteCompraDiaria.cantidadProductos : 0}" />
+							</div>
+							<div class="EmptyBox30"></div>
+							<div class="Container100 TexAlCenter">
+								<p:button value="#{msg.MSG_BUTTON_VER_DETALLES}"
+									styleClass="GreenButton" />
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="Container100">
+					<div class="ContainerIndent">
+						<div class="Card">
+							<p:messages id="men" globalOnly="true" showDetail="false"
+								severity="info error fatal" />
+							<p:growl id="growl" showDetail="false" severity="warn error" />
+
+							<h:form id="formDashBoard" enctype="multipart/form-data">
+
+								<div class="CardTopic">
+									<p:selectOneMenu id="reporteMensual" style="width:170px;"
+										styleClass="Fright" value="#{dashBoard.reporteMensualEnum}"
+										converter="#{reporteMensualConverter}">
+										<p:ajax listener="#{dashBoard.graficarReporteMensual}"
+											update="formDashBoard" />
+										<f:selectItem value="#{null}"
+											itemLabel="#{msgGlobal.MSG_ITEM_SELECT_DEFAULT}"
+											noSelectionOption="true" itemDisabled="true" />
+										<f:selectItems value="#{dashBoard.reporteMensuales}" />
+									</p:selectOneMenu>
+									<i class="fa fa-dashboard Fs30 Fleft MarRight10"></i>
+									#{msg.MSG_HEADER_PANEL_REPORTE_MENSUAL} <br /> <span
+										class="CardSubTopic">#{msg.MSG_VALUE_REPORTE_MENSUAL} </span>
+								</div>
+								<div class="SeparatorFull"></div>
+								<div class="EmptyBox10"></div>
+
+								<div>
+									<p:chart type="bar" model="#{dashBoard.barModelVentas}"
+										style="height:300px;"
+										rendered="#{dashBoard.barChartModel eq dashBoard.barModelVentas}" />
+								</div>
+								<div>
+									<p:chart type="bar" model="#{dashBoard.barModelDevoluciones}"
+										style="height:300px;"
+										rendered="#{dashBoard.barChartModel eq dashBoard.barModelDevoluciones}" />
+								</div>
+								<div>
+									<p:chart type="bar" model="#{dashBoard.barModelCompras}"
+										style="height:300px;"
+										rendered="#{dashBoard.barChartModel eq dashBoard.barModelCompras}" />
+								</div>
+							</h:form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="Container25 Responsive100">
+				<div class="Container100">
+					<div class="ContainerIndent">
+						<div class="Card">
+							<div class="CardTopic">
+								<i class="icon-book-alt Fs30 Fleft MarRight10"></i>
+								<p:button icon="fa fa-plus White"
+									styleClass="Fright GreenButton" outcome="goCrearProveedor" />
+								#{msg.MSG_HEADER_PANEL_DIRECTORIO} <br /> <span
+									class="CardSubTopic">#{msg.MSG_VALUE_LISTA_PROVEEDORES}</span>
+							</div>
+							<div class="SeparatorFull"></div>
+							<div class="CardTopicMini">#{msg.MSG_VALUE_ULTIMOS_PROVEEDORES}</div>
+							<div class="EmptyBox20"></div>
+
+							<p:repeat value="#{dashBoard.proveedoresApp}" var="proveedorApp"
+								size="6">
+								<div class="Wid100 OvHidden">
+									<p:button icon="fa fa-th-list White"
+										styleClass="Fright OrangeButton"
+										onclick="#{dashBoard.actionMostrarInfoProveedor(proveedorApp)}, PF('dialogInfoProveedor').show();" />
+									<span class="Fs12 FontAdamantiumBold">#{proveedorApp.razonSocial}</span><br />
+									<span class="Fs12 FontAdamantiumLight DispInherit">#{proveedorApp.telefono}</span>
+									<span class="Fs12 FontAdamantiumLight DispInherit">#{proveedorApp.celular}</span>
+								</div>
+								<div class="EmptyBox20"></div>
+							</p:repeat>
+
+							<div class="EmptyBox10"></div>
+							<div class="SeparatorFull"></div>
+							<p:button value="#{msg.MSG_BUTTON_CONSULTAR_PROVEEDORES}"
+								styleClass="CyanButton Fright" outcome="goConsultarProveedor" />
+							<span class="Red FontAdamantiumBold Fs18">#{dashBoard.proveedoresApp.size()}</span><br />
+							<span class="Fs12 FontAdamantiumRegular">#{msg.MSG_VALUE_PROVEEDORES}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<p:dialog modal="true" widgetVar="dialogInfoProveedor"
+				header="#{msg.MSG_HEADER_INFORMACION_PROVEEDOR}" draggable="false"
+				closable="true" resizable="false">
+
+				<h:panelGrid id="panelGridInfoProveedor" columns="2" cellpadding="5"
+					styleClass="ui-grid">
+					<h:outputLabel for="@next" value="#{msg.MSG_PROVEEDOR_NIT}" />
+					<h:panelGroup id="panelGroupNit">
+						<h:outputText id="nitProveedor"
+							value="#{dashBoard.proveedorApp.idProveedorApp}" />
+						<h:outputText id="guionNit" value="-" />
+						<h:outputText id="codVerificacionProveedor"
+							value="#{dashBoard.proveedorApp.codVerificacion}" />
+					</h:panelGroup>
+
+					<h:outputLabel for="@next"
+						value="#{msg.MSG_PROVEEDOR_RAZON_SOCIAL}" />
+					<h:outputText id="razonSocialProveedor"
+						value="#{dashBoard.proveedorApp.razonSocial}" />
+
+					<h:outputLabel for="@next" value="#{msg.MSG_PROVEEDOR_DIRECCION}" />
+					<h:outputText id="direccionProveedor"
+						value="#{dashBoard.proveedorApp.direccion}" />
+
+					<h:outputLabel for="@next" value="#{msg.MSG_PROVEEDOR_TELEFONO}" />
+					<h:outputText id="telefonoProveedor"
+						value="#{dashBoard.proveedorApp.telefono}" />
+
+					<h:outputLabel for="@next" value="#{msg.MSG_PROVEEDOR_CELULAR}" />
+					<h:outputText id="celularProveedor"
+						value="#{dashBoard.proveedorApp.celular}" />
+
+				</h:panelGrid>
+			</p:dialog>
+
+			<p:dialog id="dialogCambiarPassword" appendTo="@(body)"
+				draggable="false" closable="false" widgetVar="dialogCambiarPassword"
+				resizable="false" modal="true" width="500"
+				visible="#{dashBoard.showDialogCambiarPassword}"
+				header="#{msg.MSG_HEADER_DIALOG_CAMBIAR_PASSWORD}">
+
+				<h:form id="formDialogCambiarPass">
+
+					<div align="center">
+						<p:messages id="menCambiarPass" showDetail="false" severity="warn" />
+						<p:messages id="menCambiarPassGlobal" showDetail="false"
+							severity="info error fatal" />
+
+						<h:panelGrid id="panelGridCambiarPassConfirmacion" columns="2"
+							cellpadding="5" styleClass="ui-grid">
+
+							<h:outputText value="#{msg.MSG_PANELGRID_PASSWORD_ACTUAL}" />
+							<p:password id="passwordActual" value="#{dashBoard.passwordOld}"
+								required="true"
+								requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}" />
+
+							<h:outputText value="#{msg.MSG_PANELGRID_PASSWORD_NUEVO}" />
+							<p:password id="password" value="#{dashBoard.passwordNew}"
+								required="true" match="passwordNuevo" feedback="true"
+								promptLabel="#{msg.MSG_VALUE_PASSWORD_PROMPT}"
+								weakLabel="#{msg.MSG_VALUE_PASSWORD_WEAK}"
+								goodLabel="#{msg.MSG_VALUE_PASSWORD_GOOD}"
+								strongLabel="#{msg.MSG_VALUE_PASSWORD_STRONG}"
+								requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
+								validatorMessage="#{msg.MSG_ERROR_CONFIRMAR_CONTRASENA}" />
+
+							<h:outputText
+								value="#{msg.MSG_PANELGRID_PASSWORD_NUEVO_CONFIRMAR}" />
+							<p:password id="passwordNuevo" value="#{dashBoard.passwordReNew}"
+								required="true"
+								requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}" />
+
+						</h:panelGrid>
+
+						<h:panelGrid id="panelGridConfirmCambiarPassBotones" columns="2"
+							cellpadding="5" styleClass="ui-grid">
+							<p:commandButton value="#{msg.MSG_BUTTON_CAMBIAR}"
+								id="btnCambiar"
+								actionListener="#{dashBoard.actionActualizarPassword}"
+								update="menCambiarPass dialogCambiarPassword menCambiarPassGlobal"
+								icon="ui-icon-disk">
+							</p:commandButton>
+							<p:commandButton value="#{msg.MSG_BUTTON_CANCELAR}"
+								id="btnCancelarCambiarPass"
+								actionListener="#{dashBoard.actionCancelar}"
+								update="dialogCambiarPassword" process="@this" />
+						</h:panelGrid>
+
+					</div>
+				</h:form>
+			</p:dialog>
+
+			<p:dialog modal="true" widgetVar="dialogInfoUsuario"
+				header="#{msg.MSG_HEADER_INFORMACION_USUARIO}" draggable="false"
+				closable="true" resizable="false">
+
+				<h:panelGrid id="panelGridInfoUsuario" columns="2" cellpadding="5"
+					styleClass="ui-grid">
+
+					<p:outputLabel for="@next" value="#{msg.MSG_VALUE_USUARIO_NOMBRE}" />
+					<h:outputText id="nombreUsuario"
+						value="#{dashBoard.usuarioApp.nombre}" />
+
+					<p:outputLabel for="@next" value="#{msg.MSG_VALUE_USUARIO_ROL}" />
+					<h:outputText id="rolUsuario"
+						value="#{dashBoard.usuarioApp.rolApp.rol}" />
+
+					<p:outputLabel for="@next" value="#{msg.MSG_VALUE_ULTIMO_LOGIN}" />
+					<h:outputText id="ultimoLoginUsuario"
+						value="#{dashBoard.loginApp.ultimoLogin}" />
+
+				</h:panelGrid>
+			</p:dialog>
 		</f:view>
 	</ui:define>
 </ui:composition>

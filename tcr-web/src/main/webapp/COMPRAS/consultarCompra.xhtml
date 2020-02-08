@@ -10,15 +10,6 @@
 			<f:loadBundle basename="messages.consultarCompra" var="msg" />
 			<f:loadBundle basename="messages.global" var="msgGlobal" />
 
-			<p:ajaxStatus onstart="PF('statusDialog').show()"
-				onsuccess="PF('statusDialog').hide()" />
-			<p:dialog modal="true" widgetVar="statusDialog"
-				header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
-				closable="false" resizable="false">
-				<p:graphicImage
-					value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
-			</p:dialog>
-
 			<h:form id="formCompra" enctype="multipart/form-data">
 
 				<p:panel id="panelCompra" header="#{msg.MSG_HEADER_PANEL_COMPRA}">

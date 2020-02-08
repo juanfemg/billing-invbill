@@ -242,6 +242,8 @@ public class ReporteVentasView implements Serializable {
 				filterEmpty(semestresFiltro, 2);
 				filterEmpty(trimestresFiltro, 4);
 				filterEmpty(mesesFiltro, 12);
+			} else if (mesesFiltro.isEmpty()) {
+				mesesFiltro.add(0);
 			}
 
 			parameters.put("RANGO_SEMESTRE_1", filterNestedTypeMap(rangoSemestre1, semestresFiltro, 1, 5));
@@ -250,13 +252,8 @@ public class ReporteVentasView implements Serializable {
 			parameters.put("RANGO_TRIMESTRE_2", filterNestedTypeMap(rangoTrimestre2, trimestresFiltro, 2, 2));
 			parameters.put("RANGO_TRIMESTRE_3", filterNestedTypeMap(rangoTrimestre3, trimestresFiltro, 3, 2));
 			parameters.put("RANGO_TRIMESTRE_4", filterNestedTypeMap(rangoTrimestre4, trimestresFiltro, 4, 2));
-
-			mesesFiltro.add(0);
 			parameters.put("MESES", mesesFiltro);
 			parameters.put("LOGO_APP", ImageIO.read(getClass().getResource("/images/logoApp.png")));
-
-			semestresFiltro.clear();
-			trimestresFiltro.clear();
 
 			subReports = new ArrayList<>();
 			subReports.add(SUB_REPORTE_VENTAS_ANUAL);
@@ -267,6 +264,10 @@ public class ReporteVentasView implements Serializable {
 				content = new DefaultStreamedContent(stream, STREAM_CONTENT_TYPE, REPORTE_VENTAS.concat(SUFFIX_PDF));
 			}
 
+			mesesFiltro.clear();
+			semestresFiltro.clear();
+			trimestresFiltro.clear();
+
 			addInfoMessage(properties.getParametroString("MSG_REPORTE_GENERADO"));
 		} catch (Exception e) {
 			addErrorMessage(properties.getParametroString("MSG_ERROR_GENERACION_REPORTE"));
@@ -276,7 +277,7 @@ public class ReporteVentasView implements Serializable {
 
 	public List<Integer> filterEmpty(List<Integer> periodo, Integer cantidadPeriodos) {
 		if (periodo.isEmpty()) {
-			for (int count = 0; count < cantidadPeriodos; count++) {
+			for (int count = 1; count <= cantidadPeriodos; count++) {
 				periodo.add(count);
 			}
 		}

@@ -1,0 +1,38 @@
+<ui:composition 
+
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    
+    <f:loadBundle basename="messages.global" var="msgGlobal" />
+    
+    <!-- TOPBAR START -->
+    <div id="layout-topbar">
+        <a id="menu-button" class="Animated1">
+            <span id="menuline1" class="Animated05"></span>
+            <span id="menuline2" class="Animated05"></span>
+            <span id="menuline3" class="Animated05"></span>
+        </a>
+        <a href="/adamantium/dashboard.xhtml"><h:graphicImage name="images/logo.svg" id="logo" library="adamantium-layout" /></a>
+        
+        <a id="topmenu-button" class="Animated1">
+            <i class="icon-list2"></i>
+        </a>
+        
+        <ul id="top-menu">
+            <li>
+                <a class="menulink Animated05"><i class="icon-settings"></i> <span>#{msgGlobal.MSG_TOPBAR_SETTINGS}</span></a>
+                <ul style="margin-left:-145px;">
+                	<li><a href="#" onclick="PF('AdamantiumMenu').changeMenuLayout('top');return false;"><i class="icon-layout7 Fs18 Fleft MarRight10"></i> <span class="FontAdamantiumBold">#{msgGlobal.MSG_TOPBAR_SETTINGS_TOP_MENU}</span></a></li>
+                	<li><a href="#" onclick="PF('AdamantiumMenu').changeMenuLayout('left');return false;"><i class="icon-layout14 Fs18 Fleft MarRight10"></i> <span class="FontAdamantiumBold">#{msgGlobal.MSG_TOPBAR_SETTINGS_LEFT_MENU}</span></a></li>
+                	<li><a href="#" onclick="$('body').addClass('dark');return false;"><i class="icon-pen-alt-fill Fs18 Fleft MarRight10"></i> <span class="FontAdamantiumBold">#{msgGlobal.MSG_TOPBAR_SETTINGS_DARK_MENU}</span></a></li>
+                	<li><a href="#" onclick="$('body').removeClass('dark');return false;"><i class="icon-pen-alt-stroke Fs18 Fleft MarRight10"></i> <span class="FontAdamantiumBold">#{msgGlobal.MSG_TOPBAR_SETTINGS_LIGTH_MENU}</span></a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <!-- TOPBAR END -->
+    
+</ui:composition>
