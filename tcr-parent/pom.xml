@@ -369,7 +369,7 @@
 	</dependencies>
 
 	<properties>
-		<global.version>6.2.0-SNAPSHOT</global.version>
+		<global.version>7.1.0-SNAPSHOT</global.version>
 		<slf4j.version>1.7.10</slf4j.version>
 		<spring.version>4.2.4.RELEASE</spring.version>
 		<spring.security.version>3.2.0.RELEASE</spring.security.version>

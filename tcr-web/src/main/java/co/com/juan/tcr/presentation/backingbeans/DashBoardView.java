@@ -31,7 +31,9 @@ import co.com.juan.tcr.dto.ReporteVentaMensual;
 import co.com.juan.tcr.enums.ReporteMensualEnum;
 import co.com.juan.tcr.enums.SessionEnum;
 import co.com.juan.tcr.model.LoginApp;
+import co.com.juan.tcr.model.ProveedorApp;
 import co.com.juan.tcr.model.UsuarioApp;
+import co.com.juan.tcr.util.Encrypt;
 import co.com.juan.tcr.util.Properties;
 
 /**
@@ -63,12 +65,18 @@ public class DashBoardView implements Serializable {
 	private List<ReporteVentaMensual> reporteVentaMensuales;
 	private List<ReporteDevolucionMensual> reporteDevolucionMensuales;
 	private List<ReporteCompraMensual> reporteCompraMensuales;
+	private List<ProveedorApp> proveedoresApp;
+	private ProveedorApp proveedorApp;
 	private BarChartModel barModelVentas;
 	private BarChartModel barModelDevoluciones;
 	private BarChartModel barModelCompras;
 	private BarChartModel barChartModel;
 	private List<SelectItem> reporteMensuales;
 	private ReporteMensualEnum reporteMensualEnum;
+	private String passwordOld;
+	private String passwordNew;
+	private String passwordReNew;
+	private boolean showDialogCambiarPassword;
 	private transient Properties properties = new Properties(FILE_MESSAGES);
 
 	public DashBoardView() {
@@ -87,10 +95,13 @@ public class DashBoardView implements Serializable {
 		reporteVentaDiaria = new ReporteVentaDiaria();
 		reporteDevolucionDiaria = new ReporteDevolucionDiaria();
 		reporteCompraDiaria = new ReporteCompraDiaria();
+		proveedorApp = new ProveedorApp();
 		reporteVentaMensuales = new ArrayList<>();
 		reporteDevolucionMensuales = new ArrayList<>();
 		reporteCompraMensuales = new ArrayList<>();
 		reporteMensuales = new ArrayList<>();
+		proveedoresApp = new ArrayList<>();
+		showDialogCambiarPassword = false;
 		initUsuario(session);
 		initReporteVentaDiaria();
 		initReporteDevolucionDiaria();
@@ -100,6 +111,7 @@ public class DashBoardView implements Serializable {
 		initReporteCompraMensual();
 		initReportesMensuales();
 		initBarCharts();
+		initProveedores();
 	}
 
 	public void initUsuario(HttpSession session) {
@@ -185,6 +197,15 @@ public class DashBoardView implements Serializable {
 		}
 	}
 
+	public void initProveedores() {
+		try {
+			proveedoresApp = businessDelegate.getProveedores();
+		} catch (Exception e) {
+			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_PROVEEDORES"));
+			log.error("=== Consulta de Proveedores: Fallo la consulta de los proveedores", e);
+		}
+	}
+
 	public void graficarReporteMensual() {
 		if (reporteMensualEnum.equals(ReporteMensualEnum.VENTAS)) {
 			barChartModel = barModelVentas;
@@ -254,6 +275,39 @@ public class DashBoardView implements Serializable {
 		yAxis.setMin(0);
 
 		return barChartModelTemp;
+	}
+
+	public void actionCambiarPass() {
+		showDialogCambiarPassword = true;
+	}
+
+	public void actionCancelar() {
+		showDialogCambiarPassword = false;
+	}
+
+	public void actionMostrarInfoProveedor(ProveedorApp proveedorTemp) {
+		proveedorApp = proveedorTemp;
+	}
+
+	public void actionActualizarPassword() {
+		try {
+			passwordOld = new Encrypt().encrypt(passwordOld);
+			if (passwordOld.equals(usuarioApp.getPassword())) {
+				usuarioApp.setPassword(new Encrypt().encrypt(passwordNew));
+				businessDelegate.update(usuarioApp);
+				showDialogCambiarPassword = false;
+				log.info("=== Actualizacion de usuario: Usuario actualizado. Id={}, descripcion={} === ",
+						usuarioApp.getIdUsuarioApp(), usuarioApp.getNombre());
+				addInfoMessage(properties.getParametroString("MSG_USUARIO_ACTUALIZADO"));
+			} else {
+				addErrorMessage(properties.getParametroString("MSG_ERROR_PASSWORD_INCORRECTO"));
+			}
+		} catch (Exception e) {
+			addErrorMessage(properties.getParametroString("MSG_ERROR_ACTUALIZACION_USUARIO"));
+			log.error(
+					"=== Actualizacion de usuario: Fallo la actualizacion del usuario {}. Se ha producido un error: {}",
+					usuarioApp.getIdUsuarioApp(), e.getMessage());
+		}
 	}
 
 	public void addInfoMessage(String summary) {
@@ -493,6 +547,90 @@ public class DashBoardView implements Serializable {
 	 */
 	public void setProperties(Properties properties) {
 		this.properties = properties;
+	}
+
+	/**
+	 * @return the showDialogCambiarPassword
+	 */
+	public boolean isShowDialogCambiarPassword() {
+		return showDialogCambiarPassword;
+	}
+
+	/**
+	 * @param showDialogCambiarPassword the showDialogCambiarPassword to set
+	 */
+	public void setShowDialogCambiarPassword(boolean showDialogCambiarPassword) {
+		this.showDialogCambiarPassword = showDialogCambiarPassword;
+	}
+
+	/**
+	 * @return the passwordOld
+	 */
+	public String getPasswordOld() {
+		return passwordOld;
+	}
+
+	/**
+	 * @param passwordOld the passwordOld to set
+	 */
+	public void setPasswordOld(String passwordOld) {
+		this.passwordOld = passwordOld;
+	}
+
+	/**
+	 * @return the passwordNew
+	 */
+	public String getPasswordNew() {
+		return passwordNew;
+	}
+
+	/**
+	 * @param passwordNew the passwordNew to set
+	 */
+	public void setPasswordNew(String passwordNew) {
+		this.passwordNew = passwordNew;
+	}
+
+	/**
+	 * @return the passwordReNew
+	 */
+	public String getPasswordReNew() {
+		return passwordReNew;
+	}
+
+	/**
+	 * @param passwordReNew the passwordReNew to set
+	 */
+	public void setPasswordReNew(String passwordReNew) {
+		this.passwordReNew = passwordReNew;
+	}
+
+	/**
+	 * @return the proveedoresApp
+	 */
+	public List<ProveedorApp> getProveedoresApp() {
+		return proveedoresApp;
+	}
+
+	/**
+	 * @param proveedoresApp the proveedoresApp to set
+	 */
+	public void setProveedoresApp(List<ProveedorApp> proveedoresApp) {
+		this.proveedoresApp = proveedoresApp;
+	}
+
+	/**
+	 * @return the proveedorApp
+	 */
+	public ProveedorApp getProveedorApp() {
+		return proveedorApp;
+	}
+
+	/**
+	 * @param proveedorApp the proveedorApp to set
+	 */
+	public void setProveedorApp(ProveedorApp proveedorApp) {
+		this.proveedorApp = proveedorApp;
 	}
 
 }

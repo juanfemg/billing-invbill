@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>co.com.juan.tcr</groupId>
 		<artifactId>tcr-parent</artifactId>
-		<version>6.2.0-SNAPSHOT</version>
+		<version>7.1.0-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

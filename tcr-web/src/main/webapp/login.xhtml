@@ -5,53 +5,62 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-<h:head>
-	<title>TCR Web</title>
-	<meta name="viewport"
-		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-</h:head>
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>TCR Web</title>
+        <ui:insert name="head" />
+    </h:head>
 
-<h:body>
-
-	<f:loadBundle basename="messages.login" var="msg" />
-	<f:loadBundle basename="messages.global" var="msgGlobal" />
-
-	<p:ajaxStatus onstart="PF('statusDialog').show()"
-		onsuccess="PF('statusDialog').hide()" />
-	<p:dialog modal="true" widgetVar="statusDialog"
-		header="#{msgGlobal.MSG_LOAD_INFORMATION}" draggable="false"
-		closable="false" resizable="false">
-		<p:graphicImage
-			value="#{facesContext.externalContext.request.scheme}://#{facesContext.externalContext.request.serverName}:#{facesContext.externalContext.request.serverPort}#{facesContext.externalContext.request.contextPath}/images/ajax-loader.gif" />
-	</p:dialog>
-
-	<h:form id="formLogin">
+    <h:body>
+    
+    	<f:loadBundle basename="messages.login" var="msg" />
+		<f:loadBundle basename="messages.global" var="msgGlobal" />
+		
+		<h:form id="formLogin">
 		<p:growl id="growl" showDetail="false" severity="warn error" />
-
-		<p:dialog id="dialogLogin" header="#{msg.MSG_HEADER_LOGIN}"
-			resizable="false" closable="false" visible="true">
-
-			<h:panelGrid id="panelGridLogin" columns="1" cellpadding="5"
-				styleClass="ui-grid">
-				<!-- LOGIN BOX COVER START -->
-				<div>
-					<div id="login-box">
-						<div id="TAB1">
-							<p:inputText id="usernameField" name="j_username"
-								value="#{login.userId}" placeholder="#{msg.MSG_VALUE_USUARIO}" />
-
-							<p:password id="passwordField" name="j_password"
-								value="#{login.password}"
-								placeholder="#{msg.MSG_VALUE_CONTRASEGNA}" feedback="false" />
-
-							<p:commandButton value="#{msg.MSG_BUTTON_INGRESAR}" ajax="false"
+        
+        <div class="Container100 BordBottom BlueBack loginback">
+            <div class="EmptyBox50"></div>
+            
+            <div class="Wid90 MarAuto">
+                <div class="Wid30 DispBlock MarAuto WidAutoOnMobile">
+                    <div class="Card TexAlCenter" style="margin-bottom:-650px;">
+                        <h:graphicImage name="images/logo.svg" library="adamantium-layout" style="max-width:180px;"/>
+                        <div class="SeparatorFull"></div>
+                        <div class="Wid100 OvHidden BigTopic"><i class="icon-security DispBlock"></i>#{msg.MSG_HEADER_LOGIN}</div>
+                        <div class="EmptyBox20"></div>
+                        <div class="Card SoftGrayBack">
+                            <p:inputText id="usernameField" name="j_username"
+								value="#{login.userId}" placeholder="#{msg.MSG_VALUE_USUARIO}" styleClass="Wid90 TexAlCenter"/>
+                            <div class="EmptyBox10"></div>
+                            <p:inputText type="password" id="passwordField" name="j_password"
+								value="#{login.password}" feedback="false" placeholder="#{msg.MSG_VALUE_CONTRASEGNA}" styleClass="Wid90 TexAlCenter"/>
+                            <div class="EmptyBox30"></div>
+                            <p:commandButton value="#{msg.MSG_BUTTON_INGRESAR}" ajax="false" icon="fa fa-sign-in" styleClass="CyanButton"
 								action="#{login.actionLogin}" update="growl" />
-						</div>
-					</div>
-				</div>
-				<!-- LOGIN BOX COVER END -->
-			</h:panelGrid>
-		</p:dialog>
-	</h:form>
-</h:body>
+                            <div class="EmptyBox10 ShowOnMobile"></div>
+                        </div>
+                        <div class="EmptyBox20"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="EmptyBox10"></div>
+        </div>
+        
+        </h:form>
+        
+        <h:outputStylesheet name="css/core-layout.css" library="adamantium-layout" />
+        <h:outputStylesheet name="css/animate.css" library="adamantium-layout" />
+        <h:outputStylesheet name="css/adamantium-font.css" library="adamantium-layout" />
+        <h:outputStylesheet name="css/ripple-effect.css" library="adamantium-layout" />
+        <h:outputStylesheet name="css/font-awesome.css" library="adamantium-layout" />
+        <h:outputStylesheet name="css/adamantium-layout.css" library="adamantium-layout" />
+    </h:body>
+
 </html>

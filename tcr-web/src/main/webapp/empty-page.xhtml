@@ -1,0 +1,30 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="subheader">
+        Page Header
+    </ui:define>
+    
+    <ui:define name="content">
+    
+    	<f:loadBundle basename="messages.global" var="msgGlobal" />
+        
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card TexAlCenter">
+                    <br/>
+                    <h2>#{msgGlobal.MSG_EMPTY_PAGE_TITLE}</h2>
+                    <br/>
+                    <span class="gray">#{msgGlobal.MSG_EMPTY_PAGE_DESCRIPTION}</span>
+                    <br/><br/>
+                </div>
+            </div>
+        </div>
+        
+    </ui:define>
+
+</ui:composition>
