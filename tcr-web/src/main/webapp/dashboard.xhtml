@@ -50,6 +50,8 @@
 							<p:menuitem value="#{msg.MSG_VALUE_CHANGE_PASSWORD}"
 								icon="fa fa-lock" update="dialogCambiarPassword"
 								actionListener="#{dashBoard.actionCambiarPass}" />
+							<p:menuitem value="#{msg.MSG_VALUE_LOGOUT}" icon="fa fa-sign-out"
+								outcome="logout" />
 						</p:splitButton>
 					</h:form>
 				</div>
@@ -59,11 +61,11 @@
 				<div class="Container33">
 					<div class="ContainerIndent">
 						<div class="Card">
-							<div class="Wid40 TexAlCenter Fleft">
+							<div class="Wid30 TexAlCenter Fleft">
 								<i class="icon-store Pink Fs50 DispBlock MarBot20"></i> <span
 									class="FontAdamantiumBold Fs14 Pink DispBlock">#{msg.MSG_VALUE_REPORTE_VENTAS}</span>
 							</div>
-							<div class="Wid50 Fright">
+							<div class="Wid60 Fright">
 								<span class="FontAdamantiumBold Fs14 DispBlock MarBot10">#{msg.MSG_VALUE_TOTAL_VENTAS_DIARIAS}</span>
 								<p:outputLabel
 									styleClass="FontAdamantiumBold Fs24 DispBlock Pink"
@@ -89,11 +91,11 @@
 				<div class="Container33">
 					<div class="ContainerIndent">
 						<div class="Card">
-							<div class="Wid40 TexAlCenter Fleft">
+							<div class="Wid30 TexAlCenter Fleft">
 								<i class="icon-loop Purple Fs50 DispBlock MarBot20"></i> <span
 									class="FontAdamantiumBold Fs14 Purple DispBlock">#{msg.MSG_VALUE_REPORTE_DEVOLUCIONES}</span>
 							</div>
-							<div class="Wid50 Fright">
+							<div class="Wid60 Fright">
 								<span class="FontAdamantiumBold Fs14 DispBlock MarBot10">#{msg.MSG_VALUE_TOTAL_DEVOLUCIONES_DIARIAS}</span>
 								<p:outputLabel
 									styleClass="FontAdamantiumBold Fs24 DispBlock Purple"
@@ -119,11 +121,11 @@
 				<div class="Container33">
 					<div class="ContainerIndent">
 						<div class="Card">
-							<div class="Wid40 TexAlCenter Fleft">
+							<div class="Wid30 TexAlCenter Fleft">
 								<i class="fa fa-shopping-cart Green Fs50 DispBlock MarBot20"></i>
 								<span class="FontAdamantiumBold Fs14 Green DispBlock">#{msg.MSG_VALUE_REPORTE_COMPRAS}</span>
 							</div>
-							<div class="Wid50 Fright">
+							<div class="Wid60 Fright">
 								<span class="FontAdamantiumBold Fs14 DispBlock MarBot10">#{msg.MSG_VALUE_TOTAL_COMPRAS_DIARIAS}</span>
 								<p:outputLabel
 									styleClass="FontAdamantiumBold Fs24 DispBlock Green"
@@ -209,18 +211,23 @@
 							<div class="CardTopicMini">#{msg.MSG_VALUE_ULTIMOS_PROVEEDORES}</div>
 							<div class="EmptyBox20"></div>
 
-							<p:repeat value="#{dashBoard.proveedoresApp}" var="proveedorApp"
-								size="6">
-								<div class="Wid100 OvHidden">
-									<p:button icon="fa fa-th-list White"
-										styleClass="Fright OrangeButton"
-										onclick="#{dashBoard.actionMostrarInfoProveedor(proveedorApp)}, PF('dialogInfoProveedor').show();" />
-									<span class="Fs12 FontAdamantiumBold">#{proveedorApp.razonSocial}</span><br />
-									<span class="Fs12 FontAdamantiumLight DispInherit">#{proveedorApp.telefono}</span>
-									<span class="Fs12 FontAdamantiumLight DispInherit">#{proveedorApp.celular}</span>
-								</div>
-								<div class="EmptyBox20"></div>
-							</p:repeat>
+							<h:form>
+								<p:repeat value="#{dashBoard.proveedoresApp}" var="proveedorApp"
+									size="6">
+									<div class="Wid100 OvHidden">
+										<p:commandButton update="dialogInfoProveedor"
+											oncomplete="PF('dialogInfoProveedor').show()"
+											icon="fa fa-th-list White" styleClass="Fright OrangeButton">
+											<f:setPropertyActionListener value="#{proveedorApp}"
+												target="#{dashBoard.proveedorApp}" />
+										</p:commandButton>
+										<span class="Fs12 FontAdamantiumBold">#{proveedorApp.razonSocial}</span><br />
+										<span class="Fs12 FontAdamantiumLight DispInherit">#{proveedorApp.telefono}</span>
+										<span class="Fs12 FontAdamantiumLight DispInherit">#{proveedorApp.celular}</span>
+									</div>
+									<div class="EmptyBox20"></div>
+								</p:repeat>
+							</h:form>
 
 							<div class="EmptyBox10"></div>
 							<div class="SeparatorFull"></div>
@@ -234,36 +241,51 @@
 			</div>
 
 			<p:dialog modal="true" widgetVar="dialogInfoProveedor"
+				id="dialogInfoProveedor"
 				header="#{msg.MSG_HEADER_INFORMACION_PROVEEDOR}" draggable="false"
 				closable="true" resizable="false">
 
 				<h:panelGrid id="panelGridInfoProveedor" columns="2" cellpadding="5"
 					styleClass="ui-grid">
-					<h:outputLabel for="@next" value="#{msg.MSG_PROVEEDOR_NIT}" />
+					<h:outputLabel for="panelGroupNit" value="#{msg.MSG_PROVEEDOR_NIT}"
+						styleClass="FontAdamantiumBold Fs14 DispBlock MarBot10" />
 					<h:panelGroup id="panelGroupNit">
 						<h:outputText id="nitProveedor"
-							value="#{dashBoard.proveedorApp.idProveedorApp}" />
-						<h:outputText id="guionNit" value="-" />
+							value="#{dashBoard.proveedorApp.idProveedorApp}"
+							styleClass="Fs14 MarBot10" />
+						<h:outputText id="guionNit" value="-" styleClass="Fs14 MarBot10" />
 						<h:outputText id="codVerificacionProveedor"
-							value="#{dashBoard.proveedorApp.codVerificacion}" />
+							value="#{dashBoard.proveedorApp.codVerificacion}"
+							styleClass="Fs14 MarBot10" />
 					</h:panelGroup>
 
-					<h:outputLabel for="@next"
-						value="#{msg.MSG_PROVEEDOR_RAZON_SOCIAL}" />
+					<h:outputLabel for="razonSocialProveedor"
+						value="#{msg.MSG_PROVEEDOR_RAZON_SOCIAL}"
+						styleClass="FontAdamantiumBold Fs14 DispBlock MarBot10" />
 					<h:outputText id="razonSocialProveedor"
-						value="#{dashBoard.proveedorApp.razonSocial}" />
+						value="#{dashBoard.proveedorApp.razonSocial}"
+						styleClass="Fs14 DispBlock MarBot10" />
 
-					<h:outputLabel for="@next" value="#{msg.MSG_PROVEEDOR_DIRECCION}" />
+					<h:outputLabel for="direccionProveedor"
+						value="#{msg.MSG_PROVEEDOR_DIRECCION}"
+						styleClass="FontAdamantiumBold Fs14 DispBlock MarBot10" />
 					<h:outputText id="direccionProveedor"
-						value="#{dashBoard.proveedorApp.direccion}" />
+						value="#{dashBoard.proveedorApp.direccion}"
+						styleClass="Fs14 DispBlock MarBot10" />
 
-					<h:outputLabel for="@next" value="#{msg.MSG_PROVEEDOR_TELEFONO}" />
+					<h:outputLabel for="telefonoProveedor"
+						value="#{msg.MSG_PROVEEDOR_TELEFONO}"
+						styleClass="FontAdamantiumBold Fs14 DispBlock MarBot10" />
 					<h:outputText id="telefonoProveedor"
-						value="#{dashBoard.proveedorApp.telefono}" />
+						value="#{dashBoard.proveedorApp.telefono}"
+						styleClass="Fs14 DispBlock MarBot10" />
 
-					<h:outputLabel for="@next" value="#{msg.MSG_PROVEEDOR_CELULAR}" />
+					<h:outputLabel for="celularProveedor"
+						value="#{msg.MSG_PROVEEDOR_CELULAR}"
+						styleClass="FontAdamantiumBold Fs14 DispBlock MarBot10" />
 					<h:outputText id="celularProveedor"
-						value="#{dashBoard.proveedorApp.celular}" />
+						value="#{dashBoard.proveedorApp.celular}"
+						styleClass="Fs14 DispBlock MarBot10" />
 
 				</h:panelGrid>
 			</p:dialog>
@@ -284,12 +306,14 @@
 						<h:panelGrid id="panelGridCambiarPassConfirmacion" columns="2"
 							cellpadding="5" styleClass="ui-grid">
 
-							<h:outputText value="#{msg.MSG_PANELGRID_PASSWORD_ACTUAL}" />
+							<h:outputText value="#{msg.MSG_PANELGRID_PASSWORD_ACTUAL}"
+								styleClass="Fs14 DispBlock MarBot10" />
 							<p:password id="passwordActual" value="#{dashBoard.passwordOld}"
 								required="true"
 								requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}" />
 
-							<h:outputText value="#{msg.MSG_PANELGRID_PASSWORD_NUEVO}" />
+							<h:outputText value="#{msg.MSG_PANELGRID_PASSWORD_NUEVO}"
+								styleClass="Fs14 DispBlock MarBot10" />
 							<p:password id="password" value="#{dashBoard.passwordNew}"
 								required="true" match="passwordNuevo" feedback="true"
 								promptLabel="#{msg.MSG_VALUE_PASSWORD_PROMPT}"
@@ -300,7 +324,8 @@
 								validatorMessage="#{msg.MSG_ERROR_CONFIRMAR_CONTRASENA}" />
 
 							<h:outputText
-								value="#{msg.MSG_PANELGRID_PASSWORD_NUEVO_CONFIRMAR}" />
+								value="#{msg.MSG_PANELGRID_PASSWORD_NUEVO_CONFIRMAR}"
+								styleClass="Fs14 DispBlock MarBot10" />
 							<p:password id="passwordNuevo" value="#{dashBoard.passwordReNew}"
 								required="true"
 								requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}" />
@@ -332,17 +357,23 @@
 				<h:panelGrid id="panelGridInfoUsuario" columns="2" cellpadding="5"
 					styleClass="ui-grid">
 
-					<p:outputLabel for="@next" value="#{msg.MSG_VALUE_USUARIO_NOMBRE}" />
+					<p:outputLabel for="@next" value="#{msg.MSG_VALUE_USUARIO_NOMBRE}"
+						styleClass="FontAdamantiumBold Fs14 DispBlock MarBot10" />
 					<h:outputText id="nombreUsuario"
-						value="#{dashBoard.usuarioApp.nombre}" />
+						value="#{dashBoard.usuarioApp.nombre}"
+						styleClass="Fs14 DispBlock MarBot10" />
 
-					<p:outputLabel for="@next" value="#{msg.MSG_VALUE_USUARIO_ROL}" />
+					<p:outputLabel for="@next" value="#{msg.MSG_VALUE_USUARIO_ROL}"
+						styleClass="FontAdamantiumBold Fs14 DispBlock MarBot10" />
 					<h:outputText id="rolUsuario"
-						value="#{dashBoard.usuarioApp.rolApp.rol}" />
+						value="#{dashBoard.usuarioApp.rolApp.rol}"
+						styleClass="Fs14 DispBlock MarBot10" />
 
-					<p:outputLabel for="@next" value="#{msg.MSG_VALUE_ULTIMO_LOGIN}" />
+					<p:outputLabel for="@next" value="#{msg.MSG_VALUE_ULTIMO_LOGIN}"
+						styleClass="FontAdamantiumBold Fs14 DispBlock MarBot10" />
 					<h:outputText id="ultimoLoginUsuario"
-						value="#{dashBoard.loginApp.ultimoLogin}" />
+						value="#{dashBoard.loginApp.ultimoLogin}"
+						styleClass="Fs14 DispBlock MarBot10" />
 
 				</h:panelGrid>
 			</p:dialog>

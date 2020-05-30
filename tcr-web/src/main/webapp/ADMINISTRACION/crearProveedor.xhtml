@@ -28,20 +28,19 @@
 									<h:outputLabel for="nitProveedor"
 										value="#{msg.MSG_VALUE_NIT_PROVEEDOR}" />
 									<h:panelGroup id="panelGroupNit">
-										<p:inputText id="nitProveedor"
+										<p:inputNumber id="nitProveedor"
 											value="#{crearProveedor.proveedorApp.idProveedorApp}"
-											required="true"
+											converter="javax.faces.Integer" decimalPlaces="0"
+											thousandSeparator="" maxValue="2147483647" required="true"
 											requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
-											label="#{msg.MSG_VALUE_NIT_PROVEEDOR}"
-											onkeydown="return event.keyCode &gt;= 48 &amp;&amp; event.keyCode &lt;= 57 || event.keyCode &gt;= 96 &amp;&amp; event.keyCode &lt;= 105 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37  || event.keyCode == 39 || event.keyCode == 13" />
+											label="#{msg.MSG_VALUE_NIT_PROVEEDOR}" />
 										<p:outputLabel id="guionNit" value="-"></p:outputLabel>
-										<p:inputText id="nitCodVerificacionProveedor"
+										<p:inputNumber id="nitCodVerificacionProveedor"
 											value="#{crearProveedor.proveedorApp.codVerificacion}"
-											required="true"
+											converter="javax.faces.Integer" decimalPlaces="0"
+											thousandSeparator="" maxValue="2147483647" required="true"
 											requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
-											maxlength="1" size="1"
-											label="#{msg.MSG_VALUE_CODIGO_VERIFICACION_PROVEEDOR}"
-											onkeydown="return event.keyCode &gt;= 48 &amp;&amp; event.keyCode &lt;= 57 || event.keyCode &gt;= 96 &amp;&amp; event.keyCode &lt;= 105 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37  || event.keyCode == 39 || event.keyCode == 13" />
+											label="#{msg.MSG_VALUE_CODIGO_VERIFICACION_PROVEEDOR}" />
 									</h:panelGroup>
 
 									<h:outputLabel for="razonSocialProveedor"

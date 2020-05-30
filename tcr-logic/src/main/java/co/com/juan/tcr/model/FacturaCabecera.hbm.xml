@@ -24,6 +24,10 @@
 			insert="false">
 			<column name="fecha_creacion" length="0" />
 		</property>
+		<many-to-one name="clienteApp" class="ClienteApp"
+			update="true" insert="true" fetch="select" lazy="false">
+			<column name="id_cliente_app" not-null="true" />
+		</many-to-one>
 		<set name="facturaDetalles" table="factura_detalle" inverse="true"
 			lazy="true" fetch="select">
 			<key>

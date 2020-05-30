@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import co.com.juan.tcr.delegate.businessdelegate.IBusinessDelegate;
 import co.com.juan.tcr.enums.EstadosAppEnum;
 import co.com.juan.tcr.model.CategoriaProducto;
+import co.com.juan.tcr.model.ClienteApp;
 import co.com.juan.tcr.model.FacturaCabecera;
 import co.com.juan.tcr.model.FacturaDetalle;
 import co.com.juan.tcr.model.FacturaDetalleId;
@@ -60,13 +62,13 @@ public class CrearFacturaView implements Serializable {
 	private List<SelectItem> categorias;
 	private List<SelectItem> productos;
 	private StockProducto stockProducto;
+	private ClienteApp clienteApp;
+	private List<ClienteApp> cliente;
 	private boolean showDialogAdicionarItem;
 	private boolean showDialogConfirmacionActualizacion;
 	private boolean showDialogResumenFactura;
 	private boolean showInputFacturaTercero;
 	private boolean showButtonImprimir;
-	private String nitTercero;
-	private String razonSocialTercero;
 	private int cantidad;
 	private double valorIva = 0D;
 	private int metodoPago;
@@ -90,6 +92,8 @@ public class CrearFacturaView implements Serializable {
 		categoriaProducto = new CategoriaProducto();
 		stockProducto = new StockProducto();
 		facturaDetalleId = new FacturaDetalleId();
+		clienteApp = new ClienteApp();
+		cliente = new ArrayList<>();
 		showDialogAdicionarItem = true;
 		showDialogConfirmacionActualizacion = false;
 		showDialogResumenFactura = false;
@@ -97,6 +101,7 @@ public class CrearFacturaView implements Serializable {
 		showButtonImprimir = false;
 		cantidad = 1;
 		initCategoriasProducto();
+		initClientes();
 	}
 
 	public void initCategoriasProducto() {
@@ -155,6 +160,33 @@ public class CrearFacturaView implements Serializable {
 			log.error("=== Consulta de Stock de Producto : Fallo la consulta del stock de producto" + ". ERROR : "
 					+ e.getMessage());
 		}
+	}
+
+	public void initClientes() {
+		try {
+			cliente = businessDelegate.getClientes();
+
+			for (ClienteApp clienteAppTemp : cliente) {
+				if (clienteAppTemp.getEstado().equals(EstadosAppEnum.I)) {
+					cliente.remove(clienteAppTemp);
+				}
+
+			}
+
+		} catch (Exception e) {
+			addErrorMessage(e.getMessage());
+			log.error("=== Consulta de Clientes : Fallo la consulta de los clientes" + ". ERROR : " + e.getMessage());
+		}
+	}
+
+	public List<ClienteApp> completeClienteApp(String query) {
+
+		if (!cliente.isEmpty()) {
+			return cliente.stream().filter(t -> String.valueOf(t.getIdClienteApp()).startsWith(query))
+					.collect(Collectors.toList());
+		}
+
+		return new ArrayList<ClienteApp>();
 	}
 
 	public void actionAdicionar() {
@@ -259,6 +291,29 @@ public class CrearFacturaView implements Serializable {
 			addWarnMessage(properties.getParametroString("MSG_VALOR_RECIBIDO_INFERIOR"));
 		} else {
 			try {
+				if (clienteApp.getIdClienteApp() != null) {
+					ClienteApp clienteAppTemp = new ClienteApp();
+					try {
+						clienteAppTemp = businessDelegate.findClienteByID(clienteApp.getIdClienteApp());
+
+						if (clienteAppTemp == null) {
+							try {
+								businessDelegate.save(clienteApp);
+							} catch (Exception e) {
+								addErrorMessage(e.getMessage());
+								log.error("=== Creacion de Cliente : Fallo la creacion del cliente "
+										+ clienteApp.getIdClienteApp() + ". ERROR : " + e.getMessage());
+							}
+						}
+
+						facturaCabecera.setClienteApp(clienteApp);
+					} catch (Exception e) {
+						addErrorMessage(e.getMessage());
+						log.error("=== Consulta de Cliente : Fallo la consulta del cliente" + ". ERROR : "
+								+ e.getMessage());
+					}
+				}
+
 				businessDelegate.save(facturaCabecera);
 				log.info("=== Creacion de factura Cabecera : Factura creada " + facturaCabecera.getIdFactura()
 						+ " exitosamente ===");
@@ -342,12 +397,6 @@ public class CrearFacturaView implements Serializable {
 			parameters.put("EFECTIVO", metodoPago);
 			parameters.put("CAMBIO", cambio);
 			parameters.put("FACTURA_ORIGINAL", Boolean.TRUE);
-			if (nitTercero == null) {
-				parameters.put("NIT_TERCERO", nitTercero);
-			} else {
-				parameters.put("NIT_TERCERO", nitTercero.equals("") ? null : nitTercero);
-			}
-			parameters.put("RAZON_SOCIAL_TERCERO", razonSocialTercero);
 			reportController.printReport(REPORTE_FACTURA_VENTA, parameters);
 		} catch (Exception e) {
 			addErrorMessage(properties.getParametroString("MSG_ERROR_IMPRESION"));
@@ -670,34 +719,6 @@ public class CrearFacturaView implements Serializable {
 	}
 
 	/**
-	 * @return the nitTercero
-	 */
-	public String getNitTercero() {
-		return nitTercero;
-	}
-
-	/**
-	 * @param nitTercero the nitTercero to set
-	 */
-	public void setNitTercero(String nitTercero) {
-		this.nitTercero = nitTercero;
-	}
-
-	/**
-	 * @return the razonSocialTercero
-	 */
-	public String getRazonSocialTercero() {
-		return razonSocialTercero;
-	}
-
-	/**
-	 * @param razonSocialTercero the razonSocialTercero to set
-	 */
-	public void setRazonSocialTercero(String razonSocialTercero) {
-		this.razonSocialTercero = razonSocialTercero;
-	}
-
-	/**
 	 * @return the stockProducto
 	 */
 	public StockProducto getStockProducto() {
@@ -737,6 +758,34 @@ public class CrearFacturaView implements Serializable {
 	 */
 	public void setShowButtonImprimir(boolean showButtonImprimir) {
 		this.showButtonImprimir = showButtonImprimir;
+	}
+
+	/**
+	 * @return the clienteApp
+	 */
+	public ClienteApp getClienteApp() {
+		return clienteApp;
+	}
+
+	/**
+	 * @param clienteApp the clienteApp to set
+	 */
+	public void setClienteApp(ClienteApp clienteApp) {
+		this.clienteApp = clienteApp;
+	}
+
+	/**
+	 * @return the cliente
+	 */
+	public List<ClienteApp> getCliente() {
+		return cliente;
+	}
+
+	/**
+	 * @param cliente the cliente to set
+	 */
+	public void setCliente(List<ClienteApp> cliente) {
+		this.cliente = cliente;
 	}
 
 }

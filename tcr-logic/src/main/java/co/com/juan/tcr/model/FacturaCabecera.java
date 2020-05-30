@@ -17,6 +17,7 @@ public class FacturaCabecera implements java.io.Serializable {
 	private Integer valorTotal;
 	private String usuarioCreacion;
 	private Date fechaCreacion;
+	private ClienteApp clienteApp;
 	private transient Set<Object> facturaDetalles = new HashSet<>(0);
 
 	public FacturaCabecera() {
@@ -83,6 +84,14 @@ public class FacturaCabecera implements java.io.Serializable {
 
 	public void setFacturaDetalles(Set<Object> facturaDetalles) {
 		this.facturaDetalles = facturaDetalles;
+	}
+
+	public ClienteApp getClienteApp() {
+		return clienteApp;
+	}
+
+	public void setClienteApp(ClienteApp clienteApp) {
+		this.clienteApp = clienteApp;
 	}
 
 }

@@ -153,13 +153,25 @@
 
 									<h:outputLabel for="nitTercero"
 										value="#{msg.MSG_PANELGRID_FACTURA_TERCERO_NIT}" />
-									<p:inputText id="nitTercero" value="#{crearFactura.nitTercero}"
-										converter="toUpperCaseConverter" />
+									<p:autoComplete id="nitTercero"
+										value="#{crearFactura.clienteApp}" var="clienteApp"
+										itemLabel="#{clienteApp.idClienteApp}"
+										itemValue="#{clienteApp}" converter="#{clienteAppConverter}"
+										completeMethod="#{crearFactura.completeClienteApp}">
+										<p:ajax event="itemSelect" update="razonSocialTercero" />
+										<p:ajax event="change" update="razonSocialTercero" />
+										<p:column>
+											<h:outputText value="#{clienteApp.idClienteApp}" />
+										</p:column>
 
+										<p:column>
+											<h:outputText value="#{clienteApp.razonSocial}" />
+										</p:column>
+									</p:autoComplete>
 									<h:outputLabel for="razonSocialTercero"
 										value="#{msg.MSG_PANELGRID_FACTURA_TERCERO_RAZON_SOCIAL}" />
 									<p:inputText id="razonSocialTercero"
-										value="#{crearFactura.razonSocialTercero}"
+										value="#{crearFactura.clienteApp.razonSocial}"
 										converter="toUpperCaseConverter" />
 
 								</h:panelGrid>

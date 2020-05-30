@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportFactura" pageWidth="226" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="206" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" whenResourceMissingType="Empty" isIgnorePagination="true" uuid="7dc35095-98cb-4e8b-818e-8fb966d04b7d">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
@@ -81,16 +81,31 @@
 	<parameter name="NUMERO_FACTURA_VENTA" class="java.lang.Integer"/>
 	<parameter name="EFECTIVO" class="java.lang.Integer"/>
 	<parameter name="CAMBIO" class="java.lang.Integer"/>
-	<parameter name="NIT_TERCERO" class="java.lang.String"/>
-	<parameter name="RAZON_SOCIAL_TERCERO" class="java.lang.String"/>
 	<parameter name="FACTURA_ORIGINAL" class="java.lang.Boolean"/>
 	<queryString>
-		<![CDATA[select fc.fecha_creacion "FECHA_CREACION", concat('$', format(fc.valor_neto,1)) "VALOR NETO", concat('$', format(fc.valor_iva,1)) "IVA", concat('$', format(fc.valor_total,1)) "TOTAL_FACTURA" from tcr.factura_cabecera fc where fc.id_factura = $P{NUMERO_FACTURA_VENTA}]]>
+		<![CDATA[select fc.fecha_creacion "FECHA_CREACION", concat('$', format(fc.valor_neto,1)) "VALOR NETO", concat('$', format(fc.valor_iva,1)) "IVA", concat('$', format(fc.valor_total,1)) "TOTAL_FACTURA", fc.id_cliente_app "NIT_TERCERO", ca.razon_social "RAZON_SOCIAL_TERCERO" from tcr.factura_cabecera fc LEFT JOIN tcr.cliente_app ca ON (fc.id_cliente_app = ca.id_cliente_app) where fc.id_factura = $P{NUMERO_FACTURA_VENTA}]]>
 	</queryString>
-	<field name="VALOR NETO" class="java.lang.String"/>
-	<field name="IVA" class="java.lang.String"/>
-	<field name="TOTAL_FACTURA" class="java.lang.String"/>
-	<field name="FECHA_CREACION" class="java.sql.Timestamp"/>
+	<field name="FECHA_CREACION" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="FECHA_CREACION"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura_cabecera"/>
+	</field>
+	<field name="VALOR NETO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="VALOR NETO"/>
+	</field>
+	<field name="IVA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="IVA"/>
+	</field>
+	<field name="TOTAL_FACTURA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TOTAL_FACTURA"/>
+	</field>
+	<field name="NIT_TERCERO" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="NIT_TERCERO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura_cabecera"/>
+	</field>
+	<field name="RAZON_SOCIAL_TERCERO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="RAZON_SOCIAL_TERCERO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cliente_app"/>
+	</field>
 	<variable name="REPORT_CANTIDAD_ARTICULOS" class="java.lang.Integer">
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
@@ -177,14 +192,14 @@ Estimado cliente, solo se aceptan cambios hasta 8 dias.]]></text>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="7" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["CLIENTE : " + IF($P{RAZON_SOCIAL_TERCERO} == null,"CLIENTE GENERICO",$P{RAZON_SOCIAL_TERCERO})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["CLIENTE : " + IF($F{RAZON_SOCIAL_TERCERO} == null,"CLIENTE GENERICO",$F{RAZON_SOCIAL_TERCERO})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="155" width="206" height="10" uuid="670bb62a-88ea-44bc-bfdd-c8d29251b46b"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="7" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["NIT : " + IF($P{NIT_TERCERO} == null,"CLIENTE GENERICO",$P{NIT_TERCERO})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["NIT : " + IF($F{NIT_TERCERO} == null,"CLIENTE GENERICO",$F{NIT_TERCERO})]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="30" width="206" height="1" uuid="0445ee98-c66e-4bc2-91c7-6c29340a46e9"/>

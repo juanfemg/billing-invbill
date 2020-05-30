@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import co.com.juan.tcr.control.IAppConfigLogic;
 import co.com.juan.tcr.control.IAppMenuLogic;
 import co.com.juan.tcr.control.ICategoriaProductoLogic;
+import co.com.juan.tcr.control.IClienteAppLogic;
 import co.com.juan.tcr.control.ICompraCabeceraLogic;
 import co.com.juan.tcr.control.ICompraDetalleLogic;
 import co.com.juan.tcr.control.IDevolucionCabeceraLogic;
@@ -40,6 +41,7 @@ import co.com.juan.tcr.enums.EstadosAppEnum;
 import co.com.juan.tcr.model.AppConfig;
 import co.com.juan.tcr.model.AppMenu;
 import co.com.juan.tcr.model.CategoriaProducto;
+import co.com.juan.tcr.model.ClienteApp;
 import co.com.juan.tcr.model.CompraCabecera;
 import co.com.juan.tcr.model.CompraCabeceraId;
 import co.com.juan.tcr.model.CompraDetalle;
@@ -133,6 +135,9 @@ public class BusinessDelegate implements IBusinessDelegate {
 
 	@Autowired
 	private ITipoPeriodoLogic tipoPeriodoLogic;
+
+	@Autowired
+	private IClienteAppLogic clienteAppLogic;
 
 	@Override
 	public void save(LoginApp entity) {
@@ -603,6 +608,30 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public List<TipoPeriodo> getTiposPeriodo() {
 		return tipoPeriodoLogic.getTipoPeriodo();
+	}
+
+	@Override
+	public void save(ClienteApp entity) {
+		if (entity.getEstado() == null) {
+			entity.setEstado(EstadosAppEnum.A);
+		}
+
+		clienteAppLogic.saveClienteApp(entity);
+	}
+
+	@Override
+	public ClienteApp findClienteByID(Integer id) {
+		return clienteAppLogic.getClienteApp(id);
+	}
+
+	@Override
+	public void update(ClienteApp entity) {
+		clienteAppLogic.updateClienteApp(entity);
+	}
+
+	@Override
+	public List<ClienteApp> getClientes() {
+		return clienteAppLogic.getClienteApp();
 	}
 
 }

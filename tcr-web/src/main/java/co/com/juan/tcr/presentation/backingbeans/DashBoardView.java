@@ -285,10 +285,6 @@ public class DashBoardView implements Serializable {
 		showDialogCambiarPassword = false;
 	}
 
-	public void actionMostrarInfoProveedor(ProveedorApp proveedorTemp) {
-		proveedorApp = proveedorTemp;
-	}
-
 	public void actionActualizarPassword() {
 		try {
 			passwordOld = new Encrypt().encrypt(passwordOld);

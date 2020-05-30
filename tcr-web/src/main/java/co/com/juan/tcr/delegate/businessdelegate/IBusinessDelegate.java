@@ -11,6 +11,7 @@ import co.com.juan.tcr.dto.ReporteVentaMensual;
 import co.com.juan.tcr.model.AppConfig;
 import co.com.juan.tcr.model.AppMenu;
 import co.com.juan.tcr.model.CategoriaProducto;
+import co.com.juan.tcr.model.ClienteApp;
 import co.com.juan.tcr.model.CompraCabecera;
 import co.com.juan.tcr.model.CompraCabeceraId;
 import co.com.juan.tcr.model.CompraDetalle;
@@ -251,5 +252,13 @@ public interface IBusinessDelegate {
 	public void update(TipoPeriodo entity);
 
 	public List<TipoPeriodo> getTiposPeriodo();
+
+	public void save(ClienteApp entity);
+
+	public ClienteApp findClienteByID(Integer id);
+
+	public void update(ClienteApp entity);
+
+	public List<ClienteApp> getClientes();
 
 }
