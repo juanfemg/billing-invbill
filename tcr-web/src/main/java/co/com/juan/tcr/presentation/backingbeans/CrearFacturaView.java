@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -16,6 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,12 +65,17 @@ public class CrearFacturaView implements Serializable {
 	private List<SelectItem> productos;
 	private StockProducto stockProducto;
 	private ClienteApp clienteApp;
+	private ClienteApp clienteAppBusqueda;
+	private ClienteApp clienteAppRegistro;
 	private List<ClienteApp> cliente;
 	private boolean showDialogAdicionarItem;
 	private boolean showDialogConfirmacionActualizacion;
 	private boolean showDialogResumenFactura;
+	private boolean showDialogFacturaTercero;
 	private boolean showInputFacturaTercero;
 	private boolean showButtonImprimir;
+	private boolean switchFacturaTercero;
+	private boolean showMessageNitExiste;
 	private int cantidad;
 	private double valorIva = 0D;
 	private int metodoPago;
@@ -93,12 +100,17 @@ public class CrearFacturaView implements Serializable {
 		stockProducto = new StockProducto();
 		facturaDetalleId = new FacturaDetalleId();
 		clienteApp = new ClienteApp();
+		clienteAppBusqueda = new ClienteApp();
+		clienteAppRegistro = new ClienteApp();
 		cliente = new ArrayList<>();
 		showDialogAdicionarItem = true;
 		showDialogConfirmacionActualizacion = false;
 		showDialogResumenFactura = false;
 		showInputFacturaTercero = false;
 		showButtonImprimir = false;
+		showDialogFacturaTercero = false;
+		switchFacturaTercero = false;
+		showMessageNitExiste = false;
 		cantidad = 1;
 		initCategoriasProducto();
 		initClientes();
@@ -170,7 +182,6 @@ public class CrearFacturaView implements Serializable {
 				if (clienteAppTemp.getEstado().equals(EstadosAppEnum.I)) {
 					cliente.remove(clienteAppTemp);
 				}
-
 			}
 
 		} catch (Exception e) {
@@ -181,12 +192,24 @@ public class CrearFacturaView implements Serializable {
 
 	public List<ClienteApp> completeClienteApp(String query) {
 
+		Predicate<ClienteApp> nitCliente;
+		Predicate<ClienteApp> razonSocialCliente;
+		String value = query.trim().toUpperCase();
+
 		if (!cliente.isEmpty()) {
-			return cliente.stream().filter(t -> String.valueOf(t.getIdClienteApp()).startsWith(query))
-					.collect(Collectors.toList());
+			nitCliente = t -> String.valueOf(t.getIdClienteApp()).startsWith(value);
+			razonSocialCliente = t -> t.getRazonSocial().startsWith(value);
+			return cliente.stream().filter(nitCliente.or(razonSocialCliente)).collect(Collectors.toList());
 		}
 
 		return new ArrayList<ClienteApp>();
+	}
+
+	public void actionItemSelectTercero(SelectEvent event) {
+		if (event != null) {
+			clienteAppBusqueda = (ClienteApp) event.getObject();
+			actionGuardarTercero();
+		}
 	}
 
 	public void actionAdicionar() {
@@ -262,6 +285,9 @@ public class CrearFacturaView implements Serializable {
 
 		if (showDialogResumenFactura)
 			showDialogResumenFactura = false;
+
+		if (showDialogFacturaTercero)
+			showDialogFacturaTercero = false;
 	}
 
 	public void actualizarFacturaResumen() {
@@ -284,6 +310,41 @@ public class CrearFacturaView implements Serializable {
 
 	public void actionGenerarFactura() {
 		showDialogResumenFactura = true;
+	}
+
+	public void actionGuardarTercero() {
+		showDialogFacturaTercero = false;
+
+		if (switchFacturaTercero) {
+			if (clienteAppRegistro != null) {
+				if (clienteAppRegistro.getIdClienteApp() != null && clienteAppRegistro.getRazonSocial() != null) {
+					try {
+						ClienteApp clienteAppTemp = businessDelegate
+								.findClienteByID(clienteAppRegistro.getIdClienteApp());
+
+						if (clienteAppTemp != null) {
+							clienteAppRegistro = clienteAppTemp;
+							showMessageNitExiste = true;
+						}
+
+					} catch (Exception e) {
+						addErrorMessage(e.getMessage());
+						log.error("=== Consulta de Cliente : Fallo la consulta del cliente" + ". ERROR : "
+								+ e.getMessage());
+					}
+
+					showInputFacturaTercero = true;
+					clienteApp = clienteAppRegistro;
+				}
+			}
+		} else {
+			if (clienteAppBusqueda != null) {
+				if (clienteAppBusqueda.getIdClienteApp() != null && clienteAppBusqueda.getRazonSocial() != null) {
+					showInputFacturaTercero = true;
+					clienteApp = clienteAppBusqueda;
+				}
+			}
+		}
 	}
 
 	public void actionGuardar() {
@@ -406,10 +467,14 @@ public class CrearFacturaView implements Serializable {
 
 	public void actionFacturaNormal() {
 		showInputFacturaTercero = false;
+		showMessageNitExiste = false;
 	}
 
 	public void actionFacturaTercero() {
-		showInputFacturaTercero = true;
+		showDialogFacturaTercero = true;
+		showMessageNitExiste = false;
+		clienteAppBusqueda = new ClienteApp();
+		clienteAppRegistro = new ClienteApp();
 	}
 
 	public void actionLimpiar() {
@@ -786,6 +851,76 @@ public class CrearFacturaView implements Serializable {
 	 */
 	public void setCliente(List<ClienteApp> cliente) {
 		this.cliente = cliente;
+	}
+
+	/**
+	 * @return the showDialogFacturaTercero
+	 */
+	public boolean isShowDialogFacturaTercero() {
+		return showDialogFacturaTercero;
+	}
+
+	/**
+	 * @param showDialogFacturaTercero the showDialogFacturaTercero to set
+	 */
+	public void setShowDialogFacturaTercero(boolean showDialogFacturaTercero) {
+		this.showDialogFacturaTercero = showDialogFacturaTercero;
+	}
+
+	/**
+	 * @return the clienteAppBusqueda
+	 */
+	public ClienteApp getClienteAppBusqueda() {
+		return clienteAppBusqueda;
+	}
+
+	/**
+	 * @param clienteAppBusqueda the clienteAppBusqueda to set
+	 */
+	public void setClienteAppBusqueda(ClienteApp clienteAppBusqueda) {
+		this.clienteAppBusqueda = clienteAppBusqueda;
+	}
+
+	/**
+	 * @return the switchFacturaTercero
+	 */
+	public boolean isSwitchFacturaTercero() {
+		return switchFacturaTercero;
+	}
+
+	/**
+	 * @param switchFacturaTercero the switchFacturaTercero to set
+	 */
+	public void setSwitchFacturaTercero(boolean switchFacturaTercero) {
+		this.switchFacturaTercero = switchFacturaTercero;
+	}
+
+	/**
+	 * @return the clienteAppRegistro
+	 */
+	public ClienteApp getClienteAppRegistro() {
+		return clienteAppRegistro;
+	}
+
+	/**
+	 * @param clienteAppRegistro the clienteAppRegistro to set
+	 */
+	public void setClienteAppRegistro(ClienteApp clienteAppRegistro) {
+		this.clienteAppRegistro = clienteAppRegistro;
+	}
+
+	/**
+	 * @return the showMessageNitExiste
+	 */
+	public boolean isShowMessageNitExiste() {
+		return showMessageNitExiste;
+	}
+
+	/**
+	 * @param showMessageNitExiste the showMessageNitExiste to set
+	 */
+	public void setShowMessageNitExiste(boolean showMessageNitExiste) {
+		this.showMessageNitExiste = showMessageNitExiste;
 	}
 
 }

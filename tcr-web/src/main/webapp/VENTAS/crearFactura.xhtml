@@ -127,7 +127,7 @@
 									<p:commandButton value="#{msg.MSG_BUTTON_FACTURA_TERCERO}"
 										id="btnFacturaTercero"
 										actionListener="#{crearFactura.actionFacturaTercero}"
-										update="men panelInfoFactura growl"
+										update="men panelInfoFactura growl dialogFacturaTercero"
 										disabled="#{empty crearFactura.productos}" process="@this"
 										rendered="#{!crearFactura.showInputFacturaTercero and not empty crearFactura.facturaDetalle}" />
 									<p:commandButton value="#{msg.MSG_BUTTON_FACTURA_NORMAL}"
@@ -151,30 +151,22 @@
 											value="#{msg.MSG_PANELGRID_FACTURA_TERCERO_INFORMACION}" />
 									</f:facet>
 
-									<h:outputLabel for="nitTercero"
+									<h:outputLabel for="nitInfoTercero"
 										value="#{msg.MSG_PANELGRID_FACTURA_TERCERO_NIT}" />
-									<p:autoComplete id="nitTercero"
-										value="#{crearFactura.clienteApp}" var="clienteApp"
-										itemLabel="#{clienteApp.idClienteApp}"
-										itemValue="#{clienteApp}" converter="#{clienteAppConverter}"
-										completeMethod="#{crearFactura.completeClienteApp}">
-										<p:ajax event="itemSelect" update="razonSocialTercero" />
-										<p:ajax event="change" update="razonSocialTercero" />
-										<p:column>
-											<h:outputText value="#{clienteApp.idClienteApp}" />
-										</p:column>
+									<h:outputText id="nitInfoTercero"
+										value="#{crearFactura.clienteApp.idClienteApp}" />
 
-										<p:column>
-											<h:outputText value="#{clienteApp.razonSocial}" />
-										</p:column>
-									</p:autoComplete>
-									<h:outputLabel for="razonSocialTercero"
+									<h:outputLabel for="razonSocialInfoTercero"
 										value="#{msg.MSG_PANELGRID_FACTURA_TERCERO_RAZON_SOCIAL}" />
-									<p:inputText id="razonSocialTercero"
-										value="#{crearFactura.clienteApp.razonSocial}"
-										converter="toUpperCaseConverter" />
+									<h:outputText id="razonSocialInfoTercero"
+										value="#{crearFactura.clienteApp.razonSocial}" />
 
 								</h:panelGrid>
+
+								<h:outputLabel
+									value="#{msg.MSG_PANELGRID_FACTURA_TERCERO_NIT_EXISTE}"
+									rendered="#{crearFactura.showMessageNitExiste}" />
+
 							</div>
 						</p:panel>
 					</div>
@@ -395,6 +387,92 @@
 								update="dialogGenerar dialogFactura formFactura" process="@this" />
 						</h:panelGrid>
 
+					</div>
+				</h:form>
+			</p:dialog>
+
+			<p:dialog id="dialogFacturaTercero" appendTo="@(body)"
+				draggable="true" closable="false" widgetVar="dialogFacturaTercero"
+				resizable="false" modal="true" width="500"
+				visible="#{crearFactura.showDialogFacturaTercero}"
+				header="#{msg.MSG_HEADER_DIALOG_FACTURA_TERCERO}">
+
+				<h:form id="formDialogFacturaTercero">
+					<div align="center">
+						<p:messages id="menFacturaTercero" showDetail="false"
+							severity="warn" />
+						<p:messages id="menFacturaTerceroGlobal" globalOnly="true"
+							showDetail="false" severity="info error fatal" />
+
+						<p:selectOneButton value="#{crearFactura.switchFacturaTercero}">
+							<f:selectItem
+								itemLabel="#{msg.MSG_ONE_BUTTON_FACTURA_TERCERO_BUSCAR}"
+								itemValue="false" />
+							<f:selectItem
+								itemLabel="#{msg.MSG_ONE_BUTTON_FACTURA_TERCERO_CREAR}"
+								itemValue="true" />
+							<p:ajax event="change" update="formDialogFacturaTercero" />
+						</p:selectOneButton>
+
+						<h:panelGrid id="panelGridFacturaTercero" columns="2"
+							cellpadding="5" styleClass="ui-grid"
+							rendered="#{!crearFactura.switchFacturaTercero}">
+
+							<h:outputLabel for="busquedaTerecero"
+								value="#{msg.MSG_PANELGRID_FACTURA_TERCERO_BUSQUEDA}" />
+							<p:autoComplete id="busquedaTerecero" forceSelection="true"
+								var="clienteApp" itemValue="#{clienteApp}"
+								emptyMessage="#{msg.MSG_PANELGRID_FACTURA_TERCERO_BUSQUEDA_EMPTY}"
+								converter="#{clienteAppConverter}"
+								completeMethod="#{crearFactura.completeClienteApp}">
+								<p:ajax event="itemSelect"
+									update="dialogFacturaTercero formFactura formDialogFacturaTercero"
+									listener="#{crearFactura.actionItemSelectTercero}" />
+								<p:column>
+									<h:outputText value="#{clienteApp.idClienteApp}" />
+								</p:column>
+
+								<p:column>
+									<h:outputText value="#{clienteApp.razonSocial}" />
+								</p:column>
+							</p:autoComplete>
+
+						</h:panelGrid>
+
+						<h:panelGrid id="panelGridFacturaTerceroCrear" columns="2"
+							cellpadding="5" styleClass="ui-grid"
+							rendered="#{crearFactura.switchFacturaTercero}">
+
+							<h:outputLabel for="nitTercero"
+								value="#{msg.MSG_PANELGRID_FACTURA_TERCERO_NIT}" />
+							<p:inputNumber id="nitTercero"
+								value="#{crearFactura.clienteAppRegistro.idClienteApp}"
+								converter="javax.faces.Integer" decimalPlaces="0"
+								thousandSeparator="" maxValue="2147483647" required="true"
+								requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}" />
+
+							<h:outputLabel for="razonSocialTercero"
+								value="#{msg.MSG_PANELGRID_FACTURA_TERCERO_RAZON_SOCIAL}" />
+							<p:inputText id="razonSocialTercero"
+								value="#{crearFactura.clienteAppRegistro.razonSocial}"
+								converter="toUpperCaseConverter" required="true"
+								requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}" />
+
+						</h:panelGrid>
+
+						<h:panelGrid id="panelGridConfirmFacturaTerceroBotones"
+							columns="2" cellpadding="5" styleClass="ui-grid">
+							<p:commandButton value="#{msg.MSG_BUTTON_ACEPTAR}"
+								id="btnAceptarTercero"
+								actionListener="#{crearFactura.actionGuardarTercero}"
+								update="dialogFacturaTercero formFactura formDialogFacturaTercero"
+								rendered="#{crearFactura.switchFacturaTercero}">
+							</p:commandButton>
+							<p:commandButton value="#{msg.MSG_BUTTON_CANCELAR}"
+								id="btnCancelarFacturaTercero"
+								actionListener="#{crearFactura.actionCancelar}" immediate="true"
+								process="@this" update="dialogFacturaTercero" />
+						</h:panelGrid>
 					</div>
 				</h:form>
 			</p:dialog>

@@ -1,7 +1,5 @@
 package co.com.juan.tcr.converter;
 
-import java.util.List;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -44,19 +42,8 @@ public class ClienteAppConverter implements Converter {
 			return "";
 
 		try {
-			List<ClienteApp> clienteesApp = businessDelegate.getClientes();
+			clienteApp = businessDelegate.findClienteByID(Integer.parseInt(value));
 
-			for (ClienteApp clienteAppTemp : clienteesApp) {
-				if (value.equalsIgnoreCase(String.valueOf(clienteAppTemp.getRazonSocial()))) {
-					clienteApp = clienteAppTemp;
-					break;
-				}
-			}
-
-			if (clienteApp == null) {
-				clienteApp = new ClienteApp();
-				clienteApp.setIdClienteApp(Integer.valueOf(value));
-			}
 		} catch (Exception e) {
 			log.error(
 					"== Cliente App Converter: Fallo al retornar el objeto del valor {}. Se ha producido un error: {}",
@@ -80,7 +67,7 @@ public class ClienteAppConverter implements Converter {
 			return null;
 
 		clienteApp = (ClienteApp) o;
-		return clienteApp.getRazonSocial();
+		return String.valueOf(clienteApp.getIdClienteApp());
 	}
 
 	/**

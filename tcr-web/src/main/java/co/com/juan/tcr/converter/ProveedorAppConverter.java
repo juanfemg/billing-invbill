@@ -1,7 +1,5 @@
 package co.com.juan.tcr.converter;
 
-import java.util.List;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -44,14 +42,8 @@ public class ProveedorAppConverter implements Converter {
 			return "";
 
 		try {
-			List<ProveedorApp> proveedoresApp = businessDelegate.getProveedores();
+			proveedorApp = businessDelegate.findProveedorByID(Integer.parseInt(value));
 
-			for (ProveedorApp proveedorAppTemp : proveedoresApp) {
-				if (value.equalsIgnoreCase(String.valueOf(proveedorAppTemp.getRazonSocial()))) {
-					proveedorApp = proveedorAppTemp;
-					break;
-				}
-			}
 		} catch (Exception e) {
 			log.error(
 					"== Proveedor App Converter: Fallo al retornar el objeto del valor {}. Se ha producido un error: {}",
@@ -75,7 +67,7 @@ public class ProveedorAppConverter implements Converter {
 			return null;
 
 		proveedorApp = (ProveedorApp) o;
-		return proveedorApp.getRazonSocial();
+		return String.valueOf(proveedorApp.getIdProveedorApp());
 	}
 
 	/**

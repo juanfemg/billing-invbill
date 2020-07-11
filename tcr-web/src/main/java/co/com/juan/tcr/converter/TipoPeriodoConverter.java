@@ -1,7 +1,5 @@
 package co.com.juan.tcr.converter;
 
-import java.util.List;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -44,14 +42,8 @@ public class TipoPeriodoConverter implements Converter {
 			return "";
 
 		try {
-			List<TipoPeriodo> tiposPeriodo = businessDelegate.getTiposPeriodo();
+			tipoPeriodo = businessDelegate.findTipoPeriodoByID(Integer.parseInt(value));
 
-			for (TipoPeriodo tipoPeriodoTemp : tiposPeriodo) {
-				if (value.equalsIgnoreCase(String.valueOf(tipoPeriodoTemp.getPeriodo()))) {
-					tipoPeriodo = tipoPeriodoTemp;
-					break;
-				}
-			}
 		} catch (Exception e) {
 			log.error(
 					"== Tipo Periodo Converter: Fallo al retornar el objeto del valor {}. Se ha producido un error: {}",
@@ -75,7 +67,7 @@ public class TipoPeriodoConverter implements Converter {
 			return null;
 
 		tipoPeriodo = (TipoPeriodo) o;
-		return tipoPeriodo.getPeriodo();
+		return String.valueOf(tipoPeriodo.getIdPeriodo());
 	}
 
 	/**

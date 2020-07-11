@@ -1,7 +1,5 @@
 package co.com.juan.tcr.converter;
 
-import java.util.List;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -44,14 +42,8 @@ public class ProductoConverter implements Converter {
 			return "";
 
 		try {
-			List<Producto> productos = businessDelegate.getProductos();
+			producto = businessDelegate.findProductoByID(Integer.parseInt(value));
 
-			for (Producto productoTemp : productos) {
-				if (value.equalsIgnoreCase(String.valueOf(productoTemp.getProducto()))) {
-					producto = productoTemp;
-					break;
-				}
-			}
 		} catch (Exception e) {
 			log.error("== Producto Converter: Fallo al retornar el objeto del valor {}. Se ha producido un error: {}",
 					value, e.getMessage());
@@ -74,7 +66,7 @@ public class ProductoConverter implements Converter {
 			return null;
 
 		producto = (Producto) o;
-		return producto.getProducto();
+		return String.valueOf(producto.getIdProducto());
 	}
 
 	/**

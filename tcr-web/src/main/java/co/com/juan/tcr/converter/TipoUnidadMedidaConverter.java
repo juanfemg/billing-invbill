@@ -1,7 +1,5 @@
 package co.com.juan.tcr.converter;
 
-import java.util.List;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -40,15 +38,12 @@ public class TipoUnidadMedidaConverter implements Converter {
 	 */
 	@Override
 	public Object getAsObject(FacesContext ctx, UIComponent component, String value) {
-		try {
-			List<TipoUnidadMedida> tiposUnidadMedida = businessDelegate.getTiposUnidadMedida();
+		if (value == null)
+			return "";
 
-			for (TipoUnidadMedida tipoUnidadMedidaTemp : tiposUnidadMedida) {
-				if (value.equalsIgnoreCase(String.valueOf(tipoUnidadMedidaTemp.getUnidad()))) {
-					tipoUnidadMedida = tipoUnidadMedidaTemp;
-					break;
-				}
-			}
+		try {
+			tipoUnidadMedida = businessDelegate.findTipoUnidadMedidaByID(Integer.parseInt(value));
+
 		} catch (Exception e) {
 			log.error(
 					"== Tipo Unidad Medida Converter: Fallo al retornar el objeto del valor {}. Se ha producido un error: {}",
@@ -68,8 +63,11 @@ public class TipoUnidadMedidaConverter implements Converter {
 	 */
 	@Override
 	public String getAsString(FacesContext fc, UIComponent uic, Object o) {
+		if (o == null)
+			return null;
+
 		tipoUnidadMedida = (TipoUnidadMedida) o;
-		return tipoUnidadMedida.getUnidad();
+		return String.valueOf(tipoUnidadMedida.getIdUnidadMedida());
 	}
 
 	/**
