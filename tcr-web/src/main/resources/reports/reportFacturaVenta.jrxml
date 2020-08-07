@@ -83,7 +83,7 @@
 	<parameter name="CAMBIO" class="java.lang.Integer"/>
 	<parameter name="FACTURA_ORIGINAL" class="java.lang.Boolean"/>
 	<queryString>
-		<![CDATA[select fc.fecha_creacion "FECHA_CREACION", concat('$', format(fc.valor_neto,1)) "VALOR NETO", concat('$', format(fc.valor_iva,1)) "IVA", concat('$', format(fc.valor_total,1)) "TOTAL_FACTURA", fc.id_cliente_app "NIT_TERCERO", ca.razon_social "RAZON_SOCIAL_TERCERO" from tcr.factura_cabecera fc LEFT JOIN tcr.cliente_app ca ON (fc.id_cliente_app = ca.id_cliente_app) where fc.id_factura = $P{NUMERO_FACTURA_VENTA}]]>
+		<![CDATA[select fc.fecha_creacion "FECHA_CREACION", concat('$', format(fc.valor_neto,1)) "VALOR NETO", concat('$', format(fc.valor_iva,1)) "IVA", concat('$', format(fc.valor_total,1)) "TOTAL_FACTURA", fc.id_cliente_app "NIT_TERCERO", ca.cod_verificacion "CODIGO_VERIFICACION_TERCERO", ca.razon_social "RAZON_SOCIAL_TERCERO" from tcr.factura_cabecera fc LEFT JOIN tcr.cliente_app ca ON (fc.id_cliente_app = ca.id_cliente_app) where fc.id_factura = $P{NUMERO_FACTURA_VENTA}]]>
 	</queryString>
 	<field name="FECHA_CREACION" class="java.sql.Timestamp">
 		<property name="com.jaspersoft.studio.field.label" value="FECHA_CREACION"/>
@@ -105,6 +105,10 @@
 	<field name="RAZON_SOCIAL_TERCERO" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="RAZON_SOCIAL_TERCERO"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="cliente_app"/>
+	</field>
+	<field name="CODIGO_VERIFICACION_TERCERO" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="CODIGO_VERIFICACION_TERCERO"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cod_verificacion"/>
 	</field>
 	<variable name="REPORT_CANTIDAD_ARTICULOS" class="java.lang.Integer">
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
@@ -199,7 +203,7 @@ Estimado cliente, solo se aceptan cambios hasta 8 dias.]]></text>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="7" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["NIT : " + IF($F{NIT_TERCERO} == null,"CLIENTE GENERICO",$F{NIT_TERCERO})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["NIT : " + IF($F{NIT_TERCERO} == null,"CLIENTE GENERICO",IF($F{CODIGO_VERIFICACION_TERCERO} == null, $F{NIT_TERCERO}, $F{NIT_TERCERO} + "-" + $F{CODIGO_VERIFICACION_TERCERO}))]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="30" width="206" height="1" uuid="0445ee98-c66e-4bc2-91c7-6c29340a46e9"/>

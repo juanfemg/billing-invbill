@@ -62,6 +62,7 @@ public class ClienteAppLogic implements IClienteAppLogic {
 
 		try {
 			checkFields(entity);
+			checkSecondaryFields(entity);
 
 			if (getClienteApp(entity.getIdClienteApp()) != null) {
 				throw new EntityException(EntityException.ENTITY_WITHSAMEKEY);
@@ -106,6 +107,7 @@ public class ClienteAppLogic implements IClienteAppLogic {
 
 		try {
 			checkFields(entity);
+			checkSecondaryFields(entity);
 
 			clienteAppDao.update(entity);
 
@@ -245,10 +247,19 @@ public class ClienteAppLogic implements IClienteAppLogic {
 		}
 	}
 
+	@Override
+	public void checkSecondaryFields(ClienteApp entity) {
+		if ((entity.getCodVerificacion() != null) && !(Utilities
+				.checkNumberAndCheckWithPrecisionAndScale(entity.getCodVerificacion().toString(), 1, 0))) {
+			throw new EntityException().new NotValidFormatException(Constant.FIELD_COD_VERIFICACION);
+		}
+	}
+
 	private static class Constant {
 
 		private static final String ENTITY_NAME = "ClienteApp";
 		private static final String FIELD_ID_ENTITY = "idClienteApp";
+		private static final String FIELD_COD_VERIFICACION = "codVerificacion";
 		private static final String FIELD_RAZON_SOCIAL = "razonSocial";
 		private static final String FIELD_ESTADO = "estado";
 	}

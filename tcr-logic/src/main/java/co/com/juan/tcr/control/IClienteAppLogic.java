@@ -77,4 +77,10 @@ public interface IClienteAppLogic {
 	 * 
 	 */
 	public void checkFields(ClienteApp entity);
+
+	/**
+	 * Check secondary fields
+	 * 
+	 */
+	public void checkSecondaryFields(ClienteApp entity);
 }

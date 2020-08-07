@@ -14,6 +14,7 @@ public class ClienteApp implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Integer idClienteApp;
+	private Integer codVerificacion;
 	private String razonSocial;
 	private EstadosAppEnum estado;
 	private Date fechaCreacion;
@@ -22,8 +23,9 @@ public class ClienteApp implements java.io.Serializable {
 	public ClienteApp() {
 	}
 
-	public ClienteApp(Integer idClienteApp, String razonSocial, EstadosAppEnum estado) {
+	public ClienteApp(Integer idClienteApp, Integer codVerificacion, String razonSocial, EstadosAppEnum estado) {
 		this.idClienteApp = idClienteApp;
+		this.codVerificacion = codVerificacion;
 		this.razonSocial = razonSocial;
 		this.estado = estado;
 	}
@@ -34,6 +36,14 @@ public class ClienteApp implements java.io.Serializable {
 
 	public void setIdClienteApp(Integer idClienteApp) {
 		this.idClienteApp = idClienteApp;
+	}
+
+	public Integer getCodVerificacion() {
+		return this.codVerificacion;
+	}
+
+	public void setCodVerificacion(Integer codVerificacion) {
+		this.codVerificacion = codVerificacion;
 	}
 
 	public String getRazonSocial() {

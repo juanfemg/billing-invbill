@@ -8,6 +8,10 @@
 			<column name="id_cliente_app" />
 			<generator class="assigned" />
 		</id>
+		<property generated="never" lazy="true" name="codVerificacion"
+			type="java.lang.Integer">
+			<column name="cod_verificacion" not-null="false" />
+		</property>
 		<property generated="never" lazy="true" name="razonSocial"
 			type="string">
 			<column name="razon_social" length="200" not-null="true" />
