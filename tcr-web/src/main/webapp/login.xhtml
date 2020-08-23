@@ -25,15 +25,16 @@
 		<p:growl id="growl" showDetail="false" severity="warn error" />
         
         <div class="Container100 BordBottom BlueBack loginback">
-            <div class="EmptyBox50"></div>
+            <div class="EmptyBox100"></div>
             
             <div class="Wid90 MarAuto">
                 <div class="Wid30 DispBlock MarAuto WidAutoOnMobile">
+                	<div class="TexAlCenter">
+                		<h:graphicImage name="images/logo_transparent.png" style="max-width:400px; max-height:400px"/>
+                	</div>
                     <div class="Card TexAlCenter" style="margin-bottom:-650px;">
-                        <h:graphicImage name="images/logo.svg" library="adamantium-layout" style="max-width:180px;"/>
-                        <div class="SeparatorFull"></div>
                         <div class="Wid100 OvHidden BigTopic"><i class="icon-security DispBlock"></i>#{msg.MSG_HEADER_LOGIN}</div>
-                        <div class="EmptyBox20"></div>
+                        <div class="EmptyBox40"></div>
                         <div class="Card SoftGrayBack">
                             <p:inputText id="usernameField" name="j_username"
 								value="#{login.userId}" placeholder="#{msg.MSG_VALUE_USUARIO}" styleClass="Wid90 TexAlCenter"/>

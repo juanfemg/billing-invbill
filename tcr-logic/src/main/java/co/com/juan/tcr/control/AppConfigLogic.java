@@ -241,7 +241,6 @@ public class AppConfigLogic implements IAppConfigLogic {
 
 		private static final String ENTITY_NAME = "AppConfig";
 		private static final String FIELD_ID_ENTITY = "idAppConfig";
-		private static final String FIELD_VALOR = "valor";
 		private static final String FIELD_DESCRIPCION = "descripcion";
 	}
 
