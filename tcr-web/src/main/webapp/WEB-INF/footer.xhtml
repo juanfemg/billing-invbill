@@ -5,30 +5,29 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui">
-
+    
+    <f:loadBundle basename="messages.footer" var="msgFooter" />
 
     <!-- FOOTER  -->
     <div class="Container100">
         <div class="ContainerIndent">
             <div class="Card">
                 <div class="Container100" style="" id="footerlinks">
-                    <a href="#" class="DispInlBlock FontSourceSansLight Blue Fs12 Fleft HoverEffect">TERMS OF CONDITIONS</a>
+                    <a href="#" class="DispInlBlock FontSourceSansLight Blue Fs12 Fleft HoverEffect">#{msgFooter.MSG_VALUE_TERMINOS_CONDICIONES}</a>
                     <span class="Fleft BoldGray Fs12" style="padding:0px 5px;">|</span>
-                    <a href="#" class="DispInlBlock FontSourceSansLight Blue Fs12 Fleft HoverEffect">SITEMAP</a>
+                    <a href="#" class="DispInlBlock FontSourceSansLight Blue Fs12 Fleft HoverEffect">#{msgFooter.MSG_VALUE_MAPA_SITIO}</a>
                     <span class="Fleft BoldGray Fs12" style="padding:0px 5px;">|</span>
-                    <a href="#" class="DispInlBlock FontSourceSansLight Blue Fs12 Fleft HoverEffect">PRIVACY</a>
-                    <span class="Fleft BoldGray Fs12" style="padding:0px 5px;">|</span>
-                    <a href="#" class="DispInlBlock FontSourceSansLight Blue Fs12 Fleft HoverEffect">LINKING POLICY</a>
+                    <a href="#" class="DispInlBlock FontSourceSansLight Blue Fs12 Fleft HoverEffect">#{msgFooter.MSG_VALUE_PRIVACIDAD}</a>
 
                     <div class="EmptyBox10 ShowOnMobile"></div>
-                    <span class="DispInlBlock FontSourceSansLight BoldGray Fs12 Fright HoverEffect TexAlRight FloatNoneOnMobile"> PrimeFaces Adamantium Theme And Layout</span>
+                    <span class="DispInlBlock FontSourceSansLight BoldGray Fs12 Fright HoverEffect TexAlRight FloatNoneOnMobile"> #{msgFooter.MSG_VALUE_PROPIETARIO}</span>
                 </div>
                 
                 <div class="EmptyBox10"></div>
                 
                 <div class="Container50 Responsive100">
-                    <h:graphicImage name="images/logo.svg" styleClass="" library="adamantium-layout" style="height:40px;"/>
-                    <span class="DispBlock Wid100 FontSourceSansLight BoldGray Fs12 HoverEffect">+1 888 123 4567 <br/> info@adamantiumadamantium.com</span>
+                    <h:graphicImage name="images/logo.png" style="height:40px;"/>
+                    <span class="DispBlock Wid100 FontSourceSansLight BoldGray Fs12 HoverEffect">#{msgFooter.MSG_VALUE_TELEFONO_CONTACTO} <br/> #{msgFooter.MSG_VALUE_EMAIL_CONTACTO}</span>
                 </div>
                 <div class="Container50 Responsive100">
                     <div class="DispInlBlock Fright">

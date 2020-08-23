@@ -82,7 +82,7 @@
 	repr.precio_venta,
 	repr.stock,
 	repr.unidad
-FROM tcr.reporteproductos repr
+FROM invbill.reporteproductos repr
 WHERE 1 = 1 
 AND $X{IN, repr.id_categoria,  CATEGORIAS}
 AND $X{IN, repr.id_producto,  PRODUCTOS}

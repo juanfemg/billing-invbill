@@ -25,7 +25,7 @@
 
 	<aop:config>
 		<aop:pointcut id="springMonitoringPointcut"
-			expression="within(co.com.juan.tcr.control.*)" />
+			expression="within(co.com.juan.invbill.control.*)" />
 		<aop:advisor pointcut-ref="springMonitoringPointcut"
 			advice-ref="jamonPerformanceMonitorInterceptor" />
 	</aop:config>

@@ -18,9 +18,9 @@
 	</appender>
 
 	<appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${jboss.server.log.dir}/tcr-web.log" />
+		<param name="File" value="${jboss.server.log.dir}/invbill.log" />
 		<!-- Cuando se este probando en el tomcat habilitar este tag e inhabilitar 
-			el de jboss <param name="File" value="${catalina.home}/logs/tcr-web.log"/> -->
+			el de jboss <param name="File" value="${catalina.home}/logs/invbill.log"/> -->
 		<param name="Append" value="true" />
 
 		<!-- Rollover at midnight each day -->

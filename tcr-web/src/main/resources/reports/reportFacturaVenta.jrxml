@@ -63,7 +63,7 @@
 	<subDataset name="Factura_Detalle" uuid="435cc272-bb5c-4059-bb28-dfd9908697fd">
 		<parameter name="ID_FACTURA" class="java.lang.String"/>
 		<queryString>
-			<![CDATA[select fd.cantidad "Cantidad", p.producto "Producto", concat('$', format(fd.precio_venta,0)) "Precio Unitario", concat('$', format((fd.precio_venta * fd.cantidad),0)) "Precio Total" from tcr.factura_detalle fd inner join tcr.producto p on fd.id_producto = p.id_producto where fd.id_factura = $P{ID_FACTURA}]]>
+			<![CDATA[select fd.cantidad "Cantidad", p.producto "Producto", concat('$', format(fd.precio_venta,0)) "Precio Unitario", concat('$', format((fd.precio_venta * fd.cantidad),0)) "Precio Total" from invbill.factura_detalle fd inner join invbill.producto p on fd.id_producto = p.id_producto where fd.id_factura = $P{ID_FACTURA}]]>
 		</queryString>
 		<field name="Cantidad" class="java.lang.Integer">
 			<fieldDescription><![CDATA[]]></fieldDescription>
@@ -83,7 +83,7 @@
 	<parameter name="CAMBIO" class="java.lang.Integer"/>
 	<parameter name="FACTURA_ORIGINAL" class="java.lang.Boolean"/>
 	<queryString>
-		<![CDATA[select fc.fecha_creacion "FECHA_CREACION", concat('$', format(fc.valor_neto,1)) "VALOR NETO", concat('$', format(fc.valor_iva,1)) "IVA", concat('$', format(fc.valor_total,1)) "TOTAL_FACTURA", fc.id_cliente_app "NIT_TERCERO", ca.cod_verificacion "CODIGO_VERIFICACION_TERCERO", ca.razon_social "RAZON_SOCIAL_TERCERO" from tcr.factura_cabecera fc LEFT JOIN tcr.cliente_app ca ON (fc.id_cliente_app = ca.id_cliente_app) where fc.id_factura = $P{NUMERO_FACTURA_VENTA}]]>
+		<![CDATA[select fc.fecha_creacion "FECHA_CREACION", concat('$', format(fc.valor_neto,1)) "VALOR NETO", concat('$', format(fc.valor_iva,1)) "IVA", concat('$', format(fc.valor_total,1)) "TOTAL_FACTURA", fc.id_cliente_app "NIT_TERCERO", ca.cod_verificacion "CODIGO_VERIFICACION_TERCERO", ca.razon_social "RAZON_SOCIAL_TERCERO" from invbill.factura_cabecera fc LEFT JOIN invbill.cliente_app ca ON (fc.id_cliente_app = ca.id_cliente_app) where fc.id_factura = $P{NUMERO_FACTURA_VENTA}]]>
 	</queryString>
 	<field name="FECHA_CREACION" class="java.sql.Timestamp">
 		<property name="com.jaspersoft.studio.field.label" value="FECHA_CREACION"/>

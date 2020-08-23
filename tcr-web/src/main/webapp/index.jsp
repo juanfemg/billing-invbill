@@ -9,7 +9,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>TCR</title>
+		<title>InVBill</title>
 	</head>
 	<body>
 		<jsp:forward page="/login.xhtml" />

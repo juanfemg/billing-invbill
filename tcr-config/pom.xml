@@ -3,15 +3,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>co.com.juan.tcr</groupId>
-		<artifactId>tcr-parent</artifactId>
+		<groupId>co.com.juan.invbill</groupId>
+		<artifactId>invbill-parent</artifactId>
 		<version>7.1.0-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<artifactId>tcr-config</artifactId>
-	<name>Proyecto Config TCR</name>
+	<artifactId>invbill-config</artifactId>
+	<name>Proyecto Config InVBill</name>
 
 	<build>
 		<plugins>

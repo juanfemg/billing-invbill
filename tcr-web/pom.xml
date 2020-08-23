@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>co.com.juan.tcr</groupId>
-		<artifactId>tcr-parent</artifactId>
+		<groupId>co.com.juan.invbill</groupId>
+		<artifactId>invbill-parent</artifactId>
 		<version>7.1.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>tcr-web</artifactId>
+	<artifactId>invbill-web</artifactId>
 	<packaging>war</packaging>
-	<name>Proyecto Web TCR</name>
+	<name>Proyecto Web InVBill</name>
 
 	<repositories>
 		<repository>
@@ -28,13 +28,13 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>co.com.juan.tcr</groupId>
-			<artifactId>tcr-config</artifactId>
+			<groupId>co.com.juan.invbill</groupId>
+			<artifactId>invbill-config</artifactId>
 			<version>${global.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>co.com.juan.tcr</groupId>
-			<artifactId>tcr-logic</artifactId>
+			<groupId>co.com.juan.invbill</groupId>
+			<artifactId>invbill-logic</artifactId>
 			<version>${global.version}</version>
 		</dependency>
 

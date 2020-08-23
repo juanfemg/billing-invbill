@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 11-feb-2017 9:50:57 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping package="co.com.juan.invbill.model">
+	<class catalog="invbill" name="Producto" table="producto">
+		<id name="idProducto" type="java.lang.Integer">
+			<column name="id_producto" />
+			<generator class="identity" />
+		</id>
+		<many-to-one class="CategoriaProducto" fetch="select"
+			name="categoriaProducto" lazy="false">
+			<column name="id_categoria" not-null="true" />
+		</many-to-one>
+		<many-to-one name="tipoUnidadMedida" class="TipoUnidadMedida"
+			fetch="select" lazy="false">
+			<column name="id_unidad_medida" not-null="true" />
+		</many-to-one>
+		<property generated="never" lazy="true" name="producto"
+			type="string">
+			<column length="50" name="producto" not-null="true" />
+		</property>
+		<property generated="never" lazy="true" name="estado">
+			<column length="1" name="estado" not-null="true" />
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">co.com.juan.invbill.enums.EstadosAppEnum</param>
+				<param name="type">1</param>
+			</type>
+		</property>
+		<property generated="never" lazy="true" name="fechaCreacion"
+			type="timestamp" not-null="false" insert="false">
+			<column length="0" name="fecha_creacion" />
+		</property>
+		<property generated="never" lazy="true" name="medida"
+			type="double" not-null="false">
+			<column name="medida" />
+		</property>
+		<set fetch="select" inverse="true" lazy="true"
+			name="stockProductos" sort="unsorted" table="stock_producto">
+			<key>
+				<column name="id_producto" not-null="true" />
+			</key>
+			<one-to-many class="StockProducto" />
+		</set>
+		<set fetch="select" inverse="true" lazy="true"
+			name="facturaDetalles" sort="unsorted" table="factura_detalle">
+			<key>
+				<column name="id_producto" not-null="true" />
+			</key>
+			<one-to-many class="FacturaDetalle" />
+		</set>
+		<set fetch="select" inverse="true" lazy="true"
+			name="compraDetalles" sort="unsorted" table="compra_detalle">
+			<key>
+				<column name="id_producto" not-null="true" />
+			</key>
+			<one-to-many class="CompraDetalle" />
+		</set>
+		<set fetch="select" inverse="true" lazy="true"
+			name="devolucionDetalles" sort="unsorted" table="devolucion_detalle">
+			<key>
+				<column name="id_producto" not-null="true" />
+			</key>
+			<one-to-many class="DevolucionDetalle" />
+		</set>
+	</class>
+</hibernate-mapping>

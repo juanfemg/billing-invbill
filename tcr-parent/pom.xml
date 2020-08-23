@@ -2,11 +2,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>co.com.juan.tcr</groupId>
-	<artifactId>tcr-parent</artifactId>
+	<groupId>co.com.juan.invbill</groupId>
+	<artifactId>invbill-parent</artifactId>
 	<version>${global.version}</version>
 	<packaging>pom</packaging>
-	<name>Proyecto Parent TCR</name>
+	<name>Proyecto Parent InVBill</name>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>

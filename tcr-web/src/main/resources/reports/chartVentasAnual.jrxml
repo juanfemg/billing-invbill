@@ -21,8 +21,8 @@ FROM
             MONTH(venta.fecha_creacion) AS IdMes,
             (SUM(venta.valor_total) - IFNULL(SUM(devolucion.valor_total), 0)) AS valorTotal
     FROM
-        tcr.factura_cabecera venta
-    LEFT JOIN tcr.devolucion_cabecera devolucion ON (venta.id_factura = devolucion.id_factura)
+        invbill.factura_cabecera venta
+    LEFT JOIN invbill.devolucion_cabecera devolucion ON (venta.id_factura = devolucion.id_factura)
     WHERE
         YEAR(CAST(venta.fecha_creacion AS DATE)) = $P{ANIO} 
     GROUP BY YEAR(venta.fecha_creacion) , MONTH(venta.fecha_creacion)

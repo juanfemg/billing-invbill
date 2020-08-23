@@ -2,7 +2,7 @@
 <web-app id="WebApp_ID" version="3.0"
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-	<display-name>tcr-web</display-name>
+	<display-name>invbill</display-name>
 	<!-- Welcome File -->
 	<welcome-file-list>
 		<welcome-file>index.xhtml</welcome-file>
@@ -74,7 +74,7 @@
 	</filter-mapping>
 	<filter>
 		<filter-name>characterEncodingFilter</filter-name>
-		<filter-class>co.com.juan.tcr.filter.CharacterEncodingFilter</filter-class>
+		<filter-class>co.com.juan.invbill.filter.CharacterEncodingFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>characterEncodingFilter</filter-name>
