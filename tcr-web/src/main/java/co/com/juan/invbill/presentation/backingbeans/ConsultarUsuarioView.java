@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
-import co.com.juan.invbill.enums.EstadosAppEnum;
+import co.com.juan.invbill.enums.EstadoEnum;
 import co.com.juan.invbill.model.UsuarioApp;
 import co.com.juan.invbill.util.Properties;
 
@@ -55,8 +55,8 @@ public class ConsultarUsuarioView implements Serializable {
 	}
 
 	public void initEstadosApp() {
-		EstadosAppEnum[] estadosAppEnums = EstadosAppEnum.values();
-		for (EstadosAppEnum estadosAppEnumTemp : estadosAppEnums) {
+		EstadoEnum[] estadosAppEnums = EstadoEnum.values();
+		for (EstadoEnum estadosAppEnumTemp : estadosAppEnums) {
 			estadosApp.add(new SelectItem(estadosAppEnumTemp, estadosAppEnumTemp.getEstado()));
 		}
 	}

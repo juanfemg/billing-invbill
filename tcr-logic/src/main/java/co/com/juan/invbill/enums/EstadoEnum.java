@@ -4,13 +4,13 @@ package co.com.juan.invbill.enums;
  * @author Juan Felipe
  * 
  */
-public enum EstadosAppEnum {
+public enum EstadoEnum {
 
 	A("ACTIVO"), I("INACTIVO");
 
 	private final String estado;
 
-	private EstadosAppEnum(String estado) {
+	private EstadoEnum(String estado) {
 		this.estado = estado;
 	}
 

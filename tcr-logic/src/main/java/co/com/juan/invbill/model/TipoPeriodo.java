@@ -1,6 +1,6 @@
 package co.com.juan.invbill.model;
 
-import co.com.juan.invbill.enums.EstadosAppEnum;
+import co.com.juan.invbill.enums.EstadoEnum;
 
 // Generated 16/06/2019 09:33:47 PM by Hibernate Tools 4.0.1.Final
 
@@ -13,12 +13,12 @@ public class TipoPeriodo implements java.io.Serializable {
 	private Integer idPeriodo;
 	private String periodo;
 	private Integer numeroMeses;
-	private EstadosAppEnum estado;
+	private EstadoEnum estado;
 
 	public TipoPeriodo() {
 	}
 
-	public TipoPeriodo(Integer idPeriodo, String periodo, Integer numeroMeses, EstadosAppEnum estado) {
+	public TipoPeriodo(Integer idPeriodo, String periodo, Integer numeroMeses, EstadoEnum estado) {
 		this.idPeriodo = idPeriodo;
 		this.periodo = periodo;
 		this.numeroMeses = numeroMeses;
@@ -49,11 +49,11 @@ public class TipoPeriodo implements java.io.Serializable {
 		this.numeroMeses = numeroMeses;
 	}
 
-	public EstadosAppEnum getEstado() {
+	public EstadoEnum getEstado() {
 		return this.estado;
 	}
 
-	public void setEstado(EstadosAppEnum estado) {
+	public void setEstado(EstadoEnum estado) {
 		this.estado = estado;
 	}
 

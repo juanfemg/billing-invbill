@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
-import co.com.juan.invbill.enums.EstadosAppEnum;
+import co.com.juan.invbill.enums.EstadoEnum;
 import co.com.juan.invbill.model.CategoriaProducto;
 import co.com.juan.invbill.model.Producto;
 import co.com.juan.invbill.model.TipoUnidadMedida;
@@ -60,8 +60,8 @@ public class ReporteProductosView implements Serializable {
 	private List<Producto> producto;
 	private List<Producto> productoFiltro;
 	private List<SelectItem> productos;
-	private EstadosAppEnum[] estado;
-	private List<EstadosAppEnum> estadoFiltro;
+	private EstadoEnum[] estado;
+	private List<EstadoEnum> estadoFiltro;
 	private List<SelectItem> estados;
 	private List<TipoUnidadMedida> tipoUnidadMedida;
 	private List<TipoUnidadMedida> tiposUnidadMedidaFiltro;
@@ -124,9 +124,9 @@ public class ReporteProductosView implements Serializable {
 
 	public void initEstados() {
 		try {
-			estado = EstadosAppEnum.values();
+			estado = EstadoEnum.values();
 
-			for (EstadosAppEnum estadoTemp : estado) {
+			for (EstadoEnum estadoTemp : estado) {
 				estados.add(new SelectItem(estadoTemp, estadoTemp.getEstado()));
 			}
 
@@ -221,7 +221,7 @@ public class ReporteProductosView implements Serializable {
 			parameters.put("RANGO_PRECIO_COMPRA", filterNestedTypeMap(rangoPrecioCompra, stockProductoMaxPrecioCompra));
 			parameters.put("RANGO_PRECIO_VENTA", filterNestedTypeMap(rangoPrecioVenta, stockProductoMaxPrecioVenta));
 			parameters.put("RANGO_STOCK", filterNestedTypeMap(rangoStock, stockProductoMaxStock));
-			stream = reportController.getReport(REPORTE_PRODUCTOS, parameters);
+			stream = reportController.getReportPdf(REPORTE_PRODUCTOS, parameters);
 
 			if (stream != null) {
 				content = new DefaultStreamedContent(stream, STREAM_CONTENT_TYPE, REPORTE_PRODUCTOS.concat(SUFFIX_PDF));
@@ -411,28 +411,28 @@ public class ReporteProductosView implements Serializable {
 	/**
 	 * @return the estado
 	 */
-	public EstadosAppEnum[] getEstado() {
+	public EstadoEnum[] getEstado() {
 		return estado;
 	}
 
 	/**
 	 * @param estado the estado to set
 	 */
-	public void setEstado(EstadosAppEnum[] estado) {
+	public void setEstado(EstadoEnum[] estado) {
 		this.estado = estado;
 	}
 
 	/**
 	 * @return the estadoFiltro
 	 */
-	public List<EstadosAppEnum> getEstadoFiltro() {
+	public List<EstadoEnum> getEstadoFiltro() {
 		return estadoFiltro;
 	}
 
 	/**
 	 * @param estadoFiltro the estadoFiltro to set
 	 */
-	public void setEstadoFiltro(List<EstadosAppEnum> estadoFiltro) {
+	public void setEstadoFiltro(List<EstadoEnum> estadoFiltro) {
 		this.estadoFiltro = estadoFiltro;
 	}
 

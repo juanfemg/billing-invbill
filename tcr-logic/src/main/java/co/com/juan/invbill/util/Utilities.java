@@ -132,10 +132,8 @@ public class Utilities {
 	public static String formatDateWithoutTimeInAStringForBetweenWhere(Date fecha) {
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(fecha);
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH) + 1;
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		return year + "-" + month + "-" + day;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return format.format(calendar.getTime());
 	}
 
 	public static boolean validationsList(List<?> list) {

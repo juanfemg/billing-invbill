@@ -96,4 +96,10 @@ public interface IFacturaCabeceraLogic {
 	 */
 	public Object findAvgObjectByCriteria(String propertyName);
 
+	/**
+	 * List existing FacturaCabecera entity from a given instance
+	 * 
+	 */
+	public List<FacturaCabecera> findAllByFacturaCabeceraInstance(FacturaCabecera entity);
+
 }

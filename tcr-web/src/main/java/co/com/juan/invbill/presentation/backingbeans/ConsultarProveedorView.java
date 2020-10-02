@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
-import co.com.juan.invbill.enums.EstadosAppEnum;
+import co.com.juan.invbill.enums.EstadoEnum;
 import co.com.juan.invbill.model.ProveedorApp;
 import co.com.juan.invbill.util.Properties;
 
@@ -57,7 +57,7 @@ public class ConsultarProveedorView implements Serializable {
 	}
 
 	public void initEstadosApp() {
-		for (EstadosAppEnum estadosAppEnumTemp : EstadosAppEnum.values()) {
+		for (EstadoEnum estadosAppEnumTemp : EstadoEnum.values()) {
 			estadosApp.add(new SelectItem(estadosAppEnumTemp, estadosAppEnumTemp.getEstado()));
 		}
 	}

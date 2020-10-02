@@ -35,10 +35,14 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPrintServiceExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 import net.sf.jasperreports.export.SimplePrintServiceExporterConfiguration;
+import net.sf.jasperreports.export.SimpleXlsExporterConfiguration;
+import net.sf.jasperreports.export.SimpleXlsxExporterConfiguration;
 
 /**
  * @author Juan Felipe
@@ -50,7 +54,6 @@ import net.sf.jasperreports.export.SimplePrintServiceExporterConfiguration;
 public class ReportController implements IReportController {
 
 	private static final Logger log = LoggerFactory.getLogger(ReportController.class);
-	private final String SUFFIX_PDF = ".PDF";
 	private final String METADATA_AUTHOR = "Juan Felipe Mosquera";
 	private PrintService printService;
 	private Connection connection;
@@ -85,7 +88,7 @@ public class ReportController implements IReportController {
 	}
 
 	@Override
-	public InputStream getReport(String reportName, Map<String, Object> parameters)
+	public InputStream getReportPdf(String reportName, Map<String, Object> parameters)
 			throws JRException, SQLException, IOException {
 		InputStream stream;
 		File file;
@@ -95,7 +98,7 @@ public class ReportController implements IReportController {
 		try {
 			prepareReport(reportName, parameters);
 
-			file = File.createTempFile(reportName, SUFFIX_PDF);
+			file = File.createTempFile(reportName, null);
 
 			exporter = new JRPdfExporter();
 			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
@@ -106,6 +109,49 @@ public class ReportController implements IReportController {
 			configuration.setPermissions(PdfWriter.ALLOW_COPY | PdfWriter.ALLOW_PRINTING);
 
 			exporter.setConfiguration(configuration);
+			exporter.exportReport();
+
+			stream = new FileInputStream(file);
+		} catch (SQLException se) {
+			log.error("An error has occurred obtaining the connection", se);
+			throw se;
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException se) {
+					log.error("An error has occurred closing the connection", se);
+				}
+			}
+		}
+
+		return stream;
+	}
+
+	@Override
+	public InputStream getReportXls(String reportName, Map<String, Object> parameters)
+			throws JRException, SQLException, IOException {
+		InputStream stream;
+		File file;
+		JRXlsExporter exporter;
+		SimpleXlsExporterConfiguration configuration;
+
+		try {
+			prepareReport(reportName, parameters);
+
+			file = File.createTempFile(reportName, null);
+
+			exporter = new JRXlsExporter();
+			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+			exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(file));
+
+			configuration = new SimpleXlsExporterConfiguration();
+			configuration.setCreateCustomPalette(true);
+			configuration.setKeepWorkbookTemplateSheets(true);
+			configuration.setOverrideHints(true);
+
+			exporter.setConfiguration(configuration);
+
 			exporter.exportReport();
 
 			stream = new FileInputStream(file);
@@ -173,7 +219,7 @@ public class ReportController implements IReportController {
 	}
 
 	@Override
-	public InputStream getReportWithSubReports(String reportName, Map<String, Object> parameters,
+	public InputStream getReportWithSubReportsPdf(String reportName, Map<String, Object> parameters,
 			List<String> subReportNames) throws JRException, SQLException, IOException {
 		InputStream stream;
 		File file;
@@ -183,7 +229,7 @@ public class ReportController implements IReportController {
 		try {
 			printReportWithSubReports(reportName, parameters, subReportNames);
 
-			file = File.createTempFile(reportName, SUFFIX_PDF);
+			file = File.createTempFile(reportName, null);
 
 			exporter = new JRPdfExporter();
 			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
@@ -192,6 +238,48 @@ public class ReportController implements IReportController {
 			configuration = new SimplePdfExporterConfiguration();
 			configuration.setMetadataAuthor(METADATA_AUTHOR);
 			configuration.setPermissions(PdfWriter.ALLOW_COPY | PdfWriter.ALLOW_PRINTING);
+
+			exporter.setConfiguration(configuration);
+			exporter.exportReport();
+
+			stream = new FileInputStream(file);
+		} catch (SQLException se) {
+			log.error("An error has occurred obtaining the connection", se);
+			throw se;
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException se) {
+					log.error("An error has occurred closing the connection", se);
+				}
+			}
+		}
+
+		return stream;
+	}
+
+	@Override
+	public InputStream getReportWithSubReportsXls(String reportName, Map<String, Object> parameters,
+			List<String> subReportNames) throws JRException, SQLException, IOException {
+		InputStream stream;
+		File file;
+		JRXlsxExporter exporter;
+		SimpleXlsxExporterConfiguration configuration;
+
+		try {
+			printReportWithSubReports(reportName, parameters, subReportNames);
+
+			file = File.createTempFile(reportName, null);
+
+			exporter = new JRXlsxExporter();
+			exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+			exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(file));
+
+			configuration = new SimpleXlsxExporterConfiguration();
+			configuration.setCreateCustomPalette(true);
+			configuration.setKeepWorkbookTemplateSheets(true);
+			configuration.setOverrideHints(true);
 
 			exporter.setConfiguration(configuration);
 			exporter.exportReport();

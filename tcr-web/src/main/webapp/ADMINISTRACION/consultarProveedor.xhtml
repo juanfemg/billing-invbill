@@ -147,7 +147,7 @@
 									value="#{msg.MSG_DATATABLE_COLUMN_ESTADO}" />
 								<h:selectOneMenu id="estadoModProveedor"
 									value="#{consultarProveedor.proveedorModApp.estado}"
-									converter="#{estadoAppConverter}">
+									converter="#{estadoConverter}">
 									<f:selectItems value="#{consultarProveedor.estadosApp}" />
 								</h:selectOneMenu>
 

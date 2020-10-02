@@ -153,6 +153,10 @@ public interface IBusinessDelegate {
 
 	public List<FacturaCabecera> getFacturaCabeceras();
 
+	public List<FacturaCabecera> getFacturaCabecerasByCriteria(FacturaCabecera entity);
+
+	public List<FacturaCabecera> getFacturaCabeceras(FacturaCabecera entity);
+
 	public Object getMaximaFacturaCabeceraByPropertyName(String propertyName);
 
 	public Object getMinimaFacturaCabeceraByPropertyName(String propertyName);

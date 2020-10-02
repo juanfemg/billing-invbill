@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
-import co.com.juan.invbill.enums.EstadosAppEnum;
+import co.com.juan.invbill.enums.EstadoEnum;
 import co.com.juan.invbill.model.CategoriaProducto;
 import co.com.juan.invbill.model.ClienteApp;
 import co.com.juan.invbill.model.FacturaCabecera;
@@ -121,7 +121,7 @@ public class CrearFacturaView implements Serializable {
 			categoria = businessDelegate.getCategoriasProductoSortByCategoria();
 
 			for (CategoriaProducto categoriaProductoTemp : categoria) {
-				if (categoriaProductoTemp.getEstado().equals(EstadosAppEnum.A))
+				if (categoriaProductoTemp.getEstado().equals(EstadoEnum.A))
 					categorias.add(new SelectItem(categoriaProductoTemp, categoriaProductoTemp.getCategoria()));
 			}
 
@@ -146,7 +146,7 @@ public class CrearFacturaView implements Serializable {
 			productos.clear();
 
 			for (Producto productoTemp : producto) {
-				if (productoTemp.getEstado().equals(EstadosAppEnum.A))
+				if (productoTemp.getEstado().equals(EstadoEnum.A))
 					productos.add(new SelectItem(productoTemp, productoTemp.getProducto()));
 			}
 
@@ -179,7 +179,7 @@ public class CrearFacturaView implements Serializable {
 			cliente = businessDelegate.getClientes();
 
 			for (ClienteApp clienteAppTemp : cliente) {
-				if (clienteAppTemp.getEstado().equals(EstadosAppEnum.I)) {
+				if (clienteAppTemp.getEstado().equals(EstadoEnum.I)) {
 					cliente.remove(clienteAppTemp);
 				}
 			}

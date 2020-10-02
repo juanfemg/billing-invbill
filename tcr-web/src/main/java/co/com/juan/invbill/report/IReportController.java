@@ -18,10 +18,16 @@ public interface IReportController {
 
 	public void prepareReport(String reportName, Map<String, Object> parameters) throws JRException, SQLException;
 
-	public InputStream getReport(String reportName, Map<String, Object> parameters)
+	public InputStream getReportPdf(String reportName, Map<String, Object> parameters)
 			throws JRException, SQLException, IOException;
 
-	public InputStream getReportWithSubReports(String reportName, Map<String, Object> parameters,
+	public InputStream getReportXls(String reportName, Map<String, Object> parameters)
+			throws JRException, SQLException, IOException;
+
+	public InputStream getReportWithSubReportsPdf(String reportName, Map<String, Object> parameters,
+			List<String> subReportNames) throws JRException, SQLException, IOException;
+
+	public InputStream getReportWithSubReportsXls(String reportName, Map<String, Object> parameters,
 			List<String> subReportNames) throws JRException, SQLException, IOException;
 
 	public void printReport(String reportName, Map<String, Object> parameters) throws JRException, SQLException;

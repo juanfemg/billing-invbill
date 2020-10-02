@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
-import co.com.juan.invbill.enums.EstadosAppEnum;
+import co.com.juan.invbill.enums.EstadoEnum;
 import co.com.juan.invbill.model.CategoriaProducto;
 import co.com.juan.invbill.model.Producto;
 import co.com.juan.invbill.model.TipoUnidadMedida;
@@ -64,7 +64,7 @@ public class CrearProductoView implements Serializable {
 			categoriasProducto = businessDelegate.getCategoriasProductoSortByCategoria();
 
 			for (CategoriaProducto categoriaProductoTemp : categoriasProducto) {
-				if (categoriaProductoTemp.getEstado().equals(EstadosAppEnum.A)) {
+				if (categoriaProductoTemp.getEstado().equals(EstadoEnum.A)) {
 					categorias.add(new SelectItem(categoriaProductoTemp, categoriaProductoTemp.getCategoria()));
 				}
 			}
@@ -84,7 +84,7 @@ public class CrearProductoView implements Serializable {
 			tiposUnidadMedida = businessDelegate.getTiposUnidadMedida();
 
 			for (TipoUnidadMedida tipoUnidadMedidaTemp : tiposUnidadMedida) {
-				if (tipoUnidadMedidaTemp.getEstado().equals(EstadosAppEnum.A)) {
+				if (tipoUnidadMedidaTemp.getEstado().equals(EstadoEnum.A)) {
 					unidades.add(new SelectItem(tipoUnidadMedidaTemp, tipoUnidadMedidaTemp.getUnidad()));
 				}
 			}

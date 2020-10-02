@@ -6,17 +6,17 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
-import co.com.juan.invbill.enums.EstadosAppEnum;
+import co.com.juan.invbill.enums.FormatoReporteEnum;
 
 /**
  * @author Juan Felipe
  * 
  */
-@ManagedBean(name = "estadoAppConverter")
+@ManagedBean(name = "formatoReporteConverter")
 @RequestScoped
-public class EstadoAppConverter implements Converter {
+public class FormatoReporteConverter implements Converter {
 
-	private EstadosAppEnum estadosApp;
+	private FormatoReporteEnum formatoReporte;
 
 	/**
 	 * Gets the as object.
@@ -31,14 +31,14 @@ public class EstadoAppConverter implements Converter {
 		if (value == null)
 			return "";
 
-		EstadosAppEnum[] estadosAppEnums = EstadosAppEnum.values();
-		for (EstadosAppEnum estadosAppEnumTemp : estadosAppEnums) {
-			if (value.equalsIgnoreCase(String.valueOf(estadosAppEnumTemp.getEstado()))) {
-				estadosApp = estadosAppEnumTemp;
+		FormatoReporteEnum[] formatosReporteEnums = FormatoReporteEnum.values();
+		for (FormatoReporteEnum formatosReporteEnumTemp : formatosReporteEnums) {
+			if (value.equalsIgnoreCase(String.valueOf(formatosReporteEnumTemp.getFormato()))) {
+				formatoReporte = formatosReporteEnumTemp;
 				break;
 			}
 		}
-		return estadosApp;
+		return formatoReporte;
 	}
 
 	/**
@@ -54,22 +54,22 @@ public class EstadoAppConverter implements Converter {
 		if (o == null)
 			return null;
 
-		estadosApp = (EstadosAppEnum) o;
-		return estadosApp.getEstado();
+		formatoReporte = (FormatoReporteEnum) o;
+		return formatoReporte.getFormato();
 	}
 
 	/**
-	 * @return the estadosApp
+	 * @return the formatoReporte
 	 */
-	public EstadosAppEnum getEstadosApp() {
-		return estadosApp;
+	public FormatoReporteEnum getFormatoReporte() {
+		return formatoReporte;
 	}
 
 	/**
-	 * @param estadosApp the estadosApp to set
+	 * @param formatoReporte the formatoReporte to set
 	 */
-	public void setEstadosApp(EstadosAppEnum estadosApp) {
-		this.estadosApp = estadosApp;
+	public void setFormatoReporte(FormatoReporteEnum formatoReporte) {
+		this.formatoReporte = formatoReporte;
 	}
 
 }

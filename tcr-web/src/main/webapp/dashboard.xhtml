@@ -81,8 +81,11 @@
 							</div>
 							<div class="EmptyBox30"></div>
 							<div class="Container100 TexAlCenter">
-								<p:button value="#{msg.MSG_BUTTON_VER_DETALLES}"
-									styleClass="PinkButton" />
+								<p:commandButton styleClass="PinkButton"
+									value="#{msg.MSG_BUTTON_VER_DETALLES}"
+									id="btnVerDetallesVentaDiaria"
+									update="dialogDetalleConsolidadoVentas" process="@this"
+									actionListener="#{dashBoard.actionDetalleVentaDiaria}" />
 							</div>
 						</div>
 					</div>
@@ -112,7 +115,7 @@
 							<div class="EmptyBox30"></div>
 							<div class="Container100 TexAlCenter">
 								<p:button value="#{msg.MSG_BUTTON_VER_DETALLES}"
-									styleClass="PurpleButton" />
+									styleClass="PurpleButton" outcome="goConsultarDevolucion" />
 							</div>
 						</div>
 					</div>
@@ -142,7 +145,7 @@
 							<div class="EmptyBox30"></div>
 							<div class="Container100 TexAlCenter">
 								<p:button value="#{msg.MSG_BUTTON_VER_DETALLES}"
-									styleClass="GreenButton" />
+									styleClass="GreenButton" outcome="goConsultarCompra" />
 							</div>
 						</div>
 					</div>
@@ -151,9 +154,6 @@
 				<div class="Container100">
 					<div class="ContainerIndent">
 						<div class="Card">
-							<p:messages id="men" globalOnly="true" showDetail="false"
-								severity="info error fatal" />
-							<p:growl id="growl" showDetail="false" severity="warn error" />
 
 							<h:form id="formDashBoard" enctype="multipart/form-data">
 
@@ -376,6 +376,65 @@
 						styleClass="Fs14 DispBlock MarBot10" />
 
 				</h:panelGrid>
+			</p:dialog>
+
+			<p:dialog id="dialogDetalleConsolidadoVentas" appendTo="@(body)"
+				draggable="false" closable="false"
+				widgetVar="dialogDetalleConsolidadoVentas" resizable="false"
+				modal="true" width="500"
+				visible="#{dashBoard.showDialogDetalleConsolidadoVentas}"
+				header="#{msg.MSG_HEADER_DIALOG_DETALLE_CONSOLIDADO_VENTAS}">
+
+				<h:form id="formDialogDetalleVentaDiaria">
+
+					<div align="center">
+						<p:messages id="menDetalleVentaDiaria" showDetail="false"
+							severity="warn" />
+						<p:messages id="menDetalleVentaDiariaGlobal" showDetail="false"
+							severity="info error fatal" />
+
+						<h:panelGrid id="panelGridDetalleVentaDiaria" columns="2"
+							cellpadding="5" styleClass="ui-grid">
+
+							<p:outputLabel for="@next" value="#{msg.MSG_PANELGRID_FECHA}"
+								styleClass="Fs14 DispBlock MarBot10" />
+							<p:calendar id="fechaDetalleVentaDiaria"
+								value="#{dashBoard.fechaReporteConsultaFactura}" showOn="button"
+								pattern="dd/mm/yyyy" locale="es_CO" navigator="true">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy"
+									locale="es_CO" />
+							</p:calendar>
+
+							<p:outputLabel for="@next"
+								value="#{msg.MSG_PANELGRID_FORMATO_REPORTE}"
+								styleClass="Fs14 DispBlock MarBot10" />
+							<h:selectOneMenu id="formatoReporteDetalleVentaDieria"
+								value="#{dashBoard.formatoReporteFiltro}"
+								converter="#{formatoReporteConverter}">
+								<f:selectItems value="#{dashBoard.formatosReporte}" />
+							</h:selectOneMenu>
+
+						</h:panelGrid>
+
+						<h:panelGrid id="panelGridDetalleVentaDiariaBotones" columns="2"
+							cellpadding="5" styleClass="ui-grid">
+							<p:commandButton value="#{msg.MSG_BUTTON_GENERAR}"
+								id="btnGenerarDetalleVentaDiaria"
+								actionListener="#{dashBoard.actionGenerarReporteDetalleConsolidadoFacturas}"
+								ajax="false"
+								update="menDetalleVentaDiaria dialogDetalleConsolidadoVentas menDetalleVentaDiariaGlobal"
+								icon="fa fa-file"
+								onclick="PrimeFces.monitorDownload(PF('statusDialog').show(), PF('statusDialog').hide());">
+								<p:fileDownload value="#{dashBoard.content}" />
+							</p:commandButton>
+							<p:commandButton value="#{msg.MSG_BUTTON_CANCELAR}"
+								id="btnCancelarDetalleVentaDiaria"
+								actionListener="#{dashBoard.actionCancelar}"
+								update="dialogDetalleConsolidadoVentas" process="@this" />
+						</h:panelGrid>
+
+					</div>
+				</h:form>
 			</p:dialog>
 		</f:view>
 	</ui:define>

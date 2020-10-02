@@ -1,9 +1,12 @@
 package co.com.juan.invbill.presentation.backingbeans;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -12,8 +15,11 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
@@ -28,11 +34,13 @@ import co.com.juan.invbill.dto.ReporteDevolucionDiaria;
 import co.com.juan.invbill.dto.ReporteDevolucionMensual;
 import co.com.juan.invbill.dto.ReporteVentaDiaria;
 import co.com.juan.invbill.dto.ReporteVentaMensual;
+import co.com.juan.invbill.enums.FormatoReporteEnum;
 import co.com.juan.invbill.enums.ReporteMensualEnum;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.LoginApp;
 import co.com.juan.invbill.model.ProveedorApp;
 import co.com.juan.invbill.model.UsuarioApp;
+import co.com.juan.invbill.report.IReportController;
 import co.com.juan.invbill.util.Encrypt;
 import co.com.juan.invbill.util.Properties;
 
@@ -46,26 +54,34 @@ public class DashBoardView implements Serializable {
 
 	private static final String FILE_MESSAGES = "bundles.msg_Dashboard";
 	private static final long serialVersionUID = -4798674428229332395L;
-	private static final Logger log = LoggerFactory.getLogger(CrearUsuarioView.class);
+	private static final Logger log = LoggerFactory.getLogger(DashBoardView.class);
 	private static final String LABEL_CHART_VENTAS = "Ventas";
 	private static final String LABEL_CHART_DEVOLUCIONES = "Devoluciones";
 	private static final String LABEL_CHART_COMPRAS = "Compras";
 	private static final String EXTENDER_CHART = "customExtender";
 	private static final String LABEL_AXIS_X_CHART = "Dia del Mes";
 	private static final String LABEL_AXIS_Y_CHART = "Total";
+	private static final String REPORTE_CONSULTA_FACTURA = "consultaFactura";
 
 	@ManagedProperty(value = "#{BusinessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
+
+	@ManagedProperty(value = "#{ReportController}")
+	private transient IReportController reportController;
 
 	private UsuarioApp usuarioApp;
 	private LoginApp loginApp;
 	private ReporteVentaDiaria reporteVentaDiaria;
 	private ReporteDevolucionDiaria reporteDevolucionDiaria;
 	private ReporteCompraDiaria reporteCompraDiaria;
+	private Date fechaReporteConsultaFactura;
+	private FormatoReporteEnum formatoReporteFiltro;
+	private List<SelectItem> formatosReporte;
 	private List<ReporteVentaMensual> reporteVentaMensuales;
 	private List<ReporteDevolucionMensual> reporteDevolucionMensuales;
 	private List<ReporteCompraMensual> reporteCompraMensuales;
 	private List<ProveedorApp> proveedoresApp;
+	private StreamedContent content;
 	private ProveedorApp proveedorApp;
 	private BarChartModel barModelVentas;
 	private BarChartModel barModelDevoluciones;
@@ -77,6 +93,7 @@ public class DashBoardView implements Serializable {
 	private String passwordNew;
 	private String passwordReNew;
 	private boolean showDialogCambiarPassword;
+	private boolean showDialogDetalleConsolidadoVentas;
 	private transient Properties properties = new Properties(FILE_MESSAGES);
 
 	public DashBoardView() {
@@ -96,12 +113,15 @@ public class DashBoardView implements Serializable {
 		reporteDevolucionDiaria = new ReporteDevolucionDiaria();
 		reporteCompraDiaria = new ReporteCompraDiaria();
 		proveedorApp = new ProveedorApp();
+		fechaReporteConsultaFactura = new Date();
 		reporteVentaMensuales = new ArrayList<>();
 		reporteDevolucionMensuales = new ArrayList<>();
 		reporteCompraMensuales = new ArrayList<>();
 		reporteMensuales = new ArrayList<>();
 		proveedoresApp = new ArrayList<>();
+		formatosReporte = new ArrayList<>();
 		showDialogCambiarPassword = false;
+		showDialogDetalleConsolidadoVentas = false;
 		initUsuario(session);
 		initReporteVentaDiaria();
 		initReporteDevolucionDiaria();
@@ -112,6 +132,7 @@ public class DashBoardView implements Serializable {
 		initReportesMensuales();
 		initBarCharts();
 		initProveedores();
+		initFormatosReporte();
 	}
 
 	public void initUsuario(HttpSession session) {
@@ -206,6 +227,12 @@ public class DashBoardView implements Serializable {
 		}
 	}
 
+	public void initFormatosReporte() {
+		for (FormatoReporteEnum formatosReporteEnumTemp : FormatoReporteEnum.values()) {
+			formatosReporte.add(new SelectItem(formatosReporteEnumTemp, formatosReporteEnumTemp.toString()));
+		}
+	}
+
 	public void graficarReporteMensual() {
 		if (reporteMensualEnum.equals(ReporteMensualEnum.VENTAS)) {
 			barChartModel = barModelVentas;
@@ -281,10 +308,6 @@ public class DashBoardView implements Serializable {
 		showDialogCambiarPassword = true;
 	}
 
-	public void actionCancelar() {
-		showDialogCambiarPassword = false;
-	}
-
 	public void actionActualizarPassword() {
 		try {
 			passwordOld = new Encrypt().encrypt(passwordOld);
@@ -304,6 +327,46 @@ public class DashBoardView implements Serializable {
 					"=== Actualizacion de usuario: Fallo la actualizacion del usuario {}. Se ha producido un error: {}",
 					usuarioApp.getIdUsuarioApp(), e.getMessage());
 		}
+	}
+
+	public void actionDetalleVentaDiaria() {
+		showDialogDetalleConsolidadoVentas = true;
+	}
+
+	public void actionGenerarReporteDetalleConsolidadoFacturas() {
+		InputStream stream = null;
+
+		try {
+			Map<String, Object> parameters = new HashMap<>();
+			parameters.put("LOGO", ImageIO.read(getClass().getResource("/images/logo.png")));
+			parameters.put("FECHA", fechaReporteConsultaFactura);
+			parameters.put("EXPORTER_FORMAT", formatoReporteFiltro.getFormato());
+
+			if (formatoReporteFiltro.equals(FormatoReporteEnum.PDF)) {
+				stream = reportController.getReportPdf(REPORTE_CONSULTA_FACTURA, parameters);
+			} else if (formatoReporteFiltro.equals(FormatoReporteEnum.EXCEL)) {
+				stream = reportController.getReportXls(REPORTE_CONSULTA_FACTURA, parameters);
+			}
+
+			if (stream != null) {
+				content = new DefaultStreamedContent(stream, formatoReporteFiltro.getMime(),
+						REPORTE_CONSULTA_FACTURA.concat(".".concat(formatoReporteFiltro.getFormato())));
+			} else {
+				throw new Exception();
+			}
+
+			addInfoMessage(properties.getParametroString("MSG_REPORTE_GENERADO"));
+		} catch (Exception e) {
+			addErrorMessage(properties.getParametroString("MSG_ERROR_GENERACION_REPORTE"));
+			log.error("=== Generacion Reporte Consolidado Facturas : Fallo la generacion del reporte", e);
+		}
+	}
+
+	public void actionCancelar() {
+		if (showDialogCambiarPassword)
+			showDialogCambiarPassword = false;
+		if (showDialogDetalleConsolidadoVentas)
+			showDialogDetalleConsolidadoVentas = false;
 	}
 
 	public void addInfoMessage(String summary) {
@@ -627,6 +690,92 @@ public class DashBoardView implements Serializable {
 	 */
 	public void setProveedorApp(ProveedorApp proveedorApp) {
 		this.proveedorApp = proveedorApp;
+	}
+
+	/**
+	 * @return the reportController
+	 */
+	public IReportController getReportController() {
+		return reportController;
+	}
+
+	/**
+	 * @param reportController the reportController to set
+	 */
+	public void setReportController(IReportController reportController) {
+		this.reportController = reportController;
+	}
+
+	/**
+	 * @return the content
+	 */
+	public StreamedContent getContent() {
+		return content;
+	}
+
+	/**
+	 * @param content the content to set
+	 */
+	public void setContent(StreamedContent content) {
+		this.content = content;
+	}
+
+	/**
+	 * @return the formatosReporte
+	 */
+	public List<SelectItem> getFormatosReporte() {
+		return formatosReporte;
+	}
+
+	/**
+	 * @param formatosReporte the formatosReporte to set
+	 */
+	public void setFormatosReporte(List<SelectItem> formatosReporte) {
+		this.formatosReporte = formatosReporte;
+	}
+
+	/**
+	 * @return the fechaReporteConsultaFactura
+	 */
+	public Date getFechaReporteConsultaFactura() {
+		return fechaReporteConsultaFactura;
+	}
+
+	/**
+	 * @param fechaReporteConsultaFactura the fechaReporteConsultaFactura to set
+	 */
+	public void setFechaReporteConsultaFactura(Date fechaReporteConsultaFactura) {
+		this.fechaReporteConsultaFactura = fechaReporteConsultaFactura;
+	}
+
+	/**
+	 * @return the showDialogDetalleConsolidadoVentas
+	 */
+	public boolean isShowDialogDetalleConsolidadoVentas() {
+		return showDialogDetalleConsolidadoVentas;
+	}
+
+	/**
+	 * @param showDialogDetalleConsolidadoVentas the
+	 *                                           showDialogDetalleConsolidadoVentas
+	 *                                           to set
+	 */
+	public void setShowDialogDetalleConsolidadoVentas(boolean showDialogDetalleConsolidadoVentas) {
+		this.showDialogDetalleConsolidadoVentas = showDialogDetalleConsolidadoVentas;
+	}
+
+	/**
+	 * @return the formatoReporteFiltro
+	 */
+	public FormatoReporteEnum getFormatoReporteFiltro() {
+		return formatoReporteFiltro;
+	}
+
+	/**
+	 * @param formatoReporteFiltro the formatoReporteFiltro to set
+	 */
+	public void setFormatoReporteFiltro(FormatoReporteEnum formatoReporteFiltro) {
+		this.formatoReporteFiltro = formatoReporteFiltro;
 	}
 
 }

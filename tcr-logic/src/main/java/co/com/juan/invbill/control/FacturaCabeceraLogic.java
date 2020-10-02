@@ -305,6 +305,23 @@ public class FacturaCabeceraLogic implements IFacturaCabeceraLogic {
 		return object;
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public List<FacturaCabecera> findAllByFacturaCabeceraInstance(FacturaCabecera entity) {
+		log.debug("finding {} instance", Constant.ENTITY_NAME);
+
+		List<FacturaCabecera> list = new ArrayList<>();
+
+		try {
+			list = facturaCabeceraDao.findAllByExample(entity, null);
+		} catch (Exception e) {
+			log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+			throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+		}
+
+		return list;
+	}
+
 	private static class Constant {
 
 		private static final String ENTITY_NAME = "FacturaCabecera";

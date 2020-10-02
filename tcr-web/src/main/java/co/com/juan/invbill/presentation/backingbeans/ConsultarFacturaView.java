@@ -74,6 +74,24 @@ public class ConsultarFacturaView implements Serializable {
 		}
 	}
 
+	public void initFacturas(FacturaCabecera entity) {
+		try {
+			facturaCabeceras = businessDelegate.getFacturaCabeceras(entity);
+		} catch (Exception e) {
+			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_FACTURAS"));
+			log.error("=== Consulta de facturas: Fallo la consulta de las facturas", e);
+		}
+	}
+
+	public void initFacturasCriteria(FacturaCabecera entity) {
+		try {
+			facturaCabeceras = businessDelegate.getFacturaCabecerasByCriteria(entity);
+		} catch (Exception e) {
+			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_FACTURAS"));
+			log.error("=== Consulta de facturas: Fallo la consulta de las facturas", e);
+		}
+	}
+
 	public void initFactura() {
 		FacturaCabecera facturaCabeceraTemp;
 
@@ -96,10 +114,12 @@ public class ConsultarFacturaView implements Serializable {
 	}
 
 	public void actionConsultar() {
-		if (facturaCabecera.getIdFactura() == null) {
+		if (facturaCabecera.getIdFactura() == null && facturaCabecera.getFechaCreacion() == null) {
 			initFacturas();
-		} else {
+		} else if (facturaCabecera.getFechaCreacion() == null) {
 			initFactura();
+		} else {
+			initFacturasCriteria(facturaCabecera);
 		}
 	}
 

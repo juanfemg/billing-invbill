@@ -98,7 +98,7 @@
 									value="#{msg.MSG_DATATABLE_COLUMN_ESTADO}" />
 								<h:selectOneMenu id="estadoModCategoria"
 									value="#{consultarCategoria.categoriaModProducto.estado}"
-									converter="#{estadoAppConverter}">
+									converter="#{estadoConverter}">
 									<f:selectItems value="#{consultarCategoria.estadosApp}" />
 								</h:selectOneMenu>
 

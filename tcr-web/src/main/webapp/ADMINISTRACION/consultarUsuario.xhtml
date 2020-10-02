@@ -75,7 +75,7 @@
 										value="#{msg.MSG_VALUE_ESTADO}" />
 									<h:selectOneMenu id="estadoModUsuario"
 										value="#{consultarUsuario.usuarioModApp.estado}"
-										converter="#{estadoAppConverter}">
+										converter="#{estadoConverter}">
 										<f:selectItems value="#{consultarUsuario.estadosApp}" />
 									</h:selectOneMenu>
 

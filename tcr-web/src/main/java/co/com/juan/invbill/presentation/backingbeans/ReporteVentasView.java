@@ -258,7 +258,7 @@ public class ReporteVentasView implements Serializable {
 			subReports = new ArrayList<>();
 			subReports.add(SUB_REPORTE_VENTAS_ANUAL);
 
-			stream = reportController.getReportWithSubReports(REPORTE_VENTAS, parameters, subReports);
+			stream = reportController.getReportWithSubReportsPdf(REPORTE_VENTAS, parameters, subReports);
 
 			if (stream != null) {
 				content = new DefaultStreamedContent(stream, STREAM_CONTENT_TYPE, REPORTE_VENTAS.concat(SUFFIX_PDF));
