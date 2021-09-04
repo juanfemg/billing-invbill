@@ -16,7 +16,8 @@ public interface IReportController {
 
 	public boolean getDefaultPrinter();
 
-	public void prepareReport(String reportName, Map<String, Object> parameters) throws JRException, SQLException;
+	public void prepareReport(String reportName, Map<String, Object> parameters, boolean compiled)
+			throws JRException, SQLException;
 
 	public InputStream getReportPdf(String reportName, Map<String, Object> parameters)
 			throws JRException, SQLException, IOException;

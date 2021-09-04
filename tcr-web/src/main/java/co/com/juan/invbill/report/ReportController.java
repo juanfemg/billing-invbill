@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +56,8 @@ public class ReportController implements IReportController {
 
 	private static final Logger log = LoggerFactory.getLogger(ReportController.class);
 	private final String METADATA_AUTHOR = "Juan Felipe Mosquera";
+	private final String COMPILEDFILE = "JASPER";
+	private final String UNCOMPILEDFILE = "JRXML";
 	private PrintService printService;
 	private Connection connection;
 	private InputStream file;
@@ -68,6 +71,7 @@ public class ReportController implements IReportController {
 	@Override
 	public boolean getDefaultPrinter() {
 		PrintService[] printServices;
+		List<PrintService> listPrinters;
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		AppConfig appConfig = (AppConfig) session.getAttribute(ParameterApp.IMPRESORA_PREDETERMINADA.toString());
 
@@ -75,11 +79,16 @@ public class ReportController implements IReportController {
 			return false;
 		else {
 			printServices = PrinterJob.lookupPrintServices();
+			listPrinters = Arrays.asList(printServices);
 
-			for (PrintService printServiceLook : printServices) {
-				if (printServiceLook.getName().equalsIgnoreCase(appConfig.getValor())) {
-					printService = printServiceLook;
-					return true;
+			if (listPrinters.contains(printService)) {
+				return true;
+			} else {
+				for (PrintService printServiceLook : printServices) {
+					if (printServiceLook.getName().equalsIgnoreCase(appConfig.getValor())) {
+						printService = printServiceLook;
+						return true;
+					}
 				}
 			}
 		}
@@ -96,7 +105,7 @@ public class ReportController implements IReportController {
 		SimplePdfExporterConfiguration configuration;
 
 		try {
-			prepareReport(reportName, parameters);
+			prepareReport(reportName, parameters, true);
 
 			file = File.createTempFile(reportName, null);
 
@@ -137,7 +146,7 @@ public class ReportController implements IReportController {
 		SimpleXlsExporterConfiguration configuration;
 
 		try {
-			prepareReport(reportName, parameters);
+			prepareReport(reportName, parameters, true);
 
 			file = File.createTempFile(reportName, null);
 
@@ -178,7 +187,7 @@ public class ReportController implements IReportController {
 		SimplePrintServiceExporterConfiguration configuration;
 
 		try {
-			prepareReport(reportName, parameters);
+			prepareReport(reportName, parameters, true);
 
 			printRequestAttributeSet = new HashPrintRequestAttributeSet();
 			printRequestAttributeSet.add(new Copies(1));
@@ -209,13 +218,18 @@ public class ReportController implements IReportController {
 	}
 
 	@Override
-	public void prepareReport(String reportName, Map<String, Object> parameters) throws JRException, SQLException {
+	public void prepareReport(String reportName, Map<String, Object> parameters, boolean compiled)
+			throws JRException, SQLException {
 		connection = dataSource.getConnection();
 
-		file = ReportController.class.getResourceAsStream("/reports/" + reportName + ".jrxml");
+		file = ReportController.class
+				.getResourceAsStream("/reports/" + reportName + "." + (compiled ? COMPILEDFILE : UNCOMPILEDFILE));
 
-		jasperReport = JasperCompileManager.compileReport(file);
-		jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+		if (!compiled) {
+			jasperReport = JasperCompileManager.compileReport(file);
+		}
+
+		jasperPrint = JasperFillManager.fillReport(file, parameters, connection);
 	}
 
 	@Override

@@ -173,64 +173,6 @@
 											id="btnLimpiar" update="@(.ui-update)" process="@this"
 											actionListener="#{reporteProductos.actionLimpiar}" />
 									</h:panelGrid>
-									
-									<div class="EmptyBox10" />
-									
-									<p:dataTable id="dataTableConsultarReporteProductos"
-										value="#{consultarFactura.facturaCabecerasssssssssssssssssssss}" var="reporte"
-										paginator="true" rows="10"
-										paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-										rowsPerPageTemplate="5,10,15"
-										emptyMessage="#{msg.MSG_DATATABLE_DATA_NO_FOUND}"
-										sortBy="#{factura.fechaCreacion}" reflow="true"
-										sortOrder="descending">
-
-										<p:column filterBy="#{factura.idFactura}"
-											sortBy="#{factura.idFactura}" filterMatchMode="contains">
-											<f:facet name="header">
-												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_FACTURA}" />
-											</f:facet>
-											<h:outputText value="#{factura.idFactura}" />
-										</p:column>
-
-										<p:column>
-											<f:facet name="header">
-												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_VALOR_NETO}" />
-											</f:facet>
-											<h:outputText value="#{factura.valorNeto}">
-												<f:convertNumber locale="es_CO" />
-											</h:outputText>
-										</p:column>
-
-										<p:column>
-											<f:facet name="header">
-												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_VALOR_IVA}" />
-											</f:facet>
-											<h:outputText value="#{factura.valorIva}">
-												<f:convertNumber locale="es_CO" />
-											</h:outputText>
-										</p:column>
-
-										<p:column>
-											<f:facet name="header">
-												<h:outputText
-													value="#{msg.MSG_DATATABLE_COLUMN_VALOR_TOTAL}" />
-											</f:facet>
-											<h:outputText value="#{factura.valorTotal}">
-												<f:convertNumber locale="es_CO" />
-											</h:outputText>
-										</p:column>
-
-										<p:column>
-											<f:facet name="header">
-												<h:outputText
-													value="#{msg.MSG_DATATABLE_COLUMN_FECHA_CREACION}" />
-											</f:facet>
-											<h:outputText value="#{factura.fechaCreacion}">
-												<f:convertDateTime locale="es_CO" />
-											</h:outputText>
-										</p:column>
-									</p:dataTable>
 								</h:form>
 							</div>
 						</div>

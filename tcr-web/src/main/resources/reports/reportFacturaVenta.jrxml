@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
+<!-- Created with Jaspersoft Studio version 6.17.0.final using JasperReports Library version 6.17.0-6d93193241dd8cc42629e188b94f9e0bc5722efd  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportFactura" pageWidth="226" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="206" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" whenResourceMissingType="Empty" isIgnorePagination="true" uuid="7dc35095-98cb-4e8b-818e-8fb966d04b7d">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
@@ -140,7 +140,7 @@
 					<font size="7"/>
 				</textElement>
 				<text><![CDATA[Ruben Dario Mosquera	NIT. 16.665.229-1
-Regimen Simplificado]]></text>
+No responsable del impuesto a las ventas (IVA)]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="66" width="206" height="64" uuid="f3df2e49-9121-4adb-8818-6b59aabc60c9"/>
@@ -148,7 +148,7 @@ Regimen Simplificado]]></text>
 					<font size="7"/>
 				</textElement>
 				<text><![CDATA[Dirección : Carrera 5N No. 46CN - 30
-Teléfono : 6655231 - 6839255
+Teléfono : 6655231
 Celular : 3104918719 - 3155439589
 Barrio : B/ Popular - Cali - Colombia
 Email : rubenchos1962@gmail.com]]></text>
@@ -228,7 +228,7 @@ Estimado cliente, solo se aceptan cambios hasta 8 dias.]]></text>
 					<jr:column width="144" uuid="8aa3fd2f-fdc5-4690-baea-51059aff6e8d">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 						<jr:detailCell style="table" height="10" rowSpan="1">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="144" height="10" isPrintWhenDetailOverflows="true" uuid="a793e43a-e3c4-42f5-8efb-64de40f054ea">
 									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 								</reportElement>
