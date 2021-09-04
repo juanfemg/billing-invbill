@@ -175,6 +175,7 @@ public class ReporteProductosView implements Serializable {
 			stockProductoMaxPrecioCompra = (Integer) businessDelegate
 					.getMaximoStockProductoByPropertyName(PROPERTY_NAME_PRECIO_COMPRA);
 
+			rangoPrecioCompra.put("MAX", stockProductoMaxPrecioCompra);
 		} catch (Exception e) {
 			addErrorMessage(e.getMessage());
 			log.error(
@@ -188,6 +189,7 @@ public class ReporteProductosView implements Serializable {
 			stockProductoMaxPrecioVenta = (Integer) businessDelegate
 					.getMaximoStockProductoByPropertyName(PROPERTY_NAME_PRECIO_VENTA);
 
+			rangoPrecioVenta.put("MAX", stockProductoMaxPrecioVenta);
 		} catch (Exception e) {
 			addErrorMessage(e.getMessage());
 			log.error(
@@ -201,6 +203,7 @@ public class ReporteProductosView implements Serializable {
 			stockProductoMaxStock = (Integer) businessDelegate
 					.getMaximoStockProductoByPropertyName(PROPERTY_NAME_STOCK);
 
+			rangoStock.put("MAX", stockProductoMaxStock);
 		} catch (Exception e) {
 			addErrorMessage(e.getMessage());
 			log.error("=== Consulta de Stock Productos : Fallo la consulta del maximo del stock de los productos"

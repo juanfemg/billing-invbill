@@ -673,4 +673,18 @@ public class BusinessDelegate implements IBusinessDelegate {
 		return clienteAppLogic.getClienteApp();
 	}
 
+	@Override
+	public List<Producto> getReporteProductosByCriteria(Producto entity) {
+		List<Object> variables = new ArrayList<>();
+
+		if (entity.getIdProducto() != null) {
+			variables.add("idPrducto");
+			variables.add(true);
+			variables.add(entity.getIdProducto());
+			variables.add("in");
+		}
+
+		return productoLogic.findByCriteria(variables.toArray(), null, null);
+	}
+
 }

@@ -10,141 +10,146 @@
 			<f:loadBundle basename="messages.reporteProductos" var="msg" />
 			<f:loadBundle basename="messages.global" var="msgGlobal" />
 
-			<h:form id="formReporteProductos" enctype="multipart/form-data">
+			<div class="Container100">
+				<div class="ContainerIndent">
+					<div class="Card">
+						<div class="CardTopic">#{msg.MSG_HEADER_PANEL_REPORTE_PRODUCTOS}</div>
+						<div class="SeparatorFull"></div>
+						<div class="Container100 Responsive100 ui-fluid">
+							<div class="ContainerIndent">
+								<h:form id="formReporteProductos" enctype="multipart/form-data">
 
-				<p:panel id="panelReporteProductos"
-					header="#{msg.MSG_HEADER_PANEL_REPORTE_PRODUCTOS}">
+									<p:messages id="men" globalOnly="true" showDetail="false"
+										severity="info error fatal" />
+									<p:growl id="growl" showDetail="false" severity="warn" />
 
-					<div align="center">
-						<p:messages id="men" globalOnly="true" showDetail="false"
-							severity="info error fatal" />
-						<p:growl id="growl" showDetail="false" severity="warn" />
+									<h:outputText id="descripcionReporte"
+										value="#{msg.MSG_DESCRIPCION_REPORTE}" />
 
-						<p:panel id="panelFiltrosProducto">
-							<div align="left">
+									<div class="EmptyBox40" />
 
-								<h:outputText id="descripcionReporte"
-									value="#{msg.MSG_DESCRIPCION_REPORTE}" />
+									<h:panelGrid id="panelGridFiltrosProducto" columns="3"
+										cellpadding="5" styleClass="ui-grid, ui-update">
+										<h:outputLabel for="@next" class="BigTopic"
+											value="#{msg.MSG_VALUE_CATEGORIA}" />
+										<h:panelGroup id="panelGroupCategorias">
+											<p:selectCheckboxMenu id="categoriaProducto"
+												value="#{reporteProductos.categoriaFiltro}"
+												converter="#{categoriaProductoConverter}"
+												disabled="#{empty reporteProductos.categorias}"
+												filter="true" filterMatchMode="startsWith"
+												label="#{msg.MSG_VALUE_CATEGORIAS}">
+												<p:ajax event="change" update="panelGroupProductos"
+													process="@this"
+													listener="#{reporteProductos.initProductos}" />
+												<p:ajax event="toggleSelect" update="panelGroupProductos"
+													process="@this"
+													listener="#{reporteProductos.initProductos}" />
+												<f:selectItems value="#{reporteProductos.categorias}" />
+											</p:selectCheckboxMenu>
+											<p:messages id="menCategorias" showDetail="false"
+												severity="warn" />
+										</h:panelGroup>
+										<p:message for="categoriaProducto" display="text" />
 
-								<div class="EmptyBox20" />
+										<h:outputLabel for="@next" class="BigTopic"
+											value="#{msg.MSG_VALUE_PRODUCTO}" />
+										<h:panelGroup id="panelGroupProductos">
+											<p:selectCheckboxMenu id="producto"
+												value="#{reporteProductos.productoFiltro}"
+												converter="#{productoConverter}"
+												disabled="#{empty reporteProductos.productos}" filter="true"
+												filterMatchMode="startsWith"
+												label="#{msg.MSG_VALUE_PRODUCTOS}">
+												<f:selectItems value="#{reporteProductos.productos}" />
+											</p:selectCheckboxMenu>
+											<p:messages id="menProductos" showDetail="false"
+												severity="warn" />
+										</h:panelGroup>
+										<p:message for="producto" display="text" />
 
-								<h:panelGrid id="panelGridFiltrosProducto" columns="3"
-									cellpadding="5" styleClass="ui-grid, ui-update">
-									<h:outputLabel for="categoriaProducto"
-										value="#{msg.MSG_VALUE_CATEGORIA}" />
-									<h:panelGroup id="panelGroupCategorias">
-										<p:selectCheckboxMenu id="categoriaProducto"
-											value="#{reporteProductos.categoriaFiltro}"
-											converter="#{categoriaProductoConverter}"
-											disabled="#{empty reporteProductos.categorias}" filter="true"
-											filterMatchMode="startsWith"
-											label="#{msg.MSG_VALUE_CATEGORIAS}">
-											<p:ajax event="change" update="panelGroupProductos"
-												process="@this" listener="#{reporteProductos.initProductos}" />
-											<p:ajax event="toggleSelect" update="panelGroupProductos"
-												process="@this" listener="#{reporteProductos.initProductos}" />
-											<f:selectItems value="#{reporteProductos.categorias}" />
-										</p:selectCheckboxMenu>
-										<p:messages id="menCategorias" showDetail="false"
-											severity="warn" />
-									</h:panelGroup>
-									<p:message for="categoriaProducto" display="text" />
+										<h:outputLabel for="@next" class="BigTopic"
+											value="#{msg.MSG_VALUE_ESTADO}" />
+										<h:panelGroup id="panelGroupEstados">
+											<p:selectCheckboxMenu id="estado"
+												value="#{reporteProductos.estadoFiltro}"
+												converter="#{estadoConverter}"
+												disabled="#{empty reporteProductos.estados}" filter="true"
+												filterMatchMode="startsWith"
+												label="#{msg.MSG_VALUE_ESTADOS}">
+												<f:selectItems value="#{reporteProductos.estados}" />
+											</p:selectCheckboxMenu>
+											<p:messages id="menEstados" showDetail="false"
+												severity="warn" />
+										</h:panelGroup>
+										<p:message for="estado" display="text" />
 
-									<h:outputLabel for="producto" value="#{msg.MSG_VALUE_PRODUCTO}" />
-									<h:panelGroup id="panelGroupProductos">
-										<p:selectCheckboxMenu id="producto"
-											value="#{reporteProductos.productoFiltro}"
-											converter="#{productoConverter}"
-											disabled="#{empty reporteProductos.productos}" filter="true"
-											filterMatchMode="startsWith"
-											label="#{msg.MSG_VALUE_PRODUCTOS}">
-											<f:selectItems value="#{reporteProductos.productos}" />
-										</p:selectCheckboxMenu>
-										<p:messages id="menProductos" showDetail="false"
-											severity="warn" />
-									</h:panelGroup>
-									<p:message for="producto" display="text" />
-
-									<h:outputLabel for="estado" value="#{msg.MSG_VALUE_ESTADO}" />
-									<h:panelGroup id="panelGroupEstados">
-										<p:selectCheckboxMenu id="estado"
-											value="#{reporteProductos.estadoFiltro}"
-											converter="#{estadoConverter}"
-											disabled="#{empty reporteProductos.estados}" filter="true"
-											filterMatchMode="startsWith" label="#{msg.MSG_VALUE_ESTADOS}">
-											<f:selectItems value="#{reporteProductos.estados}" />
-										</p:selectCheckboxMenu>
-										<p:messages id="menEstados" showDetail="false" severity="warn" />
-									</h:panelGroup>
-									<p:message for="estado" display="text" />
-
-									<h:outputLabel for="tipoUnidadMedida"
-										value="#{msg.MSG_VALUE_UNIDAD_MEDIDA}" />
-									<h:panelGroup id="panelGroupUnidadesMedida">
-										<p:selectCheckboxMenu id="tipoUnidadMedida"
-											value="#{reporteProductos.tiposUnidadMedidaFiltro}"
-											converter="#{tipoUnidadMedidaConverter}"
-											disabled="#{empty reporteProductos.tiposUnidadMedida}"
-											filter="true" filterMatchMode="startsWith"
-											label="#{msg.MSG_VALUE_UNIDADES_MEDIDA}">
-											<f:selectItems value="#{reporteProductos.tiposUnidadMedida}" />
-										</p:selectCheckboxMenu>
-										<p:messages id="menUnidadesMedida" showDetail="false"
-											severity="warn" />
-									</h:panelGroup>
-									<p:message for="tipoUnidadMedida" display="text" />
-								</h:panelGrid>
-
-								<h:panelGrid id="panelGridRangosProducto" columns="3"
-									cellpadding="5" styleClass="ui-grid">
-									<h:outputLabel for="precioCompra"
-										value="#{msg.MSG_VALUE_PRECIO_COMPRA}" />
-									<h:panelGrid id="precioCompra">
-										<h:outputText id="displayRangePrecioCompra"
-											value="Rango entre 0 y #{reporteProductos.stockProductoMaxPrecioCompra}" />
-										<p:slider for="precioCompraMin, precioCompraMax"
-											style="width: 800px" display="displayRangePrecioCompra"
-											range="true" displayTemplate="Rango entre {min} y {max}"
-											maxValue="#{reporteProductos.stockProductoMaxPrecioCompra}" />
+										<h:outputLabel for="@next" class="BigTopic"
+											value="#{msg.MSG_VALUE_UNIDAD_MEDIDA}" />
+										<h:panelGroup id="panelGroupUnidadesMedida">
+											<p:selectCheckboxMenu id="tipoUnidadMedida"
+												value="#{reporteProductos.tiposUnidadMedidaFiltro}"
+												converter="#{tipoUnidadMedidaConverter}"
+												disabled="#{empty reporteProductos.tiposUnidadMedida}"
+												filter="true" filterMatchMode="startsWith"
+												label="#{msg.MSG_VALUE_UNIDADES_MEDIDA}">
+												<f:selectItems value="#{reporteProductos.tiposUnidadMedida}" />
+											</p:selectCheckboxMenu>
+											<p:messages id="menUnidadesMedida" showDetail="false"
+												severity="warn" />
+										</h:panelGroup>
+										<p:message for="tipoUnidadMedida" display="text" />
 									</h:panelGrid>
-									<h:panelGrid id="precioCompraInput">
+
+									<h:panelGrid id="panelGridRangosProducto" columns="4"
+										cellpadding="5" styleClass="ui-grid">
+										<h:outputLabel for="@next" class="BigTopic"
+											value="#{msg.MSG_VALUE_PRECIO_COMPRA}" />
+										<h:panelGrid id="precioCompra">
+											<h:outputText id="displayRangePrecioCompra"
+												value="Entre 0 y #{reporteProductos.stockProductoMaxPrecioCompra}" />
+											<p:slider for="precioCompraMin, precioCompraMax"
+												style="width: 500px" display="displayRangePrecioCompra"
+												range="true" displayTemplate="Entre {min} y {max}"
+												maxValue="#{reporteProductos.stockProductoMaxPrecioCompra}"
+												step="10" />
+										</h:panelGrid>
 										<h:inputHidden id="precioCompraMin"
 											value="#{reporteProductos.rangoPrecioCompra.MIN}"
 											converter="javax.faces.Integer" />
 										<h:inputHidden id="precioCompraMax"
 											value="#{reporteProductos.rangoPrecioCompra.MAX}"
 											converter="javax.faces.Integer" />
-									</h:panelGrid>
 
-									<h:outputLabel for="precioVenta"
-										value="#{msg.MSG_VALUE_PRECIO_VENTA}" />
-									<h:panelGrid id="precioVenta">
-										<h:outputText id="displayRangePrecioVenta"
-											value="Rango entre 0 y #{reporteProductos.stockProductoMaxPrecioVenta}" />
-										<p:slider for="precioVentaMin, precioVentaMax"
-											style="width: 800px" display="displayRangePrecioVenta"
-											range="true" displayTemplate="Rango entre {min} y {max}"
-											maxValue="#{reporteProductos.stockProductoMaxPrecioVenta}" />
-									</h:panelGrid>
-									<h:panelGrid id="precioVentaInput">
+										<h:outputLabel for="@next" class="BigTopic"
+											value="#{msg.MSG_VALUE_PRECIO_VENTA}" />
+										<h:panelGrid id="precioVenta">
+											<h:outputText id="displayRangePrecioVenta"
+												value="Entre 0 y #{reporteProductos.stockProductoMaxPrecioVenta}" />
+											<p:slider for="precioVentaMin, precioVentaMax"
+												style="width: 500px" display="displayRangePrecioVenta"
+												range="true" displayTemplate="Entre {min} y {max}"
+												maxValue="#{reporteProductos.stockProductoMaxPrecioVenta}"
+												step="50" />
+										</h:panelGrid>
 										<h:inputHidden id="precioVentaMin"
 											value="#{reporteProductos.rangoPrecioVenta.MIN}"
 											converter="javax.faces.Integer" />
 										<h:inputHidden id="precioVentaMax"
 											value="#{reporteProductos.rangoPrecioVenta.MAX}"
 											converter="javax.faces.Integer" />
-									</h:panelGrid>
 
-									<h:outputLabel for="stock" value="#{msg.MSG_VALUE_STOCK}" />
-									<h:panelGrid id="stock">
-										<h:outputText id="displayRangeStock"
-											value="Rango entre 0 y #{reporteProductos.stockProductoMaxStock}" />
-										<p:slider for="stockMin, stockMax" display="displayRangeStock"
-											style="width: 800px" range="true"
-											displayTemplate="Rango entre {min} y {max}"
-											maxValue="#{reporteProductos.stockProductoMaxStock}" />
-									</h:panelGrid>
-									<h:panelGrid id="stockInput">
+										<h:outputLabel for="@next" class="BigTopic"
+											value="#{msg.MSG_VALUE_STOCK}" />
+										<h:panelGrid id="stock">
+											<h:outputText id="displayRangeStock"
+												value="Entre 0 y #{reporteProductos.stockProductoMaxStock}" />
+											<p:slider for="stockMin, stockMax" style="width: 500px"
+												display="displayRangeStock" range="true"
+												displayTemplate="Entre {min} y {max}"
+												maxValue="#{reporteProductos.stockProductoMaxStock}"
+												step="1" />
+										</h:panelGrid>
 										<h:inputHidden id="stockMin"
 											value="#{reporteProductos.rangoStock.MIN}"
 											converter="javax.faces.Integer" />
@@ -152,28 +157,88 @@
 											value="#{reporteProductos.rangoStock.MAX}"
 											converter="javax.faces.Integer" />
 									</h:panelGrid>
-								</h:panelGrid>
 
 
-								<h:panelGrid id="panelGridBotones" columns="2" cellpadding="5"
-									styleClass="ui-grid">
-									<p:commandButton value="#{msg.MSG_BUTTON_GENERAR}"
-										id="btnGenerar"
-										actionListener="#{reporteProductos.actionGenerarReporte}"
-										ajax="false" update="men panelFiltrosProducto growl"
-										icon="fa fa-file"
-										onclick="PrimeFces.monitorDownload(PF('statusDialog').show(), PF('statusDialog').hide());">
-										<p:fileDownload value="#{reporteProductos.content}" />
-									</p:commandButton>
-									<p:commandButton value="#{msg.MSG_BUTTON_LIMPIAR}"
-										id="btnLimpiar" update="@(.ui-update)" process="@this"
-										actionListener="#{reporteProductos.actionLimpiar}" />
-								</h:panelGrid>
+									<h:panelGrid id="panelGridBotones" columns="2" cellpadding="5"
+										styleClass="ui-grid">
+										<p:commandButton value="#{msg.MSG_BUTTON_GENERAR}"
+											id="btnGenerar" styleClass="Fs14"
+											actionListener="#{reporteProductos.actionGenerarReporte}"
+											ajax="false" update="men panelFiltrosProducto growl"
+											icon="ui-icon-search"
+											onclick="PrimeFces.monitorDownload(PF('statusDialog').show(), PF('statusDialog').hide());">
+											<p:fileDownload value="#{reporteProductos.content}" />
+										</p:commandButton>
+										<p:commandButton value="#{msg.MSG_BUTTON_LIMPIAR}" styleClass="Fs14"
+											id="btnLimpiar" update="@(.ui-update)" process="@this"
+											actionListener="#{reporteProductos.actionLimpiar}" />
+									</h:panelGrid>
+									
+									<div class="EmptyBox10" />
+									
+									<p:dataTable id="dataTableConsultarReporteProductos"
+										value="#{consultarFactura.facturaCabecerasssssssssssssssssssss}" var="reporte"
+										paginator="true" rows="10"
+										paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										rowsPerPageTemplate="5,10,15"
+										emptyMessage="#{msg.MSG_DATATABLE_DATA_NO_FOUND}"
+										sortBy="#{factura.fechaCreacion}" reflow="true"
+										sortOrder="descending">
+
+										<p:column filterBy="#{factura.idFactura}"
+											sortBy="#{factura.idFactura}" filterMatchMode="contains">
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_FACTURA}" />
+											</f:facet>
+											<h:outputText value="#{factura.idFactura}" />
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_VALOR_NETO}" />
+											</f:facet>
+											<h:outputText value="#{factura.valorNeto}">
+												<f:convertNumber locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_VALOR_IVA}" />
+											</f:facet>
+											<h:outputText value="#{factura.valorIva}">
+												<f:convertNumber locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_VALOR_TOTAL}" />
+											</f:facet>
+											<h:outputText value="#{factura.valorTotal}">
+												<f:convertNumber locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_FECHA_CREACION}" />
+											</f:facet>
+											<h:outputText value="#{factura.fechaCreacion}">
+												<f:convertDateTime locale="es_CO" />
+											</h:outputText>
+										</p:column>
+									</p:dataTable>
+								</h:form>
 							</div>
-						</p:panel>
+						</div>
 					</div>
-				</p:panel>
-			</h:form>
+				</div>
+			</div>
 		</f:view>
 	</ui:define>
 </ui:composition>
+
+

@@ -332,13 +332,13 @@ public class Utilities {
 		String tempWhereBoo2 = tempWhere + " AND (model." + variable + " " + comparator;
 
 		if ((booVariable.booleanValue()) && (tempWhere.length() == 0)) {
-			tempWhere = (tempWhereBoo1 + " \'" + value + "\' )");
+			tempWhere = (tempWhereBoo1 + " (\'" + value + "\') )");
 		} else if ((booVariable.booleanValue()) && (tempWhere.length() != 0)) {
-			tempWhere = (tempWhereBoo2 + " \'" + value + "\' )");
+			tempWhere = (tempWhereBoo2 + " (\'" + value + "\') )");
 		} else if ((booVariable.booleanValue()) || (tempWhere.length() == 0)) {
-			tempWhere = (tempWhereBoo1 + " " + value + " )");
+			tempWhere = (tempWhereBoo1 + " (" + value + ") )");
 		} else {
-			tempWhere = (tempWhereBoo2 + " " + value + " )");
+			tempWhere = (tempWhereBoo2 + " (" + value + ") )");
 		}
 
 		return tempWhere;

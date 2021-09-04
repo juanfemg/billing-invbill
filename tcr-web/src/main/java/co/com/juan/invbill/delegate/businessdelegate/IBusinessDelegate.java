@@ -265,4 +265,6 @@ public interface IBusinessDelegate {
 
 	public List<ClienteApp> getClientes();
 
+	public List<Producto> getReporteProductosByCriteria(Producto entity);
+
 }
