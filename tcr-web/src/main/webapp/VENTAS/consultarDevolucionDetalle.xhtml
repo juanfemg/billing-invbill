@@ -8,132 +8,133 @@
 	<ui:define name="content">
 		<f:view>
 
-			<f:loadBundle basename="messages.consultarDevolucionDetalle" var="msg" />
+			<f:loadBundle basename="messages.consultarDevolucionDetalle"
+				var="msg" />
 			<f:loadBundle basename="messages.global" var="msgGlobal" />
 
-			<h:form id="formDevolucion" enctype="multipart/form-data">
+			<div class="Container100">
+				<div class="ContainerIndent">
+					<div class="Card">
+						<div class="CardTopic">#{msg.MSG_HEADER_PANEL_DEVOLUCION}</div>
+						<div class="SeparatorFull"></div>
+						<div class="Container100 Responsive100 ui-fluid">
+							<div class="ContainerIndent">
+								<h:form id="formDevolucion" enctype="multipart/form-data">
 
-				<p:panel id="panelDevolucion" header="#{msg.MSG_HEADER_PANEL_DEVOLUCION}">
+									<p:messages id="men" globalOnly="true" showDetail="false"
+										severity="info error fatal" />
+									<p:growl id="growl" showDetail="false" severity="warn error" />
 
-					<div align="center">
-						<p:messages id="men" globalOnly="true" showDetail="false"
-							severity="info error fatal" />
-						<p:growl id="growl" showDetail="false" severity="warn error" />
+									<h:panelGrid id="panelGridInfoCabecera" columns="2"
+										cellpadding="5" styleClass="ui-grid">
 
-						<p:panel id="panelInfoDevolucion">
-							<div align="center">
+										<h:outputLabel value="#{msg.MSG_PANEL_HEADER_FACTURA}"
+											class="BigTopic" />
+										<h:outputText
+											value="#{consultarDevolucionDetalle.devolucionCabecera.idFactura}" />
 
-								<h:panelGrid id="panelGridInfoCabecera" columns="2"
-									cellpadding="5" styleClass="ui-grid">
+									</h:panelGrid>
 
-									<h:outputLabel
-										value="#{msg.MSG_PANEL_HEADER_FACTURA}" />
-									<h:outputText
-										value="#{consultarDevolucionDetalle.devolucionCabecera.idFactura}" />
+									<div class="EmptyBox10" />
 
-								</h:panelGrid>
-							</div>
+									<h:panelGrid id="panelGridInfoDevolucion" columns="2"
+										cellpadding="5" styleClass="ui-grid">
 
-							<div align="left">
+										<p:dataTable
+											value="#{consultarDevolucionDetalle.devolucionCabecera.devolucionDetalles}"
+											var="item" paginator="false" editable="true" editMode="row"
+											emptyMessage="#{msg.MSG_DATATABLE_DATA_NO_FOUND}">
 
-								<h:panelGrid id="panelGridInfoDevolucion" columns="2"
-									cellpadding="5" styleClass="ui-grid">
-
-									<p:dataTable
-										value="#{consultarDevolucionDetalle.devolucionCabecera.devolucionDetalles}"
-										var="item" paginator="false" editable="true" editMode="row"
-										emptyMessage="#{msg.MSG_DATATABLE_DATA_NO_FOUND}">
-
-										<p:column>
-											<f:facet name="header">
-												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CATEGORIA}" />
-											</f:facet>
-											<h:outputText
-												value="#{item.producto.categoriaProducto.categoria}" />
-										</p:column>
-
-										<p:column>
-											<f:facet name="header">
-												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_PRODUCTO}" />
-											</f:facet>
-											<h:outputText value="#{item.producto.producto}" />
-										</p:column>
-
-										<p:column style="width: 100px">
-											<f:facet name="header">
-												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CANTIDAD}" />
-											</f:facet>
-											<h:outputText value="#{item.cantidad}" />
-										</p:column>
-
-										<p:column>
-											<f:facet name="header">
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CATEGORIA}" />
+												</f:facet>
 												<h:outputText
-													value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_VENTA_UNIDAD}" />
-											</f:facet>
-											<h:outputText value="#{item.precioVenta}">
-												<f:convertNumber locale="es_CO" maxFractionDigits="2" />
-											</h:outputText>
-										</p:column>
+													value="#{item.producto.categoriaProducto.categoria}" />
+											</p:column>
 
-										<p:column>
-											<f:facet name="header">
-												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_IVA}" />
-											</f:facet>
-											<h:outputText value="#{item.valorIva}">
-												<f:convertNumber locale="es_CO" maxFractionDigits="2" />
-											</h:outputText>
-										</p:column>
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_PRODUCTO}" />
+												</f:facet>
+												<h:outputText value="#{item.producto.producto}" />
+											</p:column>
 
-										<p:column>
-											<f:facet name="header">
+											<p:column style="width: 100px">
+												<f:facet name="header">
+													<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_CANTIDAD}" />
+												</f:facet>
+												<h:outputText value="#{item.cantidad}" />
+											</p:column>
+
+											<p:column>
+												<f:facet name="header">
+													<h:outputText
+														value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_VENTA_UNIDAD}" />
+												</f:facet>
+												<h:outputText value="#{item.precioVenta}">
+													<f:convertNumber locale="es_CO" maxFractionDigits="2" />
+												</h:outputText>
+											</p:column>
+
+											<p:column>
+												<f:facet name="header">
+													<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_IVA}" />
+												</f:facet>
+												<h:outputText value="#{item.valorIva}">
+													<f:convertNumber locale="es_CO" maxFractionDigits="2" />
+												</h:outputText>
+											</p:column>
+
+											<p:column>
+												<f:facet name="header">
+													<h:outputText
+														value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_VENTA_TOTAL}" />
+												</f:facet>
 												<h:outputText
-													value="#{msg.MSG_DATATABLE_COLUMN_PRECIO_VENTA_TOTAL}" />
-											</f:facet>
-											<h:outputText
-												value="#{(item.precioVenta + item.valorIva) * item.cantidad}">
-												<f:convertNumber locale="es_CO" maxFractionDigits="2" />
-											</h:outputText>
-										</p:column>
-									</p:dataTable>
-								</h:panelGrid>
+													value="#{(item.precioVenta + item.valorIva) * item.cantidad}">
+													<f:convertNumber locale="es_CO" maxFractionDigits="2" />
+												</h:outputText>
+											</p:column>
+										</p:dataTable>
+									</h:panelGrid>
 
-								<h:panelGrid id="panelGridResumenDevolucion" columns="2"
-									cellpadding="5" styleClass="ui-grid">
+									<h:panelGrid id="panelGridResumenDevolucion" columns="2"
+										cellpadding="5" styleClass="ui-grid">
 
-									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_NETO}" />
-									<h:outputText
-										value="#{consultarDevolucionDetalle.devolucionCabecera.valorNeto}">
-										<f:convertNumber locale="es_CO" currencySymbol="$"
-											type="currency" />
-									</h:outputText>
+										<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_NETO}" />
+										<h:outputText
+											value="#{consultarDevolucionDetalle.devolucionCabecera.valorNeto}">
+											<f:convertNumber locale="es_CO" currencySymbol="$"
+												type="currency" />
+										</h:outputText>
 
-									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_IVA}" />
-									<h:outputText
-										value="#{consultarDevolucionDetalle.devolucionCabecera.valorIva}">
-										<f:convertNumber locale="es_CO" currencySymbol="$"
-											type="currency" />
-									</h:outputText>
+										<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_IVA}" />
+										<h:outputText
+											value="#{consultarDevolucionDetalle.devolucionCabecera.valorIva}">
+											<f:convertNumber locale="es_CO" currencySymbol="$"
+												type="currency" />
+										</h:outputText>
 
-									<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_TOTAL}" />
-									<h:outputText
-										value="#{consultarDevolucionDetalle.devolucionCabecera.valorTotal}">
-										<f:convertNumber locale="es_CO" currencySymbol="$"
-											type="currency" />
-									</h:outputText>
-								</h:panelGrid>
+										<h:outputText value="#{msg.MSG_PANELGRID_RESUMEN_VALOR_TOTAL}" />
+										<h:outputText
+											value="#{consultarDevolucionDetalle.devolucionCabecera.valorTotal}">
+											<f:convertNumber locale="es_CO" currencySymbol="$"
+												type="currency" />
+										</h:outputText>
+									</h:panelGrid>
 
-								<h:panelGrid id="panelGridBotones" columns="2" cellpadding="5"
-									styleClass="ui-grid">
-									<p:commandButton value="#{msg.MSG_BUTTON_ATRAS}" id="btnAtras"
-										action="#{consultarDevolucionDetalle.actionVolver}" />
-								</h:panelGrid>
-
+									<h:panelGrid id="panelGridBotones" columns="2" cellpadding="5"
+										styleClass="ui-grid">
+										<p:commandButton value="#{msg.MSG_BUTTON_ATRAS}" id="btnAtras"
+											action="#{consultarDevolucionDetalle.actionVolver}" />
+									</h:panelGrid>
+								</h:form>
 							</div>
-						</p:panel>
+						</div>
 					</div>
-				</p:panel>
-			</h:form>
+				</div>
+			</div>
 		</f:view>
 	</ui:define>
 </ui:composition>

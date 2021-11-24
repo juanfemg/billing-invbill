@@ -40,7 +40,6 @@ public class ConsultarDevolucionDetalleView implements Serializable {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		devolucionCabecera = (DevolucionCabecera) session.getAttribute(SessionEnum.DEVOLUCION_CABECERA_DETALLE.name());
 		facturaCabecera = (FacturaCabecera) session.getAttribute(SessionEnum.FACTURA_CABECERA_DETALLE.name());
-		session.removeAttribute(SessionEnum.DEVOLUCION_CABECERA_DETALLE.name());
 	}
 
 	public String actionVolver() {

@@ -67,6 +67,15 @@ public class ConsultarDevolucionView implements Serializable {
 		}
 	}
 
+	public void initDevolucionCriteria(DevolucionCabecera entity) {
+		try {
+			devolucionCabeceras = businessDelegate.getDevolucionCabecerasByCriteria(entity);
+		} catch (Exception e) {
+			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_DEVOLUCIONES"));
+			log.error("=== Consulta de devoluciones: Fallo la consulta de las devoluciones", e);
+		}
+	}
+
 	public void initDevolucion() {
 		DevolucionCabecera devolucionCabeceraTemp;
 
@@ -89,10 +98,12 @@ public class ConsultarDevolucionView implements Serializable {
 	}
 
 	public void actionConsultar() {
-		if (devolucionCabecera.getIdFactura() == null) {
+		if (devolucionCabecera.getIdFactura() == null && devolucionCabecera.getFechaCreacion() == null) {
 			initDevoluciones();
-		} else {
+		} else if (devolucionCabecera.getFechaCreacion() == null) {
 			initDevolucion();
+		} else {
+			initDevolucionCriteria(devolucionCabecera);
 		}
 	}
 

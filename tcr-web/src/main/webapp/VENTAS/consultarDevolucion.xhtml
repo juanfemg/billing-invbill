@@ -10,117 +10,128 @@
 			<f:loadBundle basename="messages.consultarDevolucion" var="msg" />
 			<f:loadBundle basename="messages.global" var="msgGlobal" />
 
-			<h:form id="formDevolucion" enctype="multipart/form-data">
+			<div class="Container100">
+				<div class="ContainerIndent">
+					<div class="Card">
+						<div class="CardTopic">#{msg.MSG_HEADER_PANEL_DEVOLUCION}</div>
+						<div class="SeparatorFull"></div>
+						<div class="Container100 Responsive100 ui-fluid">
+							<div class="ContainerIndent">
+								<h:form id="formDevolucion" enctype="multipart/form-data">
 
-				<p:panel id="panelDevolucion" header="#{msg.MSG_HEADER_PANEL_DEVOLUCION}">
+									<p:messages id="men" globalOnly="true" showDetail="false"
+										severity="info error fatal" />
+									<p:growl id="growl" showDetail="false" severity="warn" />
 
-					<div align="center">
-						<p:messages id="men" globalOnly="true" showDetail="false"
-							severity="info error fatal" />
-						<p:growl id="growl" showDetail="false" severity="warn error" />
+									<h:panelGrid id="panelGridConsultarDevolucion" columns="2"
+										cellpadding="5" styleClass="ui-grid">
+										<h:outputLabel for="numeroFactura" class="BigTopic"
+											value="#{msg.MSG_DIALOG_FACTURA}" />
+										<p:inputText id="numeroFactura"
+											value="#{consultarDevolucion.devolucionCabecera.idFactura}"
+											label="#{msg.MSG_DIALOG_FACTURA}" maxlength="20" />
+										<p:outputLabel for="@next" class="BigTopic"
+											value="#{msg.MSG_DIALOG_FECHA_CREACION}" />
+										<p:calendar id="fechaCreacion"
+											value="#{consultarDevolucion.devolucionCabecera.fechaCreacion}"
+											showOn="button" pattern="dd/mm/yyyy" locale="es_CO"
+											navigator="true">
+											<f:convertDateTime type="date" pattern="dd/MM/yyyy"
+												locale="es_CO" />
+										</p:calendar>
+									</h:panelGrid>
 
-						<p:panel id="panelConsultarDevolucion">
-							<div align="left">
-
-								<h:panelGrid id="panelGridConsultarDevolucion" columns="2"
-									cellpadding="5" styleClass="ui-grid">
-									<h:outputLabel for="numeroFactura"
-										value="#{msg.MSG_DIALOG_FACTURA}" />
-									<p:inputText id="numeroFactura"
-										value="#{consultarDevolucion.devolucionCabecera.idFactura}"
-										label="#{msg.MSG_DIALOG_FACTURA}" maxlength="20" />
-								</h:panelGrid>
-
-								<h:panelGrid id="panelGridBotonesConsultar" columns="2"
-									cellpadding="5" styleClass="ui-grid">
-									<p:commandButton value="#{msg.MSG_BUTTON_CONSULTAR}"
-										id="btnConsultar"
-										actionListener="#{consultarDevolucion.actionConsultar}"
-										update="men panelConsultarCabeceraDevolucion growl"
-										icon="ui-icon-search" process="panelConsultarDevolucion" />
-									<p:commandButton value="#{msg.MSG_BUTTON_LIMPIAR}"
-										id="btnLimpiar" update="@form" process="@this"
-										actionListener="#{consultarDevolucion.actionLimpiar}" />
-								</h:panelGrid>
-							</div>
-						</p:panel>
-
-						<div class="EmptyBox10" />
-
-						<p:panel id="panelConsultarCabeceraDevolucion">
-							<div align="left">
-
-								<p:dataTable value="#{consultarDevolucion.devolucionCabeceras}"
-									var="devolucion" paginator="true" rows="10"
-									emptyMessage="#{msg.MSG_DATATABLE_DATA_NO_FOUND}"
-									sortBy="#{devolucion.fechaCreacion}" sortOrder="descending">
-
-									<p:column filterBy="#{devolucion.idFactura}"
-										sortBy="#{devolucion.idFactura}"
-										filterMatchMode="contains">
-										<f:facet name="header">
-											<h:outputText
-												value="#{msg.MSG_DATATABLE_COLUMN_FACTURA}" />
-										</f:facet>
-										<h:outputText value="#{devolucion.idFactura}" />
-									</p:column>
-
-									<p:column>
-										<f:facet name="header">
-											<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_VALOR_NETO}" />
-										</f:facet>
-										<h:outputText value="#{devolucion.valorNeto}">
-											<f:convertNumber locale="es_CO" />
-										</h:outputText>
-									</p:column>
-
-									<p:column>
-										<f:facet name="header">
-											<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_VALOR_IVA}" />
-										</f:facet>
-										<h:outputText value="#{devolucion.valorIva}">
-											<f:convertNumber locale="es_CO" />
-										</h:outputText>
-									</p:column>
-
-									<p:column>
-										<f:facet name="header">
-											<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_VALOR_TOTAL}" />
-										</f:facet>
-										<h:outputText value="#{devolucion.valorTotal}">
-											<f:convertNumber locale="es_CO" />
-										</h:outputText>
-									</p:column>
-
-									<p:column>
-										<f:facet name="header">
-											<h:outputText
-												value="#{msg.MSG_DATATABLE_COLUMN_FECHA_CREACION}" />
-										</f:facet>
-										<h:outputText value="#{devolucion.fechaCreacion}">
-											<f:convertDateTime locale="es_CO" />
-										</h:outputText>
-									</p:column>
-
-									<p:column headerText="#{msg.MSG_DATATABLE_COLUMN_ACCIONES}"
-										style="width: 100px">
-										<p:commandButton id="btnConsultarDetalle"
+									<h:panelGrid id="panelGridBotonesConsultar" columns="2"
+										cellpadding="5" styleClass="ui-grid">
+										<p:commandButton styleClass="Fs14"
+											value="#{msg.MSG_BUTTON_CONSULTAR}" id="btnConsultar"
+											actionListener="#{consultarDevolucion.actionConsultar}"
+											update="men dataTableConsultarCabeceraDevolucion growl"
 											icon="ui-icon-search"
-											action="#{consultarDevolucion.actionConsultarDetalle}"
-											update="@form" process="@this">
-											<f:setPropertyActionListener value="#{devolucion}"
-												target="#{consultarDevolucion.devolucionCabecera}" />
-										</p:commandButton>
-										<p:tooltip id="toolTipDetalle" for="btnConsultarDetalle"
-											value="#{msgGlobal.MSG_TOOLTIP_DATATABLE_DETALLE}" />
+											process="@this, panelGridConsultarDevolucion" />
+										<p:commandButton styleClass="Fs14"
+											value="#{msg.MSG_BUTTON_LIMPIAR}" id="btnLimpiar"
+											update="@form" process="@this"
+											actionListener="#{consultarDevolucion.actionLimpiar}" />
+									</h:panelGrid>
 
-									</p:column>
-								</p:dataTable>
+									<div class="EmptyBox10" />
+
+									<p:dataTable id="dataTableConsultarCabeceraDevolucion"
+										value="#{consultarDevolucion.devolucionCabeceras}"
+										var="devolucion" paginator="true" rows="10"
+										paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										rowsPerPageTemplate="5,10,15"
+										emptyMessage="#{msg.MSG_DATATABLE_DATA_NO_FOUND}"
+										sortBy="#{devolucion.fechaCreacion}" reflow="true"
+										sortOrder="descending">
+
+										<p:column filterBy="#{devolucion.idFactura}"
+											sortBy="#{devolucion.idFactura}" filterMatchMode="contains">
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_FACTURA}" />
+											</f:facet>
+											<h:outputText value="#{devolucion.idFactura}" />
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_VALOR_NETO}" />
+											</f:facet>
+											<h:outputText value="#{devolucion.valorNeto}">
+												<f:convertNumber locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_VALOR_IVA}" />
+											</f:facet>
+											<h:outputText value="#{devolucion.valorIva}">
+												<f:convertNumber locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_VALOR_TOTAL}" />
+											</f:facet>
+											<h:outputText value="#{devolucion.valorTotal}">
+												<f:convertNumber locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{msg.MSG_DATATABLE_COLUMN_FECHA_CREACION}" />
+											</f:facet>
+											<h:outputText value="#{devolucion.fechaCreacion}">
+												<f:convertDateTime locale="es_CO" />
+											</h:outputText>
+										</p:column>
+
+										<p:column headerText="#{msg.MSG_DATATABLE_COLUMN_ACCIONES}"
+											style="width: 100px">
+											<p:commandButton id="btnConsultarDetalle"
+												icon="ui-icon-search"
+												action="#{consultarDevolucion.actionConsultarDetalle}"
+												update="@form" process="@this">
+												<f:setPropertyActionListener value="#{devolucion}"
+													target="#{consultarDevolucion.devolucionCabecera}" />
+											</p:commandButton>
+											<p:tooltip id="toolTipDetalle" for="btnConsultarDetalle"
+												value="#{msgGlobal.MSG_TOOLTIP_DATATABLE_DETALLE}" />
+
+										</p:column>
+									</p:dataTable>
+								</h:form>
 							</div>
-						</p:panel>
+						</div>
 					</div>
-				</p:panel>
-			</h:form>
+				</div>
+			</div>
 		</f:view>
 	</ui:define>
 </ui:composition>

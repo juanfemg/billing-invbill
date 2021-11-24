@@ -50,7 +50,6 @@ public class ConsultarFacturaDetalleView implements Serializable {
 	public void init() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 		facturaCabecera = (FacturaCabecera) session.getAttribute(SessionEnum.FACTURA_CABECERA_DETALLE.name());
-		session.removeAttribute(SessionEnum.FACTURA_CABECERA_DETALLE.name());
 
 		try {
 			if (facturaCabecera != null) {

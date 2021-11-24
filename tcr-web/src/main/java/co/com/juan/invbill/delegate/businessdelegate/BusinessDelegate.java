@@ -351,11 +351,6 @@ public class BusinessDelegate implements IBusinessDelegate {
 	}
 
 	@Override
-	public List<FacturaCabecera> getFacturaCabeceras(FacturaCabecera entity) {
-		return facturaCabeceraLogic.findAllByFacturaCabeceraInstance(entity);
-	}
-
-	@Override
 	public Object getMaximaFacturaCabeceraByPropertyName(String propertyName) {
 		return facturaCabeceraLogic.findMaxObjectByCriteria(propertyName);
 	}
@@ -519,6 +514,39 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public List<DevolucionCabecera> getDevolucionCabeceras() {
 		return devolucionCabeceraLogic.getDataDevolucionCabecera();
+	}
+
+	@Override
+	public List<DevolucionCabecera> getDevolucionCabecerasByCriteria(DevolucionCabecera entity) {
+		List<Object> variables = new ArrayList<>();
+		List<Object> variablesBetweenDates = new ArrayList<>();
+
+		if (entity.getIdFactura() != null) {
+			variables.add("idFactura");
+			variables.add(true);
+			variables.add(entity.getIdFactura());
+			variables.add("=");
+		}
+
+		if (entity.getFechaCreacion() != null) {
+			Calendar calendarStart = Calendar.getInstance();
+			calendarStart.setTime(entity.getFechaCreacion());
+			calendarStart.add(Calendar.HOUR_OF_DAY, 0);
+			calendarStart.add(Calendar.MINUTE, 0);
+			calendarStart.add(Calendar.SECOND, 0);
+
+			Calendar calendarEnd = Calendar.getInstance();
+			calendarEnd.setTime(entity.getFechaCreacion());
+			calendarEnd.add(Calendar.HOUR_OF_DAY, 23);
+			calendarEnd.add(Calendar.MINUTE, 59);
+			calendarEnd.add(Calendar.SECOND, 59);
+
+			variablesBetweenDates.add("fechaCreacion");
+			variablesBetweenDates.add(calendarStart.getTime());
+			variablesBetweenDates.add(calendarEnd.getTime());
+		}
+
+		return devolucionCabeceraLogic.findByCriteria(variables.toArray(), null, variablesBetweenDates.toArray());
 	}
 
 	@Override

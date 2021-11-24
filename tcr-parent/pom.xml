@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>co.com.juan.invbill</groupId>
 	<artifactId>invbill-parent</artifactId>
-	<version>${global.version}</version>
+	<version>7.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Proyecto Parent InVBill</name>
 
@@ -355,7 +355,6 @@
 	</dependencies>
 
 	<properties>
-		<global.version>7.2.0-SNAPSHOT</global.version>
 		<slf4j.version>1.7.10</slf4j.version>
 		<spring.version>4.2.4.RELEASE</spring.version>
 		<spring.security.version>3.2.0.RELEASE</spring.security.version>
