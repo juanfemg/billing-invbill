@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="co.com.juan.invbill.model">
+	<sql-query name="SPDetalleFacturaDevolucion">
+		<return alias="facturadet" class="FacturaDetalle" />
+		<![CDATA[CALL getDetalleFacturaDevolucion(?)]]>
+	</sql-query>
+
+	<sql-query name="SPReporteVentaDiaria">
+		<return-scalar column="valorTotal" type="double" />
+		<return-scalar column="cantidadProductos" type="integer" />
+		<![CDATA[CALL getReporteVentaDiaria(?)]]>
+	</sql-query>
+
+	<sql-query name="SPReporteDevolucionDiaria">
+		<return-scalar column="valorTotal" type="double" />
+		<return-scalar column="cantidadProductos" type="integer" />
+		<![CDATA[CALL getReporteDevolucionDiaria(?)]]>
+	</sql-query>
+
+	<sql-query name="SPReporteCompraDiaria">
+		<return-scalar column="valorTotal" type="double" />
+		<return-scalar column="cantidadProductos" type="integer" />
+		<![CDATA[CALL getReporteCompraDiaria(?)]]>
+	</sql-query>
+
+	<sql-query name="SPReporteVentaMensual">
+		<return-scalar column="valorTotal" type="double" />
+		<return-scalar column="diaMes" type="integer" />
+		<![CDATA[CALL getReporteVentaMensual(?)]]>
+	</sql-query>
+
+	<sql-query name="SPReporteDevolucionMensual">
+		<return-scalar column="valorTotal" type="double" />
+		<return-scalar column="diaMes" type="integer" />
+		<![CDATA[CALL getReporteDevolucionMensual(?)]]>
+	</sql-query>
+
+	<sql-query name="SPReporteCompraMensual">
+		<return-scalar column="valorTotal" type="double" />
+		<return-scalar column="diaMes" type="integer" />
+		<![CDATA[CALL getReporteCompraMensual(?)]]>
+	</sql-query>
+</hibernate-mapping>

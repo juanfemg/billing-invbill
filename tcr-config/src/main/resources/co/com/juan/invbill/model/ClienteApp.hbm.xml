@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 8/07/2017 10:57:33 AM by Hibernate Tools 4.0.1.Final -->
+<hibernate-mapping package="co.com.juan.invbill.model">
+	<class name="ClienteApp" table="cliente_app" catalog="invbill">
+		<id name="idClienteApp" type="java.lang.Integer">
+			<column name="id_cliente_app" />
+			<generator class="assigned" />
+		</id>
+		<property generated="never" lazy="true" name="codVerificacion"
+			type="java.lang.Integer">
+			<column name="cod_verificacion" not-null="false" />
+		</property>
+		<property generated="never" lazy="true" name="razonSocial"
+			type="string">
+			<column name="razon_social" length="200" not-null="true" />
+		</property>
+		<property generated="never" lazy="true" name="estado">
+			<column length="1" name="estado" not-null="true" />
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">co.com.juan.invbill.enums.EstadoEnum</param>
+				<param name="type">1</param>
+			</type>
+		</property>
+		<property generated="never" lazy="true" name="fechaCreacion"
+			type="timestamp" not-null="false" insert="false">
+			<column length="0" name="fecha_creacion" />
+		</property>
+		<set name="facturaCabeceras" table="factura_cabecera" inverse="true"
+			lazy="true" fetch="select">
+			<key>
+				<column name="id_cliente_app" not-null="true" />
+			</key>
+			<one-to-many class="FacturaCabecera" />
+		</set>
+	</class>
+</hibernate-mapping>

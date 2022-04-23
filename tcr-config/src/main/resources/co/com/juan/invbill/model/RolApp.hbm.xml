@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 11-feb-2017 9:50:57 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping package="co.com.juan.invbill.model">
+	<class catalog="invbill" name="RolApp" table="rol_app">
+		<id name="idRolApp" type="java.lang.Integer">
+			<column name="id_rol_app" />
+			<generator class="identity" />
+		</id>
+		<property generated="never" lazy="true" name="rol" type="string">
+			<column length="45" name="rol" not-null="true" />
+		</property>
+		<property generated="never" lazy="true" name="estado">
+			<column length="1" name="estado" not-null="true" />
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">co.com.juan.invbill.enums.EstadoEnum</param>
+				<param name="type">1</param>
+			</type>
+		</property>
+		<set fetch="select" inverse="true" lazy="true" name="usuarioApps"
+			sort="unsorted" table="usuario_app">
+			<key>
+				<column name="id_rol_app" not-null="true" />
+			</key>
+			<one-to-many class="UsuarioApp" />
+		</set>
+	</class>
+</hibernate-mapping>

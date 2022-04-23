@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 11-feb-2017 9:50:57 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping package="co.com.juan.invbill.model">
+	<class catalog="invbill" name="LoginApp" table="login_app">
+		<id name="idLoginApp" type="string">
+			<column length="20" name="id_login_app" />
+			<generator class="assigned" />
+		</id>
+		<property generated="never" lazy="true" name="ultimoLogin"
+			type="timestamp">
+			<column length="0" name="ultimo_login" />
+		</property>
+		<property generated="never" lazy="true" name="idSession"
+			type="string">
+			<column length="100" name="id_session" />
+		</property>
+	</class>
+</hibernate-mapping>

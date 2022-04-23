@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 25-mar-2017 1:19:20 by Hibernate Tools 4.0.0 -->
+<hibernate-mapping package="co.com.juan.invbill.model">
+	<class name="FacturaCabecera" table="factura_cabecera" catalog="invbill">
+		<id name="idFactura" type="java.lang.Integer">
+			<column name="id_factura" />
+			<generator class="identity" />
+		</id>
+		<property name="valorNeto" type="double">
+			<column name="valor_neto" precision="22" scale="2" not-null="true" />
+		</property>
+		<property name="valorIva" type="double">
+			<column name="valor_iva" precision="22" scale="2" not-null="true" />
+		</property>
+		<property name="valorTotal" type="int">
+			<column name="valor_total" not-null="true" />
+		</property>
+		<property name="usuarioCreacion" type="string">
+			<column name="usuario_creacion" length="20" not-null="true" />
+		</property>
+		<property name="fechaCreacion" type="timestamp" not-null="false"
+			insert="false">
+			<column name="fecha_creacion" length="0" />
+		</property>
+		<many-to-one name="clienteApp" class="ClienteApp"
+			update="true" insert="true" fetch="select" lazy="false">
+			<column name="id_cliente_app" not-null="true" />
+		</many-to-one>
+		<set name="facturaDetalles" table="factura_detalle" inverse="true"
+			lazy="true" fetch="select">
+			<key>
+				<column name="id_factura" not-null="true" />
+			</key>
+			<one-to-many class="FacturaDetalle" />
+		</set>
+	</class>
+</hibernate-mapping>

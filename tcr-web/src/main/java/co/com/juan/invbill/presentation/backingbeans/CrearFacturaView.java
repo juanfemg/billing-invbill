@@ -241,7 +241,9 @@ public class CrearFacturaView implements Serializable {
 					facturaModDetalle.setValorIva(valorIva);
 					facturaDetalle.add(facturaModDetalle);
 
+					FacturaDetalle facturaModDetalleClone = facturaModDetalle;
 					facturaModDetalle = new FacturaDetalle();
+					facturaModDetalle.setProducto(facturaModDetalleClone.getProducto());
 					cantidad = 1;
 					showDialogAdicionarItem = false;
 					actualizarFacturaResumen();
@@ -264,7 +266,9 @@ public class CrearFacturaView implements Serializable {
 		} else {
 			facturaModDetalle.setCantidad(cantidad);
 
+			FacturaDetalle facturaModDetalleClone = facturaModDetalle;
 			facturaModDetalle = new FacturaDetalle();
+			facturaModDetalle.setProducto(facturaModDetalleClone.getProducto());
 			cantidad = 1;
 			showDialogConfirmacionActualizacion = false;
 			showDialogAdicionarItem = false;
