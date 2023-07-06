@@ -9,6 +9,7 @@
 		<property name="show_sql">false</property>
 		<property name="hibernate.enable_lazy_load_no_trans">true</property>
 		<property name="hibernate.connection.pool_size">10</property>
+		<property name="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</property>
 		<mapping resource="co/com/juan/invbill/model/NamedQuery.hbm.xml" />
 		<mapping resource="co/com/juan/invbill/model/LoginApp.hbm.xml" />
 		<mapping resource="co/com/juan/invbill/model/UsuarioApp.hbm.xml" />

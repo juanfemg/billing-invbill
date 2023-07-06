@@ -366,16 +366,31 @@
 
 	<repositories>
 		<repository>
+			<id>central</id>
+			<name>Maven Central</name>
+			<layout>default</layout>
+			<url>https://repo1.maven.org/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>jaspersoft-third-party</id>
+			<name>JasperSoft Maven Repository</name>
+			<url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
+		</repository>
+
+		<repository>
 			<id>prime-repo</id>
 			<name>PrimeFaces Maven Repository</name>
-			<url>http://repository.primefaces.org</url>
-			<layout>default</layout>
+			<url>https://repository.primefaces.org</url>
 		</repository>
 
 		<repository>
 			<id>jr-ce-releases</id>
 			<name>JasperSoft Maven Repository</name>
-			<url>http://jaspersoft.artifactoryonline.com/jaspersoft/jr-ce-releases</url>
+			<url>https://jaspersoft.artifactoryonline.com/jaspersoft/jr-ce-releases</url>
 		</repository>
 	</repositories>
 </project>
