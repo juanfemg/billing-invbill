@@ -38,7 +38,7 @@ import co.com.juan.invbill.dto.control.IReporteDevolucionDiariaLogic;
 import co.com.juan.invbill.dto.control.IReporteDevolucionMensualLogic;
 import co.com.juan.invbill.dto.control.IReporteVentaDiariaLogic;
 import co.com.juan.invbill.dto.control.IReporteVentaMensualLogic;
-import co.com.juan.invbill.enums.EstadoEnum;
+import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.model.AppConfig;
 import co.com.juan.invbill.model.AppMenu;
 import co.com.juan.invbill.model.CategoriaProducto;
@@ -158,7 +158,7 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public void save(UsuarioApp entity) {
 		if (entity.getEstado() == null) {
-			entity.setEstado(EstadoEnum.A);
+			entity.setEstado(StatusEnum.A);
 		}
 
 		if (entity.getPassword() != null) {
@@ -166,7 +166,7 @@ public class BusinessDelegate implements IBusinessDelegate {
 		}
 
 		if (entity.getRolApp() == null) {
-			RolApp rolApp = new RolApp("ADMINISTRADOR", EstadoEnum.A);
+			RolApp rolApp = new RolApp("ADMINISTRADOR", StatusEnum.A);
 			rolApp.setIdRolApp(1);
 			entity.setRolApp(rolApp);
 		}
@@ -187,7 +187,7 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public void save(CategoriaProducto entity) {
 		if (entity.getEstado() == null) {
-			entity.setEstado(EstadoEnum.A);
+			entity.setEstado(StatusEnum.A);
 		}
 
 		categoriaProductoLogic.saveCategoriaProducto(entity);
@@ -216,7 +216,7 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public void save(Producto entity) {
 		if (entity.getEstado() == null) {
-			entity.setEstado(EstadoEnum.A);
+			entity.setEstado(StatusEnum.A);
 		}
 
 		productoLogic.saveProducto(entity);
@@ -393,7 +393,7 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public void save(ProveedorApp entity) {
 		if (entity.getEstado() == null) {
-			entity.setEstado(EstadoEnum.A);
+			entity.setEstado(StatusEnum.A);
 		}
 
 		proveedorAppLogic.saveProveedorApp(entity);
@@ -632,7 +632,7 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public void save(TipoUnidadMedida entity) {
 		if (entity.getEstado() == null) {
-			entity.setEstado(EstadoEnum.A);
+			entity.setEstado(StatusEnum.A);
 		}
 
 		tipoUnidadMedidaLogic.saveTipoUnidadMedida(entity);
@@ -656,7 +656,7 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public void save(TipoPeriodo entity) {
 		if (entity.getEstado() == null) {
-			entity.setEstado(EstadoEnum.A);
+			entity.setEstado(StatusEnum.A);
 		}
 
 		tipoPeriodoLogic.saveTipoPeriodo(entity);
@@ -680,7 +680,7 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public void save(ClienteApp entity) {
 		if (entity.getEstado() == null) {
-			entity.setEstado(EstadoEnum.A);
+			entity.setEstado(StatusEnum.A);
 		}
 
 		clienteAppLogic.saveClienteApp(entity);

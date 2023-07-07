@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
-import co.com.juan.invbill.enums.EstadoEnum;
+import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.AppConfig;
 import co.com.juan.invbill.model.CategoriaProducto;
@@ -127,7 +127,7 @@ public class RegistrarCompraView implements Serializable {
 			categorias.clear();
 
 			for (CategoriaProducto categoriaProductoTemp : categoria) {
-				if (categoriaProductoTemp.getEstado().equals(EstadoEnum.A)) {
+				if (categoriaProductoTemp.getEstado().equals(StatusEnum.A)) {
 					categorias.add(new SelectItem(categoriaProductoTemp, categoriaProductoTemp.getCategoria()));
 				}
 			}
@@ -152,7 +152,7 @@ public class RegistrarCompraView implements Serializable {
 			productos.clear();
 
 			for (Producto productoTemp : producto) {
-				if (productoTemp.getEstado().equals(EstadoEnum.A)) {
+				if (productoTemp.getEstado().equals(StatusEnum.A)) {
 					productos.add(new SelectItem(productoTemp, productoTemp.getProducto()));
 				}
 			}
@@ -191,7 +191,7 @@ public class RegistrarCompraView implements Serializable {
 			if (proveedorApp == null) {
 				addWarnMessage(properties.getParametroString("MSG_PROVEEDOR_NO_EXISTE"));
 			} else {
-				if (proveedorApp.getEstado().equals(EstadoEnum.I)) {
+				if (proveedorApp.getEstado().equals(StatusEnum.I)) {
 					addWarnMessage(properties.getParametroString("MSG_PROVEEDOR_INACTIVO"));
 				} else {
 					compraCabeceraId.setIdProveedorApp(proveedorApp.getIdProveedorApp());

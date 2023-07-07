@@ -6,7 +6,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
-import co.com.juan.invbill.enums.EstadoEnum;
+import co.com.juan.invbill.enums.StatusEnum;
 
 /**
  * @author Juan Felipe
@@ -16,7 +16,7 @@ import co.com.juan.invbill.enums.EstadoEnum;
 @RequestScoped
 public class EstadoConverter implements Converter {
 
-	private EstadoEnum estado;
+	private StatusEnum estado;
 
 	/**
 	 * Gets the as object.
@@ -31,9 +31,9 @@ public class EstadoConverter implements Converter {
 		if (value == null)
 			return "";
 
-		EstadoEnum[] estadosAppEnums = EstadoEnum.values();
-		for (EstadoEnum estadosAppEnumTemp : estadosAppEnums) {
-			if (value.equalsIgnoreCase(String.valueOf(estadosAppEnumTemp.getEstado()))) {
+		StatusEnum[] estadosAppEnums = StatusEnum.values();
+		for (StatusEnum estadosAppEnumTemp : estadosAppEnums) {
+			if (value.equalsIgnoreCase(String.valueOf(estadosAppEnumTemp.getStatus()))) {
 				estado = estadosAppEnumTemp;
 				break;
 			}
@@ -54,21 +54,21 @@ public class EstadoConverter implements Converter {
 		if (o == null)
 			return null;
 
-		estado = (EstadoEnum) o;
-		return estado.getEstado();
+		estado = (StatusEnum) o;
+		return estado.getStatus();
 	}
 
 	/**
 	 * @return the estado
 	 */
-	public EstadoEnum getEstado() {
+	public StatusEnum getEstado() {
 		return estado;
 	}
 
 	/**
 	 * @param estado the estado to set
 	 */
-	public void setEstado(EstadoEnum estado) {
+	public void setEstado(StatusEnum estado) {
 		this.estado = estado;
 	}
 

@@ -49,12 +49,12 @@ public class ConsultarCompraView implements Serializable {
 	@PostConstruct
 	public void init() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		compraCabeceras = (List<CompraCabecera>) session.getAttribute(SessionEnum.COMPRA_CABECERAS.name());
+		compraCabeceras = (List<CompraCabecera>) session.getAttribute(SessionEnum.PURCHASE_HEADERS.name());
 
 		if (compraCabeceras == null) {
 			compraCabeceras = new ArrayList<>();
 		} else {
-			session.removeAttribute(SessionEnum.COMPRA_CABECERAS.name());
+			session.removeAttribute(SessionEnum.PURCHASE_HEADERS.name());
 		}
 
 		compraCabecera = new CompraCabecera();
@@ -126,8 +126,8 @@ public class ConsultarCompraView implements Serializable {
 
 	public String actionConsultarDetalle() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		session.setAttribute(SessionEnum.COMPRA_CABECERA_DETALLE.name(), compraCabecera);
-		session.setAttribute(SessionEnum.COMPRA_CABECERAS.name(), compraCabeceras);
+		session.setAttribute(SessionEnum.PURCHASE_HEADER_DETAIL.name(), compraCabecera);
+		session.setAttribute(SessionEnum.PURCHASE_HEADERS.name(), compraCabeceras);
 
 		return "goConsultarCompraDetalle";
 	}

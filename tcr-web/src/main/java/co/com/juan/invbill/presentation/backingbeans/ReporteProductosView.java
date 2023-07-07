@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
-import co.com.juan.invbill.enums.EstadoEnum;
+import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.model.CategoriaProducto;
 import co.com.juan.invbill.model.Producto;
 import co.com.juan.invbill.model.TipoUnidadMedida;
@@ -60,8 +60,8 @@ public class ReporteProductosView implements Serializable {
 	private List<Producto> producto;
 	private List<Producto> productoFiltro;
 	private List<SelectItem> productos;
-	private EstadoEnum[] estado;
-	private List<EstadoEnum> estadoFiltro;
+	private StatusEnum[] estado;
+	private List<StatusEnum> estadoFiltro;
 	private List<SelectItem> estados;
 	private List<TipoUnidadMedida> tipoUnidadMedida;
 	private List<TipoUnidadMedida> tiposUnidadMedidaFiltro;
@@ -124,10 +124,10 @@ public class ReporteProductosView implements Serializable {
 
 	public void initEstados() {
 		try {
-			estado = EstadoEnum.values();
+			estado = StatusEnum.values();
 
-			for (EstadoEnum estadoTemp : estado) {
-				estados.add(new SelectItem(estadoTemp, estadoTemp.getEstado()));
+			for (StatusEnum estadoTemp : estado) {
+				estados.add(new SelectItem(estadoTemp, estadoTemp.getStatus()));
 			}
 
 		} catch (Exception e) {
@@ -414,28 +414,28 @@ public class ReporteProductosView implements Serializable {
 	/**
 	 * @return the estado
 	 */
-	public EstadoEnum[] getEstado() {
+	public StatusEnum[] getEstado() {
 		return estado;
 	}
 
 	/**
 	 * @param estado the estado to set
 	 */
-	public void setEstado(EstadoEnum[] estado) {
+	public void setEstado(StatusEnum[] estado) {
 		this.estado = estado;
 	}
 
 	/**
 	 * @return the estadoFiltro
 	 */
-	public List<EstadoEnum> getEstadoFiltro() {
+	public List<StatusEnum> getEstadoFiltro() {
 		return estadoFiltro;
 	}
 
 	/**
 	 * @param estadoFiltro the estadoFiltro to set
 	 */
-	public void setEstadoFiltro(List<EstadoEnum> estadoFiltro) {
+	public void setEstadoFiltro(List<StatusEnum> estadoFiltro) {
 		this.estadoFiltro = estadoFiltro;
 	}
 

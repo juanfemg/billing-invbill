@@ -6,7 +6,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
-import co.com.juan.invbill.enums.ReporteMensualEnum;
+import co.com.juan.invbill.enums.MonthlyReportEnum;
 
 /**
  * @author Juan Felipe
@@ -16,7 +16,7 @@ import co.com.juan.invbill.enums.ReporteMensualEnum;
 @RequestScoped
 public class ReporteMensualConverter implements Converter {
 
-	private ReporteMensualEnum reporteMensual;
+	private MonthlyReportEnum reporteMensual;
 
 	/**
 	 * Gets the as object.
@@ -34,10 +34,10 @@ public class ReporteMensualConverter implements Converter {
 		if (value == null)
 			return "";
 
-		ReporteMensualEnum[] reportesMensualEnums = ReporteMensualEnum.values();
-		for (ReporteMensualEnum reporteMensualEnumTemp : reportesMensualEnums) {
-			if (value.equalsIgnoreCase(String.valueOf(reporteMensualEnumTemp.getReporte()))) {
-				reporteMensual = reporteMensualEnumTemp;
+		MonthlyReportEnum[] reportesMensualEnums = MonthlyReportEnum.values();
+		for (MonthlyReportEnum monthlyReportEnumTemp : reportesMensualEnums) {
+			if (value.equalsIgnoreCase(String.valueOf(monthlyReportEnumTemp.getReport()))) {
+				reporteMensual = monthlyReportEnumTemp;
 				break;
 			}
 		}
@@ -60,14 +60,14 @@ public class ReporteMensualConverter implements Converter {
 		if (o == null)
 			return null;
 
-		reporteMensual = (ReporteMensualEnum) o;
-		return reporteMensual.getReporte();
+		reporteMensual = (MonthlyReportEnum) o;
+		return reporteMensual.getReport();
 	}
 
 	/**
 	 * @return the reporteMensual
 	 */
-	public ReporteMensualEnum getReporteMensual() {
+	public MonthlyReportEnum getReporteMensual() {
 		return reporteMensual;
 	}
 
@@ -75,7 +75,7 @@ public class ReporteMensualConverter implements Converter {
 	 * @param reporteMensual
 	 *            the reporteMensual to set
 	 */
-	public void setReporteMensual(ReporteMensualEnum reporteMensual) {
+	public void setReporteMensual(MonthlyReportEnum reporteMensual) {
 		this.reporteMensual = reporteMensual;
 	}
 

@@ -49,7 +49,7 @@ public class ConsultarFacturaDetalleView implements Serializable {
 	@PostConstruct
 	public void init() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		facturaCabecera = (FacturaCabecera) session.getAttribute(SessionEnum.FACTURA_CABECERA_DETALLE.name());
+		facturaCabecera = (FacturaCabecera) session.getAttribute(SessionEnum.INVOICE_HEADER_DETAIL.name());
 
 		try {
 			if (facturaCabecera != null) {
@@ -65,8 +65,8 @@ public class ConsultarFacturaDetalleView implements Serializable {
 
 	public String actionConsultarDevoluciones() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		session.setAttribute(SessionEnum.DEVOLUCION_CABECERA_DETALLE.name(), devolucionCabecera);
-		session.setAttribute(SessionEnum.FACTURA_CABECERA_DETALLE.name(), facturaCabecera);
+		session.setAttribute(SessionEnum.RETURN_HEADER_DETAIL.name(), devolucionCabecera);
+		session.setAttribute(SessionEnum.INVOICE_HEADER_DETAIL.name(), facturaCabecera);
 
 		return "goConsultarDevolucionDetalle";
 	}

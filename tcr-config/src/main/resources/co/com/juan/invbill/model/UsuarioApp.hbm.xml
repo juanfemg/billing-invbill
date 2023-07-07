@@ -22,7 +22,7 @@
 		<property generated="never" lazy="true" name="estado">
 			<column length="1" name="estado" not-null="true" />
 			<type name="org.hibernate.type.EnumType">
-				<param name="enumClass">co.com.juan.invbill.enums.EstadoEnum</param>
+				<param name="enumClass">co.com.juan.invbill.enums.StatusEnum</param>
 				<param name="type">1</param>
 			</type>
 		</property>

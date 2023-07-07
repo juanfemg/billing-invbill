@@ -1,8 +1,10 @@
-package co.com.juan.invbill.control;
+package co.com.juan.invbill.control.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import co.com.juan.invbill.control.IUsuarioAppLogic;
+import co.com.juan.invbill.dao.IUsuarioAppDao;
+import co.com.juan.invbill.exceptions.EntityException;
+import co.com.juan.invbill.model.UsuarioApp;
+import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import co.com.juan.invbill.dao.IUsuarioAppDao;
-import co.com.juan.invbill.exceptions.EntityException;
-import co.com.juan.invbill.model.UsuarioApp;
-import co.com.juan.invbill.util.Utilities;
+import java.util.List;
 
 /**
  * @author Juan Felipe
@@ -27,36 +26,11 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 
 	private static final Logger log = LoggerFactory.getLogger(UsuarioAppLogic.class);
 
-	/**
-	 * DAO injected by Spring that manages UsuarioApp entities
-	 * 
-	 */
 	@Autowired
 	private IUsuarioAppDao usuarioAppDao;
 
-	/**
-	 * Logic injected by Spring that manages UsuarioApp entities
-	 * 
-	 */
 	@Override
-	@Transactional(readOnly = true)
-	public List<UsuarioApp> getUsuarioApp() {
-		log.debug("finding all {} instances", Constant.ENTITY_NAME);
-
-		List<UsuarioApp> list = new ArrayList<>();
-
-		try {
-			list = usuarioAppDao.findAll();
-		} catch (Exception e) {
-			log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-			throw new EntityException().new GettingException(EntityException.ALL + Constant.ENTITY_NAME);
-		}
-
-		return list;
-	}
-
-	@Override
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	@Transactional(propagation = Propagation.REQUIRED)
 	public void saveUsuarioApp(UsuarioApp entity) {
 		log.debug("saving {} instance", Constant.ENTITY_NAME);
 
@@ -77,30 +51,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 	}
 
 	@Override
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	public void deleteUsuarioApp(UsuarioApp entity) {
-		log.debug("deleting {} instance", Constant.ENTITY_NAME);
-
-		if (entity == null) {
-			throw new EntityException().new NullEntityExcepcion(Constant.ENTITY_NAME);
-		}
-
-		if (entity.getIdUsuarioApp() == null) {
-			throw new EntityException().new EmptyFieldException(Constant.FIELD_ID_ENTITY);
-		}
-
-		try {
-			usuarioAppDao.delete(entity);
-
-			log.debug("delete {} successful", Constant.ENTITY_NAME);
-		} catch (Exception e) {
-			log.error("delete {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-			throw new EntityException().new DeletingException(Constant.ENTITY_NAME);
-		}
-	}
-
-	@Override
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	@Transactional(propagation = Propagation.REQUIRED)
 	public void updateUsuarioApp(UsuarioApp entity) {
 		log.debug("updating {} instance", Constant.ENTITY_NAME);
 
@@ -121,7 +72,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 	public UsuarioApp getUsuarioApp(String id) {
 		log.debug("getting {} instance", Constant.ENTITY_NAME);
 
-		UsuarioApp entity = null;
+		UsuarioApp entity;
 
 		try {
 			entity = usuarioAppDao.findById(id);
@@ -136,57 +87,11 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<UsuarioApp> findPageUsuarioApp(String sortColumnName, boolean sortAscending, int startRow,
-			int maxResults) {
-		List<UsuarioApp> entity = null;
-
-		try {
-			entity = usuarioAppDao.findPage(sortColumnName, sortAscending, startRow, maxResults);
-		} catch (Exception e) {
-			throw new EntityException().new FindingException(Constant.ENTITY_NAME);
-		}
-
-		return entity;
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public Long findTotalNumberUsuarioApp() {
-		Long entity = null;
-
-		try {
-			entity = usuarioAppDao.count();
-		} catch (Exception e) {
-			throw new EntityException().new FindingException(Constant.ENTITY_NAME);
-		}
-
-		return entity;
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public List<UsuarioApp> getDataUsuarioApp() {
-		log.debug("getting {} instance", Constant.ENTITY_NAME);
-
-		List<UsuarioApp> list = new ArrayList<>();
-
-		try {
-			list = usuarioAppDao.findAll();
-		} catch (Exception e) {
-			log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-			throw new EntityException().new FindingException(Constant.ENTITY_NAME);
-		}
-
-		return list;
-	}
-
-	@Override
-	@Transactional(readOnly = true)
 	public List<UsuarioApp> findByCriteria(Object[] variables, Object[] variablesBetween,
 			Object[] variablesBetweenDates) {
 		log.debug("getting {} instance by criteria", Constant.ENTITY_NAME);
 
-		List<UsuarioApp> list = new ArrayList<>();
+		List<UsuarioApp> list;
 		String where;
 
 		try {
@@ -204,7 +109,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 	public List<UsuarioApp> findByProperty(String propertyName, Object value) {
 		log.debug("finding {} instance", Constant.ENTITY_NAME);
 
-		List<UsuarioApp> list = new ArrayList<>();
+		List<UsuarioApp> list;
 
 		try {
 			list = usuarioAppDao.findByProperty(propertyName, value);
@@ -216,8 +121,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 		return list;
 	}
 
-	@Override
-	public void checkFields(UsuarioApp entity) {
+	private void checkFields(UsuarioApp entity) {
 		if (entity.getIdUsuarioApp() == null) {
 			throw new EntityException().new EmptyFieldException(Constant.FIELD_ID_ENTITY);
 		}

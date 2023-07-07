@@ -54,12 +54,12 @@ public class ConsultarFacturaView implements Serializable {
 	@PostConstruct
 	public void init() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		facturaCabeceras = (List<FacturaCabecera>) session.getAttribute(SessionEnum.FACTURA_CABECERAS.name());
+		facturaCabeceras = (List<FacturaCabecera>) session.getAttribute(SessionEnum.INVOICE_HEADERS.name());
 
 		if (facturaCabeceras == null) {
 			facturaCabeceras = new ArrayList<>();
 		} else {
-			session.removeAttribute(SessionEnum.FACTURA_CABECERAS.name());
+			session.removeAttribute(SessionEnum.INVOICE_HEADERS.name());
 		}
 
 		facturaCabecera = new FacturaCabecera();
@@ -116,8 +116,8 @@ public class ConsultarFacturaView implements Serializable {
 
 	public String actionConsultarDetalle() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		session.setAttribute(SessionEnum.FACTURA_CABECERA_DETALLE.name(), facturaCabecera);
-		session.setAttribute(SessionEnum.FACTURA_CABECERAS.name(), facturaCabeceras);
+		session.setAttribute(SessionEnum.INVOICE_HEADER_DETAIL.name(), facturaCabecera);
+		session.setAttribute(SessionEnum.INVOICE_HEADERS.name(), facturaCabeceras);
 
 		return "goConsultarFacturaDetalle";
 	}

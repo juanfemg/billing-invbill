@@ -6,100 +6,28 @@ import co.com.juan.invbill.model.FacturaCabecera;
 
 /**
  * @author Juan Felipe
- * 
  */
 public interface IFacturaCabeceraLogic {
 
-	/**
-	 * List FacturaCabecera objects
-	 * 
-	 */
-	public List<FacturaCabecera> getFacturaCabecera();
+    List<FacturaCabecera> getFacturaCabecera();
 
-	/**
-	 * Save an existing FacturaCabecera entity
-	 * 
-	 */
-	public void saveFacturaCabecera(FacturaCabecera entity);
+    void saveFacturaCabecera(FacturaCabecera entity);
 
-	/**
-	 * Delete an existing FacturaCabecera entity
-	 * 
-	 */
-	public void deleteFacturaCabecera(FacturaCabecera entity);
+    void updateFacturaCabecera(FacturaCabecera entity);
 
-	/**
-	 * Update an existing FacturaCabecera entity
-	 * 
-	 */
-	public void updateFacturaCabecera(FacturaCabecera entity);
+    FacturaCabecera getFacturaCabecera(Integer id);
 
-	/**
-	 * Find an existing FacturaCabecera entity
-	 * 
-	 */
-	public FacturaCabecera getFacturaCabecera(Integer id);
+    List<FacturaCabecera> getDataFacturaCabecera();
 
-	/**
-	 * List sort existing FacturaCabecera entity
-	 * 
-	 */
-	public List<FacturaCabecera> findPageFacturaCabecera(String sortColumnName, boolean sortAscending, int startRow,
-			int maxResults);
+    List<FacturaCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
+                                         Object[] variablesBetweenDates);
 
-	/**
-	 * Get rows existing FacturaCabecera entity
-	 * 
-	 */
-	public Long findTotalNumberFacturaCabecera();
+    List<FacturaCabecera> findByProperty(String propertyName, Object value);
 
-	/**
-	 * Get data existing FacturaCabecera entity
-	 * 
-	 */
-	public List<FacturaCabecera> getDataFacturaCabecera();
+    Object findMaxObjectByCriteria(String propertyName);
 
-	/**
-	 * Find by Criteria an existing FacturaCabecera entity
-	 * 
-	 */
-	public List<FacturaCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
-			Object[] variablesBetweenDates);
+    Object findMinObjectByCriteria(String propertyName);
 
-	/**
-	 * Find by Property an existing FacturaCabecera entity
-	 * 
-	 */
-	public List<FacturaCabecera> findByProperty(String propertyName, Object value);
-
-	/**
-	 * Check fields
-	 * 
-	 */
-	public void checkFields(FacturaCabecera entity);
-
-	/**
-	 * Find by Criteria with Projection MAX an existing object
-	 * 
-	 */
-	public Object findMaxObjectByCriteria(String propertyName);
-
-	/**
-	 * Find by Criteria with Projection MIN an existing object
-	 * 
-	 */
-	public Object findMinObjectByCriteria(String propertyName);
-
-	/**
-	 * Find by Criteria with Projection AVG an existing object
-	 * 
-	 */
-	public Object findAvgObjectByCriteria(String propertyName);
-
-	/**
-	 * List existing FacturaCabecera entity from a given instance
-	 * 
-	 */
-	public List<FacturaCabecera> findAllByFacturaCabeceraInstance(FacturaCabecera entity);
+    Object findAvgObjectByCriteria(String propertyName);
 
 }

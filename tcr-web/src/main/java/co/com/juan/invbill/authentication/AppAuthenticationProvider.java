@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
-import co.com.juan.invbill.enums.EstadoEnum;
+import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.model.UsuarioApp;
 import co.com.juan.invbill.util.Encrypt;
 
@@ -68,7 +68,7 @@ public class AppAuthenticationProvider implements AuthenticationProvider {
 		usuarioApp = businessDelegator.findUsuarioByID(userName);
 
 		if (usuarioApp != null) {
-			if (usuarioApp.getEstado() == EstadoEnum.A) {
+			if (usuarioApp.getEstado() == StatusEnum.A) {
 				enabled = true;
 			} else {
 				enabled = false;

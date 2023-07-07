@@ -6,7 +6,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
-import co.com.juan.invbill.enums.FormatoReporteEnum;
+import co.com.juan.invbill.enums.ReportFormatEnum;
 
 /**
  * @author Juan Felipe
@@ -16,7 +16,7 @@ import co.com.juan.invbill.enums.FormatoReporteEnum;
 @RequestScoped
 public class FormatoReporteConverter implements Converter {
 
-	private FormatoReporteEnum formatoReporte;
+	private ReportFormatEnum formatoReporte;
 
 	/**
 	 * Gets the as object.
@@ -31,9 +31,9 @@ public class FormatoReporteConverter implements Converter {
 		if (value == null)
 			return "";
 
-		FormatoReporteEnum[] formatosReporteEnums = FormatoReporteEnum.values();
-		for (FormatoReporteEnum formatosReporteEnumTemp : formatosReporteEnums) {
-			if (value.equalsIgnoreCase(String.valueOf(formatosReporteEnumTemp.getFormato()))) {
+		ReportFormatEnum[] formatosReporteEnums = ReportFormatEnum.values();
+		for (ReportFormatEnum formatosReporteEnumTemp : formatosReporteEnums) {
+			if (value.equalsIgnoreCase(String.valueOf(formatosReporteEnumTemp.getFormat()))) {
 				formatoReporte = formatosReporteEnumTemp;
 				break;
 			}
@@ -54,21 +54,21 @@ public class FormatoReporteConverter implements Converter {
 		if (o == null)
 			return null;
 
-		formatoReporte = (FormatoReporteEnum) o;
-		return formatoReporte.getFormato();
+		formatoReporte = (ReportFormatEnum) o;
+		return formatoReporte.getFormat();
 	}
 
 	/**
 	 * @return the formatoReporte
 	 */
-	public FormatoReporteEnum getFormatoReporte() {
+	public ReportFormatEnum getFormatoReporte() {
 		return formatoReporte;
 	}
 
 	/**
 	 * @param formatoReporte the formatoReporte to set
 	 */
-	public void setFormatoReporte(FormatoReporteEnum formatoReporte) {
+	public void setFormatoReporte(ReportFormatEnum formatoReporte) {
 		this.formatoReporte = formatoReporte;
 	}
 

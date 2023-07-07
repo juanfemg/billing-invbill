@@ -7,86 +7,24 @@ import co.com.juan.invbill.model.Producto;
 
 /**
  * @author Juan Felipe
- * 
  */
 public interface IProductoLogic {
 
-	/**
-	 * List Producto objects
-	 * 
-	 */
-	public List<Producto> getProducto();
+    List<Producto> getProducto();
 
-	/**
-	 * Save an existing Producto entity
-	 * 
-	 */
-	public void saveProducto(Producto entity);
+    void saveProducto(Producto entity);
 
-	/**
-	 * Delete an existing Producto entity
-	 * 
-	 */
-	public void deleteProducto(Producto entity);
+    void updateProducto(Producto entity);
 
-	/**
-	 * Update an existing Producto entity
-	 * 
-	 */
-	public void updateProducto(Producto entity);
+    Producto getProducto(Integer id);
 
-	/**
-	 * Find an existing Producto entity
-	 * 
-	 */
-	public Producto getProducto(Integer id);
+    List<Producto> findByCriteria(Object[] variables, Object[] variablesBetween, Object[] variablesBetweenDates);
 
-	/**
-	 * List sort existing Producto entity
-	 * 
-	 */
-	public List<Producto> findPageProducto(String sortColumnName, boolean sortAscending, int startRow, int maxResults);
+    List<Producto> findByProperty(String propertyName, Object value);
 
-	/**
-	 * Get rows existing Producto entity
-	 * 
-	 */
-	public Long findTotalNumberProducto();
+    List<Producto> findByPropertySort(String propertyName, Object value, String sortColumnName,
+                                      boolean sortAscending);
 
-	/**
-	 * Get data existing Producto entity
-	 * 
-	 */
-	public List<Producto> getDataProducto();
+    List<Producto> findByProperty(String propertyName, Collection<?> values);
 
-	/**
-	 * Find by Criteria an existing Producto entity
-	 * 
-	 */
-	public List<Producto> findByCriteria(Object[] variables, Object[] variablesBetween, Object[] variablesBetweenDates);
-
-	/**
-	 * Find by Property an existing Producto entity
-	 * 
-	 */
-	public List<Producto> findByProperty(String propertyName, Object value);
-
-	/**
-	 * Find by Property an sort existing Producto entity
-	 * 
-	 */
-	public List<Producto> findByPropertySort(String propertyName, Object value, String sortColumnName,
-			boolean sortAscending);
-
-	/**
-	 * Find by Property an existing Producto entity
-	 * 
-	 */
-	public List<Producto> findByProperty(String propertyName, Collection<?> values);
-
-	/**
-	 * Check fields
-	 * 
-	 */
-	public void checkFields(Producto entity);
 }

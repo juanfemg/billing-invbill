@@ -36,8 +36,8 @@ public class ConsultarCompraDetalleView implements Serializable {
 	@PostConstruct
 	public void init() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		compraCabecera = (CompraCabecera) session.getAttribute(SessionEnum.COMPRA_CABECERA_DETALLE.name());
-		session.removeAttribute(SessionEnum.COMPRA_CABECERA_DETALLE.name());
+		compraCabecera = (CompraCabecera) session.getAttribute(SessionEnum.PURCHASE_HEADER_DETAIL.name());
+		session.removeAttribute(SessionEnum.PURCHASE_HEADER_DETAIL.name());
 	}
 
 	public void addInfoMessage(String summary) {

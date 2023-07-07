@@ -18,6 +18,7 @@ import javax.faces.model.SelectItem;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.enums.MonthlyReportEnum;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.chart.Axis;
@@ -34,8 +35,7 @@ import co.com.juan.invbill.dto.ReporteDevolucionDiaria;
 import co.com.juan.invbill.dto.ReporteDevolucionMensual;
 import co.com.juan.invbill.dto.ReporteVentaDiaria;
 import co.com.juan.invbill.dto.ReporteVentaMensual;
-import co.com.juan.invbill.enums.FormatoReporteEnum;
-import co.com.juan.invbill.enums.ReporteMensualEnum;
+import co.com.juan.invbill.enums.ReportFormatEnum;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.LoginApp;
 import co.com.juan.invbill.model.ProveedorApp;
@@ -75,7 +75,7 @@ public class DashBoardView implements Serializable {
 	private ReporteDevolucionDiaria reporteDevolucionDiaria;
 	private ReporteCompraDiaria reporteCompraDiaria;
 	private Date fechaReporteConsultaFactura;
-	private FormatoReporteEnum formatoReporteFiltro;
+	private ReportFormatEnum formatoReporteFiltro;
 	private List<SelectItem> formatosReporte;
 	private List<ReporteVentaMensual> reporteVentaMensuales;
 	private List<ReporteDevolucionMensual> reporteDevolucionMensuales;
@@ -88,7 +88,7 @@ public class DashBoardView implements Serializable {
 	private BarChartModel barModelCompras;
 	private BarChartModel barChartModel;
 	private List<SelectItem> reporteMensuales;
-	private ReporteMensualEnum reporteMensualEnum;
+	private MonthlyReportEnum monthlyReportEnum;
 	private String passwordOld;
 	private String passwordNew;
 	private String passwordReNew;
@@ -213,8 +213,8 @@ public class DashBoardView implements Serializable {
 	}
 
 	public void initReportesMensuales() {
-		for (ReporteMensualEnum reporteMensualEnumTemp : ReporteMensualEnum.values()) {
-			reporteMensuales.add(new SelectItem(reporteMensualEnumTemp, reporteMensualEnumTemp.getReporte()));
+		for (MonthlyReportEnum monthlyReportEnumTemp : MonthlyReportEnum.values()) {
+			reporteMensuales.add(new SelectItem(monthlyReportEnumTemp, monthlyReportEnumTemp.getReport()));
 		}
 	}
 
@@ -228,15 +228,15 @@ public class DashBoardView implements Serializable {
 	}
 
 	public void initFormatosReporte() {
-		for (FormatoReporteEnum formatosReporteEnumTemp : FormatoReporteEnum.values()) {
+		for (ReportFormatEnum formatosReporteEnumTemp : ReportFormatEnum.values()) {
 			formatosReporte.add(new SelectItem(formatosReporteEnumTemp, formatosReporteEnumTemp.toString()));
 		}
 	}
 
 	public void graficarReporteMensual() {
-		if (reporteMensualEnum.equals(ReporteMensualEnum.VENTAS)) {
+		if (monthlyReportEnum.equals(MonthlyReportEnum.SALES)) {
 			barChartModel = barModelVentas;
-		} else if (reporteMensualEnum.equals(ReporteMensualEnum.DEVOLUCIONES)) {
+		} else if (monthlyReportEnum.equals(MonthlyReportEnum.RETURNS)) {
 			barChartModel = barModelDevoluciones;
 		} else {
 			barChartModel = barModelCompras;
@@ -248,11 +248,11 @@ public class DashBoardView implements Serializable {
 		ChartSeries devoluciones = configurationBarChart(LABEL_CHART_DEVOLUCIONES, reporteDevolucionMensuales);
 		ChartSeries compras = configurationBarChart(LABEL_CHART_COMPRAS, reporteCompraMensuales);
 
-		barModelVentas = configurationBarModel(ventas, ReporteMensualEnum.VENTAS, "ne", false, "F15A29",
+		barModelVentas = configurationBarModel(ventas, MonthlyReportEnum.SALES, "ne", false, "F15A29",
 				EXTENDER_CHART);
-		barModelDevoluciones = configurationBarModel(devoluciones, ReporteMensualEnum.DEVOLUCIONES, "ne", false,
+		barModelDevoluciones = configurationBarModel(devoluciones, MonthlyReportEnum.RETURNS, "ne", false,
 				"8DC63F", EXTENDER_CHART);
-		barModelCompras = configurationBarModel(compras, ReporteMensualEnum.COMPRAS, "ne", false, "C1E1F4",
+		barModelCompras = configurationBarModel(compras, MonthlyReportEnum.PURCHASES, "ne", false, "C1E1F4",
 				EXTENDER_CHART);
 	}
 
@@ -282,12 +282,12 @@ public class DashBoardView implements Serializable {
 
 	}
 
-	public BarChartModel configurationBarModel(ChartSeries series, ReporteMensualEnum title, String legendPosition,
-			boolean showPointLabels, String seriesColors, String extender) {
+	public BarChartModel configurationBarModel(ChartSeries series, MonthlyReportEnum title, String legendPosition,
+											   boolean showPointLabels, String seriesColors, String extender) {
 		BarChartModel barChartModelTemp = new BarChartModel();
 
 		barChartModelTemp.addSeries(series);
-		barChartModelTemp.setTitle(title.getReporte());
+		barChartModelTemp.setTitle(title.getReport());
 		barChartModelTemp.setZoom(true);
 		barChartModelTemp.setLegendPosition(legendPosition);
 		barChartModelTemp.setShowPointLabels(showPointLabels);
@@ -340,17 +340,17 @@ public class DashBoardView implements Serializable {
 			Map<String, Object> parameters = new HashMap<>();
 			parameters.put("LOGO", ImageIO.read(getClass().getResource("/images/logo.png")));
 			parameters.put("FECHA", fechaReporteConsultaFactura);
-			parameters.put("EXPORTER_FORMAT", formatoReporteFiltro.getFormato());
+			parameters.put("EXPORTER_FORMAT", formatoReporteFiltro.getFormat());
 
-			if (formatoReporteFiltro.equals(FormatoReporteEnum.PDF)) {
+			if (formatoReporteFiltro.equals(ReportFormatEnum.PDF)) {
 				stream = reportController.getReportPdf(REPORTE_CONSULTA_FACTURA, parameters);
-			} else if (formatoReporteFiltro.equals(FormatoReporteEnum.EXCEL)) {
+			} else if (formatoReporteFiltro.equals(ReportFormatEnum.EXCEL)) {
 				stream = reportController.getReportXls(REPORTE_CONSULTA_FACTURA, parameters);
 			}
 
 			if (stream != null) {
 				content = new DefaultStreamedContent(stream, formatoReporteFiltro.getMime(),
-						REPORTE_CONSULTA_FACTURA.concat(".".concat(formatoReporteFiltro.getFormato())));
+						REPORTE_CONSULTA_FACTURA.concat(".".concat(formatoReporteFiltro.getFormat())));
 			} else {
 				throw new Exception();
 			}
@@ -566,18 +566,12 @@ public class DashBoardView implements Serializable {
 		this.reporteMensuales = reporteMensuales;
 	}
 
-	/**
-	 * @return the reporteMensualEnum
-	 */
-	public ReporteMensualEnum getReporteMensualEnum() {
-		return reporteMensualEnum;
+	public MonthlyReportEnum getMonthlyReportEnum() {
+		return monthlyReportEnum;
 	}
 
-	/**
-	 * @param reporteMensualEnum the reporteMensualEnum to set
-	 */
-	public void setReporteMensualEnum(ReporteMensualEnum reporteMensualEnum) {
-		this.reporteMensualEnum = reporteMensualEnum;
+	public void setMonthlyReportEnum(MonthlyReportEnum monthlyReportEnum) {
+		this.monthlyReportEnum = monthlyReportEnum;
 	}
 
 	/**
@@ -767,14 +761,14 @@ public class DashBoardView implements Serializable {
 	/**
 	 * @return the formatoReporteFiltro
 	 */
-	public FormatoReporteEnum getFormatoReporteFiltro() {
+	public ReportFormatEnum getFormatoReporteFiltro() {
 		return formatoReporteFiltro;
 	}
 
 	/**
 	 * @param formatoReporteFiltro the formatoReporteFiltro to set
 	 */
-	public void setFormatoReporteFiltro(FormatoReporteEnum formatoReporteFiltro) {
+	public void setFormatoReporteFiltro(ReportFormatEnum formatoReporteFiltro) {
 		this.formatoReporteFiltro = formatoReporteFiltro;
 	}
 

@@ -6,73 +6,17 @@ import co.com.juan.invbill.model.LoginApp;
 
 /**
  * @author Juan Felipe
- * 
  */
 public interface ILoginAppLogic {
 
-	/**
-	 * List LoginApp objects
-	 * 
-	 */
-	public List<LoginApp> getLoginApp();
+    void saveLoginApp(LoginApp entity);
 
-	/**
-	 * Save an existing LoginApp entity
-	 * 
-	 */
-	public void saveLoginApp(LoginApp entity);
+    void updateLoginApp(LoginApp entity);
 
-	/**
-	 * Delete an existing LoginApp entity
-	 * 
-	 */
-	public void deleteLoginApp(LoginApp entity);
+    LoginApp getLoginApp(String id);
 
-	/**
-	 * Update an existing LoginApp entity
-	 * 
-	 */
-	public void updateLoginApp(LoginApp entity);
+    List<LoginApp> findByCriteria(Object[] variables, Object[] variablesBetween, Object[] variablesBetweenDates);
 
-	/**
-	 * Find an existing LoginApp entity
-	 * 
-	 */
-	public LoginApp getLoginApp(String id);
+    List<LoginApp> findByProperty(String propertyName, Object value);
 
-	/**
-	 * List sort existing LoginApp entity
-	 * 
-	 */
-	public List<LoginApp> findPageLoginApp(String sortColumnName, boolean sortAscending, int startRow, int maxResults);
-
-	/**
-	 * Get rows existing LoginApp entity
-	 * 
-	 */
-	public Long findTotalNumberLoginApp();
-
-	/**
-	 * Get data existing LoginApp entity
-	 * 
-	 */
-	public List<LoginApp> getDataLoginApp();
-
-	/**
-	 * Find by Criteria an existing LoginApp entity
-	 * 
-	 */
-	public List<LoginApp> findByCriteria(Object[] variables, Object[] variablesBetween, Object[] variablesBetweenDates);
-
-	/**
-	 * Find by Property an existing LoginApp entity
-	 * 
-	 */
-	public List<LoginApp> findByProperty(String propertyName, Object value);
-
-	/**
-	 * Check fields
-	 * 
-	 */
-	public void checkFields(LoginApp entity);
 }

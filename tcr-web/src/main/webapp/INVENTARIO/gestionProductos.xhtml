@@ -81,7 +81,7 @@
 										<f:facet name="header">
 											<h:outputText value="#{msg.MSG_DATATABLE_COLUMN_ESTADO}" />
 										</f:facet>
-										<h:outputText value="#{stockProducto.producto.estado.estado}" />
+										<h:outputText value="#{stockProducto.producto.estado.status}" />
 									</p:column>
 
 									<p:column headerText="#{msg.MSG_DATATABLE_COLUMN_ACCIONES}"
@@ -137,7 +137,7 @@
 								<h:outputLabel for="estadoModStockProducto"
 									value="#{msg.MSG_DATATABLE_COLUMN_ESTADO}" />
 								<h:outputText id="estadoModStockProducto"
-									value="#{gestionProductos.stockProductoMod.producto.estado.estado}" />
+									value="#{gestionProductos.stockProductoMod.producto.estado.status}" />
 
 								<h:outputLabel for="categoriaModStockProducto"
 									value="#{msg.MSG_DATATABLE_COLUMN_CATEGORIA}" />

@@ -47,12 +47,12 @@ public class ConsultarDevolucionView implements Serializable {
 	@PostConstruct
 	public void init() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		devolucionCabeceras = (List<DevolucionCabecera>) session.getAttribute(SessionEnum.DEVOLUCION_CABECERAS.name());
+		devolucionCabeceras = (List<DevolucionCabecera>) session.getAttribute(SessionEnum.RETURN_HEADERS.name());
 
 		if (devolucionCabeceras == null) {
 			devolucionCabeceras = new ArrayList<>();
 		} else {
-			session.removeAttribute(SessionEnum.DEVOLUCION_CABECERAS.name());
+			session.removeAttribute(SessionEnum.RETURN_HEADERS.name());
 		}
 
 		devolucionCabecera = new DevolucionCabecera();
@@ -109,8 +109,8 @@ public class ConsultarDevolucionView implements Serializable {
 
 	public String actionConsultarDetalle() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		session.setAttribute(SessionEnum.DEVOLUCION_CABECERA_DETALLE.name(), devolucionCabecera);
-		session.setAttribute(SessionEnum.DEVOLUCION_CABECERAS.name(), devolucionCabeceras);
+		session.setAttribute(SessionEnum.RETURN_HEADER_DETAIL.name(), devolucionCabecera);
+		session.setAttribute(SessionEnum.RETURN_HEADERS.name(), devolucionCabeceras);
 
 		return "goConsultarDevolucionDetalle";
 	}
