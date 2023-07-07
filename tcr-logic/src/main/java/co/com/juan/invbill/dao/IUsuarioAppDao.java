@@ -5,7 +5,6 @@ import co.com.juan.invbill.model.UsuarioApp;
 
 /**
  * @author Juan Felipe
- *
  */
 public interface IUsuarioAppDao extends Dao<UsuarioApp, String> {
 

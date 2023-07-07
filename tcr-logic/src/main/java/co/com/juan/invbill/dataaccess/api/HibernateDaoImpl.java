@@ -23,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
+
 /**
  * @author Juan Felipe
  * 
@@ -35,7 +37,7 @@ public class HibernateDaoImpl<T, P extends Serializable> implements Dao<T, P> {
 	private Class<T> entityClass;
 	private Logger log = null;
 
-	@Autowired
+	@Resource
 	private SessionFactory sessionFactory;
 
 	private boolean cacheQueries = false;

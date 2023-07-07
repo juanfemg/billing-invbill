@@ -5,7 +5,6 @@ import co.com.juan.invbill.model.StockProducto;
 
 /**
  * @author Juan Felipe
- * 
  */
 public interface IStockProductoDao extends Dao<StockProducto, Integer> {
 

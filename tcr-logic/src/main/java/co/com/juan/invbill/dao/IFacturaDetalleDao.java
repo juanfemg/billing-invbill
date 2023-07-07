@@ -6,7 +6,6 @@ import co.com.juan.invbill.model.FacturaDetalleId;
 
 /**
  * @author Juan Felipe
- * 
  */
 public interface IFacturaDetalleDao extends Dao<FacturaDetalle, FacturaDetalleId> {
 

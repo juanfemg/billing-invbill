@@ -5,7 +5,6 @@ import co.com.juan.invbill.model.AppConfig;
 
 /**
  * @author Juan Felipe
- *
  */
 public interface IAppConfigDao extends Dao<AppConfig, String> {
 

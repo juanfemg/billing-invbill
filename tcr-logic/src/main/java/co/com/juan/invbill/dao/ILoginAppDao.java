@@ -5,8 +5,7 @@ import co.com.juan.invbill.model.LoginApp;
 
 /**
  * @author Juan Felipe
- *
  */
-public interface ILoginAppDao extends Dao<LoginApp, String>{
+public interface ILoginAppDao extends Dao<LoginApp, String> {
 
 }

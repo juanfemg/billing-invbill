@@ -5,7 +5,6 @@ import co.com.juan.invbill.model.TipoPeriodo;
 
 /**
  * @author Juan Felipe
- * 
  */
 public interface ITipoPeriodoDao extends Dao<TipoPeriodo, Integer> {
 

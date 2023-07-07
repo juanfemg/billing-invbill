@@ -5,7 +5,6 @@ import co.com.juan.invbill.model.ProveedorApp;
 
 /**
  * @author Juan Felipe
- *
  */
 public interface IProveedorAppDao extends Dao<ProveedorApp, Integer> {
 

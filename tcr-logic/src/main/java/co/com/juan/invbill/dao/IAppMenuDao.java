@@ -5,7 +5,6 @@ import co.com.juan.invbill.model.AppMenu;
 
 /**
  * @author Juan Felipe
- *
  */
 public interface IAppMenuDao extends Dao<AppMenu, String> {
 

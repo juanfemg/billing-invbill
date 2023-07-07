@@ -6,7 +6,6 @@ import co.com.juan.invbill.model.DevolucionDetalleId;
 
 /**
  * @author Juan Felipe
- * 
  */
 public interface IDevolucionDetalleDao extends Dao<DevolucionDetalle, DevolucionDetalleId> {
 

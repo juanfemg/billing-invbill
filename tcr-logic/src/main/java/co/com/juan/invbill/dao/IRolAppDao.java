@@ -5,7 +5,6 @@ import co.com.juan.invbill.model.RolApp;
 
 /**
  * @author Juan Felipe
- * 
  */
 public interface IRolAppDao extends Dao<RolApp, Integer> {
 
