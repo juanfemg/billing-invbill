@@ -23,7 +23,7 @@ public class ProveedorAppConverter implements Converter {
 
 	private static final Logger log = LoggerFactory.getLogger(ProveedorAppConverter.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private IBusinessDelegate businessDelegate;
 
 	private ProveedorApp proveedorApp;

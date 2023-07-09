@@ -8,12 +8,12 @@ import co.com.juan.invbill.model.CompraDetalleId;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -25,9 +25,12 @@ import java.util.List;
 public class CompraDetalleLogic implements ICompraDetalleLogic {
 
     private static final Logger log = LoggerFactory.getLogger(CompraDetalleLogic.class);
+    private final ICompraDetalleDao compraDetalleDao;
 
-    @Autowired
-    private ICompraDetalleDao compraDetalleDao;
+    @Inject
+    public CompraDetalleLogic(ICompraDetalleDao compraDetalleDao) {
+        this.compraDetalleDao = compraDetalleDao;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -40,7 +43,7 @@ public class CompraDetalleLogic implements ICompraDetalleLogic {
             list = compraDetalleDao.findAll();
         } catch (Exception e) {
             log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new GettingException(EntityException.ALL + Constant.ENTITY_NAME);
+            throw new EntityException.GettingException(EntityException.ALL + Constant.ENTITY_NAME);
         }
 
         return list;
@@ -63,7 +66,7 @@ public class CompraDetalleLogic implements ICompraDetalleLogic {
             log.debug("save {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new SavingException(Constant.ENTITY_NAME);
+            throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -80,7 +83,7 @@ public class CompraDetalleLogic implements ICompraDetalleLogic {
             log.debug("update {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new UpdatingException(Constant.ENTITY_NAME);
+            throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -96,7 +99,7 @@ public class CompraDetalleLogic implements ICompraDetalleLogic {
 
         } catch (Exception e) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return entity;
@@ -116,7 +119,7 @@ public class CompraDetalleLogic implements ICompraDetalleLogic {
             list = compraDetalleDao.findByCriteria(where);
         } catch (Exception e) {
             log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
         return list;
     }
@@ -132,7 +135,7 @@ public class CompraDetalleLogic implements ICompraDetalleLogic {
             list = compraDetalleDao.findByProperty(propertyName, value);
         } catch (Exception e) {
             log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -140,30 +143,30 @@ public class CompraDetalleLogic implements ICompraDetalleLogic {
 
     private void checkFields(CompraDetalle entity) {
         if (entity.getCantidad() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_CANTIDAD);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_CANTIDAD);
         }
 
         if ((entity.getCantidad() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getCantidad().toString(), 11, 0))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_CANTIDAD);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_CANTIDAD);
         }
 
         if (entity.getPrecioCompra() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_PRECIO_VENTA);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_PRECIO_VENTA);
         }
 
         if ((entity.getPrecioCompra() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getPrecioCompra().toString(), 22, 2))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_PRECIO_VENTA);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_PRECIO_VENTA);
         }
 
         if (entity.getValorIva() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_VALOR_IVA);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_VALOR_IVA);
         }
 
         if ((entity.getValorIva() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getValorIva().toString(), 22, 2))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_VALOR_IVA);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_VALOR_IVA);
         }
     }
 

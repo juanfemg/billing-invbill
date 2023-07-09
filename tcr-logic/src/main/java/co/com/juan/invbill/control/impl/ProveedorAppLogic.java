@@ -2,17 +2,18 @@ package co.com.juan.invbill.control.impl;
 
 import co.com.juan.invbill.control.IProveedorAppLogic;
 import co.com.juan.invbill.dao.IProveedorAppDao;
+import co.com.juan.invbill.dataaccess.api.DaoException;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.ProveedorApp;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -24,9 +25,12 @@ import java.util.List;
 public class ProveedorAppLogic implements IProveedorAppLogic {
 
     private static final Logger log = LoggerFactory.getLogger(ProveedorAppLogic.class);
+    private final IProveedorAppDao proveedorAppDao;
 
-    @Autowired
-    private IProveedorAppDao proveedorAppDao;
+    @Inject
+    public ProveedorAppLogic(IProveedorAppDao proveedorAppDao) {
+        this.proveedorAppDao = proveedorAppDao;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -39,7 +43,7 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
             list = proveedorAppDao.findAll();
         } catch (Exception e) {
             log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new GettingException(EntityException.ALL + Constant.ENTITY_NAME);
+            throw new EntityException.GettingException(EntityException.ALL + Constant.ENTITY_NAME);
         }
 
         return list;
@@ -61,9 +65,9 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
             proveedorAppDao.save(entity);
 
             log.debug("save {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new SavingException(Constant.ENTITY_NAME);
+            throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -81,7 +85,7 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
             log.debug("update {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new UpdatingException(Constant.ENTITY_NAME);
+            throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -97,7 +101,7 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
 
         } catch (Exception e) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return entity;
@@ -117,7 +121,7 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
             list = proveedorAppDao.findByCriteria(where);
         } catch (Exception e) {
             log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
         return list;
     }
@@ -133,7 +137,7 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
             list = proveedorAppDao.findByProperty(propertyName, value);
         } catch (Exception e) {
             log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -141,59 +145,59 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
 
     private void checkFields(ProveedorApp entity) {
         if (entity.getIdProveedorApp() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_ID_ENTITY);
         }
 
         if ((entity.getIdProveedorApp() != null) && !(Utilities
                 .checkNumberAndCheckWithPrecisionAndScale(entity.getIdProveedorApp().toString(), 11, 0))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_ID_ENTITY);
         }
 
         if (entity.getCodVerificacion() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_COD_VERIFICACION);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_COD_VERIFICACION);
         }
 
         if ((entity.getCodVerificacion() != null) && !(Utilities
                 .checkNumberAndCheckWithPrecisionAndScale(entity.getCodVerificacion().toString(), 1, 0))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_COD_VERIFICACION);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_COD_VERIFICACION);
         }
 
         if (entity.getRazonSocial() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_RAZON_SOCIAL);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_RAZON_SOCIAL);
         }
 
         if ((entity.getRazonSocial() != null)
                 && !(Utilities.checkWordAndCheckWithlength(entity.getRazonSocial(), 200))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_RAZON_SOCIAL);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_RAZON_SOCIAL);
         }
 
         if (entity.getEstado() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_ESTADO);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
         }
 
         if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getEstado().name(), 1))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_ESTADO);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
         }
     }
 
     private void checkSecondaryFields(ProveedorApp entity) {
         if ((entity.getDireccion() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getDireccion(), 200))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_DIRECCION);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_DIRECCION);
         }
 
         if ((entity.getTelefono() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getTelefono().toString(), 7, 0))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_TELEFONO);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_TELEFONO);
         }
 
         if ((entity.getTelefonoExt() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getTelefonoExt().toString(), 6, 0))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_TELEFONO_EXT);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_TELEFONO_EXT);
         }
 
         if ((entity.getCelular() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getCelular().toString(), 11, 0))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_CELULAR);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_CELULAR);
         }
     }
 

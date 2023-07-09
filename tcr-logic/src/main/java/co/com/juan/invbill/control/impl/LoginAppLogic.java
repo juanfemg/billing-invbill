@@ -7,12 +7,12 @@ import co.com.juan.invbill.model.LoginApp;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -24,9 +24,12 @@ import java.util.List;
 public class LoginAppLogic implements ILoginAppLogic {
 
     private static final Logger log = LoggerFactory.getLogger(LoginAppLogic.class);
+    private final ILoginAppDao loginAppDao;
 
-    @Autowired
-    private ILoginAppDao loginAppDao;
+    @Inject
+    public LoginAppLogic(ILoginAppDao loginAppDao) {
+        this.loginAppDao = loginAppDao;
+    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -45,7 +48,7 @@ public class LoginAppLogic implements ILoginAppLogic {
             log.debug("save {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new SavingException(Constant.ENTITY_NAME);
+            throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -62,7 +65,7 @@ public class LoginAppLogic implements ILoginAppLogic {
             log.debug("update {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new UpdatingException(Constant.ENTITY_NAME);
+            throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -78,7 +81,7 @@ public class LoginAppLogic implements ILoginAppLogic {
 
         } catch (Exception e) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return entity;
@@ -98,7 +101,7 @@ public class LoginAppLogic implements ILoginAppLogic {
             list = loginAppDao.findByCriteria(where);
         } catch (Exception e) {
             log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
         return list;
     }
@@ -114,7 +117,7 @@ public class LoginAppLogic implements ILoginAppLogic {
             list = loginAppDao.findByProperty(propertyName, value);
         } catch (Exception e) {
             log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -122,20 +125,20 @@ public class LoginAppLogic implements ILoginAppLogic {
 
     private void checkFields(LoginApp entity) {
         if (entity.getIdLoginApp() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_ID_ENTITY);
         }
 
         if ((entity.getIdLoginApp() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getIdLoginApp(), 20))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_ID_ENTITY);
         }
 
         if ((entity.getUltimoLogin() != null) && !(Utilities
                 .isDate(Utilities.formatDateWithoutTimeInAStringForBetweenWhere(entity.getUltimoLogin())))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_ULTIMO_LOGIN);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_ULTIMO_LOGIN);
         }
 
         if ((entity.getIdSession() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getIdSession(), 100))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_ULTIMO_LOGIN);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_ULTIMO_LOGIN);
         }
     }
 

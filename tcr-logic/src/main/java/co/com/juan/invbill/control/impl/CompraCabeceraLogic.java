@@ -8,26 +8,29 @@ import co.com.juan.invbill.model.CompraCabeceraId;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 /**
  * @author Juan Felipe
  */
-
-@Scope("singleton")
+@Singleton
 @Service("CompraCabeceraLogic")
 public class CompraCabeceraLogic implements ICompraCabeceraLogic {
 
     private static final Logger log = LoggerFactory.getLogger(CompraCabeceraLogic.class);
+    private final ICompraCabeceraDao compraCabeceraDao;
 
-    @Autowired
-    private ICompraCabeceraDao compraCabeceraDao;
+    @Inject
+    public CompraCabeceraLogic(ICompraCabeceraDao compraCabeceraDao) {
+        this.compraCabeceraDao = compraCabeceraDao;
+    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -46,7 +49,7 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
             log.debug("save {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new SavingException(Constant.ENTITY_NAME);
+            throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -63,7 +66,7 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
             log.debug("update {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new UpdatingException(Constant.ENTITY_NAME);
+            throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -79,7 +82,7 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
 
         } catch (Exception e) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return entity;
@@ -96,7 +99,7 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
             list = compraCabeceraDao.findAll();
         } catch (Exception e) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -116,7 +119,7 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
             list = compraCabeceraDao.findByCriteria(where);
         } catch (Exception e) {
             log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
         return list;
     }
@@ -132,7 +135,7 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
             list = compraCabeceraDao.findByProperty(propertyName, value);
         } catch (Exception e) {
             log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -140,39 +143,39 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
 
     private void checkFields(CompraCabecera entity) {
         if (entity.getValorNeto() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_VALOR_NETO);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_VALOR_NETO);
         }
 
         if ((entity.getValorNeto() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getValorNeto().toString(), 22, 2))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_VALOR_NETO);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_VALOR_NETO);
         }
 
         if (entity.getValorIva() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_VALOR_IVA);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_VALOR_IVA);
         }
 
         if ((entity.getValorIva() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getValorIva().toString(), 22, 2))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_VALOR_IVA);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_VALOR_IVA);
         }
 
         if (entity.getValorTotal() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_VALOR_TOTAL);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_VALOR_TOTAL);
         }
 
         if ((entity.getValorTotal() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getValorTotal().toString(), 11, 0))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_VALOR_TOTAL);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_VALOR_TOTAL);
         }
 
         if (entity.getUsuarioCreacion() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_USUARIO_CREACION);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_USUARIO_CREACION);
         }
 
         if ((entity.getUsuarioCreacion() != null)
                 && !(Utilities.checkWordAndCheckWithlength(entity.getUsuarioCreacion(), 20))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_USUARIO_CREACION);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_USUARIO_CREACION);
         }
     }
 

@@ -47,7 +47,7 @@ public class RegistrarCompraView implements Serializable {
 	private static final String ID_DIALOG_MESSAGES_CATEGORIA = "menCategorias";
 	private static final String ID_DIALOG_MESSAGES_PRODUCTO = "menProductos";
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	private transient HttpSession session;

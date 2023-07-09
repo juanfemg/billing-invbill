@@ -63,7 +63,7 @@ public class DashBoardView implements Serializable {
 	private static final String LABEL_AXIS_Y_CHART = "Total";
 	private static final String REPORTE_CONSULTA_FACTURA = "consultaFactura";
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	@ManagedProperty(value = "#{ReportController}")

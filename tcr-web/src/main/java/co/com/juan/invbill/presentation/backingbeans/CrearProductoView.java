@@ -34,7 +34,7 @@ public class CrearProductoView implements Serializable {
 	private static final long serialVersionUID = 5895645994887623582L;
 	private static final Logger log = LoggerFactory.getLogger(CrearProductoView.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	private Producto producto;

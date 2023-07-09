@@ -23,7 +23,7 @@ public class ClienteAppConverter implements Converter {
 
 	private static final Logger log = LoggerFactory.getLogger(ClienteAppConverter.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private IBusinessDelegate businessDelegate;
 
 	private ClienteApp clienteApp;

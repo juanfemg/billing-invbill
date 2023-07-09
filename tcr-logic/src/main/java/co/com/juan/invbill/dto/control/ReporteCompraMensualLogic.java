@@ -49,7 +49,7 @@ public class ReporteCompraMensualLogic implements IReporteCompraMensualLogic {
 
 		} catch (Exception e) {
 			log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-			throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+			throw new EntityException.FindingException(Constant.ENTITY_NAME);
 		}
 
 		return list;

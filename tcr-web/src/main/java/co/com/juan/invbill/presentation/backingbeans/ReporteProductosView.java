@@ -48,7 +48,7 @@ public class ReporteProductosView implements Serializable {
 	private static final String PROPERTY_NAME_STOCK = "stock";
 	private static final Logger log = LoggerFactory.getLogger(CrearFacturaView.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	@ManagedProperty(value = "#{ReportController}")

@@ -4,15 +4,20 @@ import co.com.juan.invbill.dao.IDevolucionDetalleDao;
 import co.com.juan.invbill.dataaccess.api.HibernateDaoImpl;
 import co.com.juan.invbill.model.DevolucionDetalle;
 import co.com.juan.invbill.model.DevolucionDetalleId;
-import org.springframework.context.annotation.Scope;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+
+import javax.inject.Inject;
 
 /**
  * @author Juan Felipe
  */
-@Scope("singleton")
-@Repository("DevolucionDetalleDao")
+@Repository
 public class DevolucionDetalleDao extends HibernateDaoImpl<DevolucionDetalle, DevolucionDetalleId>
         implements IDevolucionDetalleDao {
 
+    @Inject
+    public DevolucionDetalleDao(SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
 }

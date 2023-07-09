@@ -3,15 +3,20 @@ package co.com.juan.invbill.dao.impl;
 import co.com.juan.invbill.dao.IStockProductoDao;
 import co.com.juan.invbill.dataaccess.api.HibernateDaoImpl;
 import co.com.juan.invbill.model.StockProducto;
-import org.springframework.context.annotation.Scope;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+
+import javax.inject.Inject;
 
 /**
  * @author Juan Felipe
  */
-@Scope("singleton")
-@Repository("StockProductoDao")
+@Repository
 public class StockProductoDao extends HibernateDaoImpl<StockProducto, Integer>
         implements IStockProductoDao {
 
+    @Inject
+    public StockProductoDao(SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
 }

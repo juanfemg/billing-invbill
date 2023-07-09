@@ -32,7 +32,7 @@ public class LeftMenuView implements Serializable {
 	private static final long serialVersionUID = -6336619798090876086L;
 	private static final Logger log = LoggerFactory.getLogger(LeftMenuView.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	private transient MenuModel model;

@@ -7,12 +7,12 @@ import co.com.juan.invbill.model.TipoPeriodo;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -23,9 +23,12 @@ import java.util.List;
 public class TipoPeriodoLogic implements ITipoPeriodoLogic {
 
     private static final Logger log = LoggerFactory.getLogger(TipoPeriodoLogic.class);
+    private final ITipoPeriodoDao tipoPeriodoDao;
 
-    @Autowired
-    private ITipoPeriodoDao tipoPeriodoDao;
+    @Inject
+    public TipoPeriodoLogic(ITipoPeriodoDao tipoPeriodoDao) {
+        this.tipoPeriodoDao = tipoPeriodoDao;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -38,7 +41,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
             list = tipoPeriodoDao.findAll();
         } catch (Exception e) {
             log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new GettingException(EntityException.ALL + Constant.ENTITY_NAME);
+            throw new EntityException.GettingException(EntityException.ALL + Constant.ENTITY_NAME);
         }
 
         return list;
@@ -61,7 +64,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
             log.debug("save {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new SavingException(Constant.ENTITY_NAME);
+            throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -78,7 +81,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
             log.debug("update {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new UpdatingException(Constant.ENTITY_NAME);
+            throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -94,7 +97,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
 
         } catch (Exception e) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return entity;
@@ -114,7 +117,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
             list = tipoPeriodoDao.findByCriteria(where);
         } catch (Exception e) {
             log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
         return list;
     }
@@ -130,7 +133,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
             list = tipoPeriodoDao.findByProperty(propertyName, value);
         } catch (Exception e) {
             log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -138,28 +141,28 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
 
     private void checkFields(TipoPeriodo entity) {
         if (entity.getPeriodo() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_PERIODO);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_PERIODO);
         }
 
         if ((entity.getPeriodo() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getPeriodo(), 45))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_PERIODO);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_PERIODO);
         }
 
         if (entity.getNumeroMeses() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_NUMERO_MESES);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_NUMERO_MESES);
         }
 
         if ((entity.getNumeroMeses() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getNumeroMeses().toString(), 11, 0))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_NUMERO_MESES);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_NUMERO_MESES);
         }
 
         if (entity.getEstado() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_ESTADO);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
         }
 
         if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getEstado().name(), 1))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_ESTADO);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
         }
     }
 

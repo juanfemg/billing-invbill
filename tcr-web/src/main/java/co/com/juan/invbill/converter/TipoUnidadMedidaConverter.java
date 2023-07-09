@@ -23,7 +23,7 @@ public class TipoUnidadMedidaConverter implements Converter {
 
 	private static final Logger log = LoggerFactory.getLogger(TipoUnidadMedidaConverter.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private IBusinessDelegate businessDelegate;
 
 	private TipoUnidadMedida tipoUnidadMedida;

@@ -31,7 +31,7 @@ public class CrearProveedorView implements Serializable {
 	private static final long serialVersionUID = -2214542422972201117L;
 	private static final Logger log = LoggerFactory.getLogger(CrearProveedorView.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	private ProveedorApp proveedorApp;

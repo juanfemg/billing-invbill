@@ -3,14 +3,19 @@ package co.com.juan.invbill.dao.impl;
 import co.com.juan.invbill.dao.IProveedorAppDao;
 import co.com.juan.invbill.dataaccess.api.HibernateDaoImpl;
 import co.com.juan.invbill.model.ProveedorApp;
-import org.springframework.context.annotation.Scope;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+
+import javax.inject.Inject;
 
 /**
  * @author Juan Felipe
  */
-@Scope("singleton")
-@Repository("ProveedorAppDao")
+@Repository
 public class ProveedorAppDao extends HibernateDaoImpl<ProveedorApp, Integer> implements IProveedorAppDao {
 
+    @Inject
+    public ProveedorAppDao(SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
 }

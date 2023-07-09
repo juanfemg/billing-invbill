@@ -2,25 +2,21 @@ package co.com.juan.invbill.control;
 
 import java.util.List;
 
+import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.AppConfig;
 
 /**
  * @author Juan Felipe
- *
  */
 public interface IAppConfigLogic {
 
-	void saveAppConfig(AppConfig entity);
+    void updateAppConfig(AppConfig entity) throws EntityException;
 
-	void updateAppConfig(AppConfig entity);
+    List<AppConfig> getDataAppConfig() throws EntityException;
 
-	AppConfig getAppConfig(String id);
+    List<AppConfig> findByCriteria(Object[] variables, Object[] variablesBetween,
+                                   Object[] variablesBetweenDates) throws EntityException;
 
-	List<AppConfig> getDataAppConfig();
-
-	List<AppConfig> findByCriteria(Object[] variables, Object[] variablesBetween,
-			Object[] variablesBetweenDates);
-
-	List<AppConfig> findByProperty(String propertyName, Object value);
+    List<AppConfig> findByProperty(String propertyName, Object value) throws EntityException;
 
 }

@@ -32,7 +32,7 @@ public class ConsultarDevolucionView implements Serializable {
 	private static final long serialVersionUID = 4670229557589957806L;
 	private static final Logger log = LoggerFactory.getLogger(ConsultarDevolucionView.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	private List<DevolucionCabecera> devolucionCabeceras;

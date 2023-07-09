@@ -35,7 +35,7 @@ public class GestionConfiguracionView implements Serializable {
 	private static final long serialVersionUID = 5778879622123315873L;
 	private static final Logger log = LoggerFactory.getLogger(GestionConfiguracionView.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	private transient PrintService[] printServices;

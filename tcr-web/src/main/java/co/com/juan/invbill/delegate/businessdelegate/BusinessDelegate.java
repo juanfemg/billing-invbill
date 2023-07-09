@@ -5,8 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import co.com.juan.invbill.control.IAppConfigLogic;
@@ -46,13 +44,11 @@ import co.com.juan.invbill.model.ClienteApp;
 import co.com.juan.invbill.model.CompraCabecera;
 import co.com.juan.invbill.model.CompraCabeceraId;
 import co.com.juan.invbill.model.CompraDetalle;
-import co.com.juan.invbill.model.CompraDetalleId;
 import co.com.juan.invbill.model.DevolucionCabecera;
 import co.com.juan.invbill.model.DevolucionDetalle;
 import co.com.juan.invbill.model.DevolucionDetalleId;
 import co.com.juan.invbill.model.FacturaCabecera;
 import co.com.juan.invbill.model.FacturaDetalle;
-import co.com.juan.invbill.model.FacturaDetalleId;
 import co.com.juan.invbill.model.LoginApp;
 import co.com.juan.invbill.model.Producto;
 import co.com.juan.invbill.model.ProveedorApp;
@@ -62,83 +58,68 @@ import co.com.juan.invbill.model.TipoPeriodo;
 import co.com.juan.invbill.model.TipoUnidadMedida;
 import co.com.juan.invbill.model.UsuarioApp;
 import co.com.juan.invbill.util.Encrypt;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
 
 /**
  * @author Juan Felipe
  * 
  */
-@Scope("singleton")
-@Service("BusinessDelegate")
+@Service
+@Transactional
 public class BusinessDelegate implements IBusinessDelegate {
 
-	@Autowired
 	private ILoginAppLogic loginAppLogic;
-
-	@Autowired
 	private IUsuarioAppLogic usuarioAppLogic;
-
-	@Autowired
 	private ICategoriaProductoLogic categoriaProductoLogic;
-
-	@Autowired
 	private IProductoLogic productoLogic;
-
-	@Autowired
 	private IStockProductoLogic stockProductoLogic;
-
-	@Autowired
 	private IFacturaCabeceraLogic facturaCabeceraLogic;
-
-	@Autowired
 	private IFacturaDetalleLogic facturaDetalleLogic;
-
-	@Autowired
 	private IProveedorAppLogic proveedorAppLogic;
-
-	@Autowired
 	private ICompraCabeceraLogic compraCabeceraLogic;
-
-	@Autowired
 	private ICompraDetalleLogic compraDetalleLogic;
-
-	@Autowired
 	private IReporteVentaDiariaLogic reporteVentaDiariaLogic;
-
-	@Autowired
 	private IReporteDevolucionDiariaLogic reporteDevolucionDiariaLogic;
-
-	@Autowired
 	private IReporteCompraDiariaLogic reporteCompraDiariaLogic;
-
-	@Autowired
 	private IDevolucionCabeceraLogic devolucionCabeceraLogic;
-
-	@Autowired
 	private IDevolucionDetalleLogic devolucionDetalleLogic;
-
-	@Autowired
 	private IAppConfigLogic appConfigLogic;
-
-	@Autowired
 	private IReporteVentaMensualLogic reporteVentaMensualLogic;
-
-	@Autowired
 	private IReporteDevolucionMensualLogic reporteDevolucionMensualLogic;
-
-	@Autowired
 	private IReporteCompraMensualLogic reporteCompraMensualLogic;
-
-	@Autowired
 	private IAppMenuLogic appMenuLogic;
-
-	@Autowired
 	private ITipoUnidadMedidaLogic tipoUnidadMedidaLogic;
-
-	@Autowired
 	private ITipoPeriodoLogic tipoPeriodoLogic;
-
-	@Autowired
 	private IClienteAppLogic clienteAppLogic;
+
+	@Inject
+	public BusinessDelegate(ILoginAppLogic loginAppLogic, IUsuarioAppLogic usuarioAppLogic, ICategoriaProductoLogic categoriaProductoLogic, IProductoLogic productoLogic, IStockProductoLogic stockProductoLogic, IFacturaCabeceraLogic facturaCabeceraLogic, IFacturaDetalleLogic facturaDetalleLogic, IProveedorAppLogic proveedorAppLogic, ICompraCabeceraLogic compraCabeceraLogic, ICompraDetalleLogic compraDetalleLogic, IReporteVentaDiariaLogic reporteVentaDiariaLogic, IReporteDevolucionDiariaLogic reporteDevolucionDiariaLogic, IReporteCompraDiariaLogic reporteCompraDiariaLogic, IDevolucionCabeceraLogic devolucionCabeceraLogic, IDevolucionDetalleLogic devolucionDetalleLogic, IAppConfigLogic appConfigLogic, IReporteVentaMensualLogic reporteVentaMensualLogic, IReporteDevolucionMensualLogic reporteDevolucionMensualLogic, IReporteCompraMensualLogic reporteCompraMensualLogic, IAppMenuLogic appMenuLogic, ITipoUnidadMedidaLogic tipoUnidadMedidaLogic, ITipoPeriodoLogic tipoPeriodoLogic, IClienteAppLogic clienteAppLogic) {
+		this.loginAppLogic = loginAppLogic;
+		this.usuarioAppLogic = usuarioAppLogic;
+		this.categoriaProductoLogic = categoriaProductoLogic;
+		this.productoLogic = productoLogic;
+		this.stockProductoLogic = stockProductoLogic;
+		this.facturaCabeceraLogic = facturaCabeceraLogic;
+		this.facturaDetalleLogic = facturaDetalleLogic;
+		this.proveedorAppLogic = proveedorAppLogic;
+		this.compraCabeceraLogic = compraCabeceraLogic;
+		this.compraDetalleLogic = compraDetalleLogic;
+		this.reporteVentaDiariaLogic = reporteVentaDiariaLogic;
+		this.reporteDevolucionDiariaLogic = reporteDevolucionDiariaLogic;
+		this.reporteCompraDiariaLogic = reporteCompraDiariaLogic;
+		this.devolucionCabeceraLogic = devolucionCabeceraLogic;
+		this.devolucionDetalleLogic = devolucionDetalleLogic;
+		this.appConfigLogic = appConfigLogic;
+		this.reporteVentaMensualLogic = reporteVentaMensualLogic;
+		this.reporteDevolucionMensualLogic = reporteDevolucionMensualLogic;
+		this.reporteCompraMensualLogic = reporteCompraMensualLogic;
+		this.appMenuLogic = appMenuLogic;
+		this.tipoUnidadMedidaLogic = tipoUnidadMedidaLogic;
+		this.tipoPeriodoLogic = tipoPeriodoLogic;
+		this.clienteAppLogic = clienteAppLogic;
+	}
 
 	@Override
 	public void save(LoginApp entity) {
@@ -204,11 +185,6 @@ public class BusinessDelegate implements IBusinessDelegate {
 	}
 
 	@Override
-	public List<CategoriaProducto> getCategoriasProducto() {
-		return categoriaProductoLogic.getCategoriaProducto();
-	}
-
-	@Override
 	public List<CategoriaProducto> getCategoriasProductoSortByCategoria() {
 		return categoriaProductoLogic.findPageCategoriaProducto("categoria", true);
 	}
@@ -248,11 +224,6 @@ public class BusinessDelegate implements IBusinessDelegate {
 	}
 
 	@Override
-	public StockProducto findStockProductoByID(Integer id) {
-		return stockProductoLogic.getStockProducto(id);
-	}
-
-	@Override
 	public void update(StockProducto entity) {
 		stockProductoLogic.updateStockProducto(entity);
 	}
@@ -270,21 +241,6 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public Object getMaximoStockProductoByPropertyName(String propertyName) {
 		return stockProductoLogic.findMaxObjectByCriteria(propertyName);
-	}
-
-	@Override
-	public Object getMinimoStockProductoByPropertyName(String propertyName) {
-		return stockProductoLogic.findMinObjectByCriteria(propertyName);
-	}
-
-	@Override
-	public Object getPromedioStockProductoByPropertyName(String propertyName) {
-		return stockProductoLogic.findAvgObjectByCriteria(propertyName);
-	}
-
-	@Override
-	public List<Producto> getProductosByCategoriaProducto(CategoriaProducto categoriaProducto) {
-		return productoLogic.findByProperty("categoriaProducto", categoriaProducto);
 	}
 
 	@Override
@@ -361,33 +317,13 @@ public class BusinessDelegate implements IBusinessDelegate {
 	}
 
 	@Override
-	public Object getPromedioFacturaCabeceraByPropertyName(String propertyName) {
-		return facturaCabeceraLogic.findAvgObjectByCriteria(propertyName);
-	}
-
-	@Override
 	public void save(FacturaDetalle entity) {
 		facturaDetalleLogic.saveFacturaDetalle(entity);
 	}
 
 	@Override
-	public FacturaDetalle findFacturaDetalleByID(FacturaDetalleId id) {
-		return facturaDetalleLogic.getFacturaDetalle(id);
-	}
-
-	@Override
 	public void update(FacturaDetalle entity) {
 		facturaDetalleLogic.updateFacturaDetalle(entity);
-	}
-
-	@Override
-	public List<FacturaDetalle> getFacturaDetalles() {
-		return facturaDetalleLogic.getFacturaDetalle();
-	}
-
-	@Override
-	public List<FacturaDetalle> getFacturaDetallesByFactura(FacturaCabecera facturaCabecera) {
-		return facturaDetalleLogic.findByProperty("facturaCabecera", facturaCabecera);
 	}
 
 	@Override
@@ -461,18 +397,8 @@ public class BusinessDelegate implements IBusinessDelegate {
 	}
 
 	@Override
-	public CompraDetalle findCompraDetalleByID(CompraDetalleId id) {
-		return compraDetalleLogic.getCompraDetalle(id);
-	}
-
-	@Override
 	public void update(CompraDetalle entity) {
 		compraDetalleLogic.updateCompraDetalle(entity);
-	}
-
-	@Override
-	public List<CompraDetalle> getCompraDetalles() {
-		return compraDetalleLogic.getCompraDetalle();
 	}
 
 	@Override
@@ -566,21 +492,6 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public void update(DevolucionDetalle entity) {
 		devolucionDetalleLogic.updateDevolucionDetalle(entity);
-	}
-
-	@Override
-	public List<DevolucionDetalle> getDevolucionDetalles() {
-		return devolucionDetalleLogic.getDevolucionDetalle();
-	}
-
-	@Override
-	public void save(AppConfig entity) {
-		appConfigLogic.saveAppConfig(entity);
-	}
-
-	@Override
-	public AppConfig findAppConfigByID(String id) {
-		return appConfigLogic.getAppConfig(id);
 	}
 
 	@Override
@@ -699,20 +610,6 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public List<ClienteApp> getClientes() {
 		return clienteAppLogic.getClienteApp();
-	}
-
-	@Override
-	public List<Producto> getReporteProductosByCriteria(Producto entity) {
-		List<Object> variables = new ArrayList<>();
-
-		if (entity.getIdProducto() != null) {
-			variables.add("idPrducto");
-			variables.add(true);
-			variables.add(entity.getIdProducto());
-			variables.add("in");
-		}
-
-		return productoLogic.findByCriteria(variables.toArray(), null, null);
 	}
 
 }

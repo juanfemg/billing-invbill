@@ -47,7 +47,7 @@ public class ReporteVentasView implements Serializable {
 	private static final Integer NUMERO_MESES_ANIO = new Integer(12);
 	private static final Logger log = LoggerFactory.getLogger(ReporteVentasView.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	@ManagedProperty(value = "#{ReportController}")

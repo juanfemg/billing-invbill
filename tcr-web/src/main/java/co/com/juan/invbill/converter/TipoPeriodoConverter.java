@@ -23,7 +23,7 @@ public class TipoPeriodoConverter implements Converter {
 
 	private static final Logger log = LoggerFactory.getLogger(TipoPeriodoConverter.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private IBusinessDelegate businessDelegate;
 
 	private TipoPeriodo tipoPeriodo;

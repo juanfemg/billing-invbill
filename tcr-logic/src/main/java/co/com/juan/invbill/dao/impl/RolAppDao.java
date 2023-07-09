@@ -3,15 +3,20 @@ package co.com.juan.invbill.dao.impl;
 import co.com.juan.invbill.dao.IRolAppDao;
 import co.com.juan.invbill.dataaccess.api.HibernateDaoImpl;
 import co.com.juan.invbill.model.RolApp;
-import org.springframework.context.annotation.Scope;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+
+import javax.inject.Inject;
 
 /**
  * @author Juan Felipe
  */
-@Scope("singleton")
-@Repository("RolAppDao")
+@Repository
 public class RolAppDao extends HibernateDaoImpl<RolApp, Integer> implements
         IRolAppDao {
 
+    @Inject
+    public RolAppDao(SessionFactory sessionFactory) {
+        super(sessionFactory);
+    }
 }

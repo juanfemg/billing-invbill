@@ -1,6 +1,7 @@
 package co.com.juan.invbill.dto.dao;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
 
 import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
@@ -33,6 +34,11 @@ public class ReporteVentaDiariaDao extends HibernateDaoImpl<ReporteVentaDiaria, 
 
 	@Resource
 	private SessionFactory sessionFactory;
+
+	@Inject
+	public ReporteVentaDiariaDao(SessionFactory sessionFactory) {
+		super(sessionFactory);
+	}
 
 	public static IReporteVentaDiariaDao getFromApplicationContext(ApplicationContext ctx) {
 		return (IReporteVentaDiariaDao) ctx.getBean("ReporteVentaDiariaDao");

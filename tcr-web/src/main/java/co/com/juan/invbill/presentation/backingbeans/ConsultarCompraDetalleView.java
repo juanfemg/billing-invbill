@@ -24,7 +24,7 @@ public class ConsultarCompraDetalleView implements Serializable {
 
 	private static final long serialVersionUID = -6989714907754566718L;
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	private CompraCabecera compraCabecera;

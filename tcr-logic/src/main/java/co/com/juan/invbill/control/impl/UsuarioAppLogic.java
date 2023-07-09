@@ -7,12 +7,12 @@ import co.com.juan.invbill.model.UsuarioApp;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -25,9 +25,12 @@ import java.util.List;
 public class UsuarioAppLogic implements IUsuarioAppLogic {
 
 	private static final Logger log = LoggerFactory.getLogger(UsuarioAppLogic.class);
+	private final IUsuarioAppDao usuarioAppDao;
 
-	@Autowired
-	private IUsuarioAppDao usuarioAppDao;
+	@Inject
+	public UsuarioAppLogic(IUsuarioAppDao usuarioAppDao) {
+		this.usuarioAppDao = usuarioAppDao;
+	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
@@ -46,7 +49,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 			log.debug("save {} successful", Constant.ENTITY_NAME);
 		} catch (Exception e) {
 			log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-			throw new EntityException().new SavingException(Constant.ENTITY_NAME);
+			throw new EntityException.SavingException(Constant.ENTITY_NAME);
 		}
 	}
 
@@ -63,7 +66,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 			log.debug("update {} successful", Constant.ENTITY_NAME);
 		} catch (Exception e) {
 			log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-			throw new EntityException().new UpdatingException(Constant.ENTITY_NAME);
+			throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
 		}
 	}
 
@@ -79,7 +82,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 
 		} catch (Exception e) {
 			log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-			throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+			throw new EntityException.FindingException(Constant.ENTITY_NAME);
 		}
 
 		return entity;
@@ -99,7 +102,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 			list = usuarioAppDao.findByCriteria(where);
 		} catch (Exception e) {
 			log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-			throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+			throw new EntityException.FindingException(Constant.ENTITY_NAME);
 		}
 		return list;
 	}
@@ -115,7 +118,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 			list = usuarioAppDao.findByProperty(propertyName, value);
 		} catch (Exception e) {
 			log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-			throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+			throw new EntityException.FindingException(Constant.ENTITY_NAME);
 		}
 
 		return list;
@@ -123,44 +126,44 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 
 	private void checkFields(UsuarioApp entity) {
 		if (entity.getIdUsuarioApp() == null) {
-			throw new EntityException().new EmptyFieldException(Constant.FIELD_ID_ENTITY);
+			throw new EntityException.EmptyFieldException(Constant.FIELD_ID_ENTITY);
 		}
 
 		if ((entity.getIdUsuarioApp() != null)
 				&& !(Utilities.checkWordAndCheckWithlength(entity.getIdUsuarioApp(), 20))) {
-			throw new EntityException().new NotValidFormatException(Constant.FIELD_ID_ENTITY);
+			throw new EntityException.NotValidFormatException(Constant.FIELD_ID_ENTITY);
 		}
 
 		if (entity.getNombre() == null) {
-			throw new EntityException().new EmptyFieldException(Constant.FIELD_NOMBRE);
+			throw new EntityException.EmptyFieldException(Constant.FIELD_NOMBRE);
 		}
 
 		if ((entity.getNombre() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getNombre(), 50))) {
-			throw new EntityException().new NotValidFormatException(Constant.FIELD_NOMBRE);
+			throw new EntityException.NotValidFormatException(Constant.FIELD_NOMBRE);
 		}
 
 		if (entity.getPassword() == null) {
-			throw new EntityException().new EmptyFieldException(Constant.FIELD_PASSW);
+			throw new EntityException.EmptyFieldException(Constant.FIELD_PASSW);
 		}
 
 		if ((entity.getPassword() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getPassword(), 45))) {
-			throw new EntityException().new NotValidFormatException(Constant.FIELD_PASSW);
+			throw new EntityException.NotValidFormatException(Constant.FIELD_PASSW);
 		}
 
 		if (entity.getEstado() == null) {
-			throw new EntityException().new EmptyFieldException(Constant.FIELD_ESTADO);
+			throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
 		}
 
 		if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getEstado().name(), 1))) {
-			throw new EntityException().new NotValidFormatException(Constant.FIELD_ESTADO);
+			throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
 		}
 
 		if (entity.getRolApp() == null) {
-			throw new EntityException().new EmptyFieldException(Constant.FIELD_ROL);
+			throw new EntityException.EmptyFieldException(Constant.FIELD_ROL);
 		}
 
 		if ((entity.getRolApp() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getRolApp().getRol(), 45))) {
-			throw new EntityException().new NotValidFormatException(Constant.FIELD_ROL);
+			throw new EntityException.NotValidFormatException(Constant.FIELD_ROL);
 		}
 	}
 

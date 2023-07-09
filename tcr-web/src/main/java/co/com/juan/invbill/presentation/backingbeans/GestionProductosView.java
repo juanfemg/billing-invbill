@@ -35,7 +35,7 @@ public class GestionProductosView implements Serializable {
 	private static final Logger log = LoggerFactory.getLogger(GestionProductosView.class);
 	private static final String ID_DIALOG_MESSAGES = "menMod";
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	private StockProducto stockProductoMod;

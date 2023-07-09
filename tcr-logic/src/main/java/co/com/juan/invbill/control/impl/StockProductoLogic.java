@@ -7,12 +7,12 @@ import co.com.juan.invbill.model.StockProducto;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -24,9 +24,12 @@ import java.util.List;
 public class StockProductoLogic implements IStockProductoLogic {
 
     private static final Logger log = LoggerFactory.getLogger(StockProductoLogic.class);
+    private final IStockProductoDao stockProductoDao;
 
-    @Autowired
-    private IStockProductoDao stockProductoDao;
+    @Inject
+    public StockProductoLogic(IStockProductoDao stockProductoDao) {
+        this.stockProductoDao = stockProductoDao;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -39,7 +42,7 @@ public class StockProductoLogic implements IStockProductoLogic {
             list = stockProductoDao.findAll();
         } catch (Exception e) {
             log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new GettingException(EntityException.ALL + Constant.ENTITY_NAME);
+            throw new EntityException.GettingException(EntityException.ALL + Constant.ENTITY_NAME);
         }
 
         return list;
@@ -58,7 +61,7 @@ public class StockProductoLogic implements IStockProductoLogic {
             log.debug("save {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new SavingException(Constant.ENTITY_NAME);
+            throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -75,7 +78,7 @@ public class StockProductoLogic implements IStockProductoLogic {
             log.debug("update {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new UpdatingException(Constant.ENTITY_NAME);
+            throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -91,7 +94,7 @@ public class StockProductoLogic implements IStockProductoLogic {
 
         } catch (Exception e) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return entity;
@@ -111,7 +114,7 @@ public class StockProductoLogic implements IStockProductoLogic {
             list = stockProductoDao.findByCriteria(where);
         } catch (Exception e) {
             log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
         return list;
     }
@@ -127,7 +130,7 @@ public class StockProductoLogic implements IStockProductoLogic {
             list = stockProductoDao.findByProperty(propertyName, value);
         } catch (Exception e) {
             log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -144,7 +147,7 @@ public class StockProductoLogic implements IStockProductoLogic {
             entity = stockProductoDao.findObjectByProperty(propertyName, value);
         } catch (Exception e) {
             log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return entity;
@@ -152,12 +155,12 @@ public class StockProductoLogic implements IStockProductoLogic {
 
     private void checkFields(StockProducto entity) {
         if (entity.getProducto() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_PRODUCTO);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_PRODUCTO);
         }
 
         if ((entity.getProducto() != null)
                 && !(Utilities.checkWordAndCheckWithlength(entity.getProducto().getProducto(), 50))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_PRODUCTO);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_PRODUCTO);
         }
     }
 
@@ -173,7 +176,7 @@ public class StockProductoLogic implements IStockProductoLogic {
 
         } catch (Exception e) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return object;
@@ -191,7 +194,7 @@ public class StockProductoLogic implements IStockProductoLogic {
 
         } catch (Exception e) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return object;
@@ -209,7 +212,7 @@ public class StockProductoLogic implements IStockProductoLogic {
 
         } catch (Exception e) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return object;

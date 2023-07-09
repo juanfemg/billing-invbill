@@ -23,7 +23,7 @@ public class ProductoConverter implements Converter {
 
 	private static final Logger log = LoggerFactory.getLogger(ProductoConverter.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private IBusinessDelegate businessDelegate;
 
 	private Producto producto;

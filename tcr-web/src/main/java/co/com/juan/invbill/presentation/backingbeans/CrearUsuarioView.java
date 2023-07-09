@@ -28,7 +28,7 @@ public class CrearUsuarioView implements Serializable {
 	private static final long serialVersionUID = -1691288731051059695L;
 	private static final Logger log = LoggerFactory.getLogger(CrearUsuarioView.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	private UsuarioApp usuarioApp;

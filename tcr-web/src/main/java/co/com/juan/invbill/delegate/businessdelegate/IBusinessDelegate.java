@@ -1,270 +1,157 @@
 package co.com.juan.invbill.delegate.businessdelegate;
 
+import co.com.juan.invbill.dto.*;
+import co.com.juan.invbill.model.*;
+
 import java.util.List;
 
-import co.com.juan.invbill.dto.ReporteCompraDiaria;
-import co.com.juan.invbill.dto.ReporteCompraMensual;
-import co.com.juan.invbill.dto.ReporteDevolucionDiaria;
-import co.com.juan.invbill.dto.ReporteDevolucionMensual;
-import co.com.juan.invbill.dto.ReporteVentaDiaria;
-import co.com.juan.invbill.dto.ReporteVentaMensual;
-import co.com.juan.invbill.model.AppConfig;
-import co.com.juan.invbill.model.AppMenu;
-import co.com.juan.invbill.model.CategoriaProducto;
-import co.com.juan.invbill.model.ClienteApp;
-import co.com.juan.invbill.model.CompraCabecera;
-import co.com.juan.invbill.model.CompraCabeceraId;
-import co.com.juan.invbill.model.CompraDetalle;
-import co.com.juan.invbill.model.CompraDetalleId;
-import co.com.juan.invbill.model.DevolucionCabecera;
-import co.com.juan.invbill.model.DevolucionDetalle;
-import co.com.juan.invbill.model.FacturaCabecera;
-import co.com.juan.invbill.model.FacturaDetalle;
-import co.com.juan.invbill.model.FacturaDetalleId;
-import co.com.juan.invbill.model.LoginApp;
-import co.com.juan.invbill.model.Producto;
-import co.com.juan.invbill.model.ProveedorApp;
-import co.com.juan.invbill.model.StockProducto;
-import co.com.juan.invbill.model.TipoPeriodo;
-import co.com.juan.invbill.model.TipoUnidadMedida;
-import co.com.juan.invbill.model.UsuarioApp;
-
 /**
- * Use a Business Delegate to reduce coupling between presentation-tier clients
- * and business services. The Business Delegate hides the underlying
- * implementation details of the business service, such as lookup and access
- * details of the EJB architecture.
- * 
- * The Business Delegate acts as a client-side business abstraction; it provides
- * an abstraction for, and thus hides, the implementation of the business
- * services. Using a Business Delegate reduces the coupling between
- * presentation-tier clients and the system's business services. Depending on
- * the implementation strategy, the Business Delegate may shield clients from
- * possible volatility in the implementation of the business service API.
- * Potentially, this reduces the number of changes that must be made to the
- * presentation-tier client code when the business service API or its underlying
- * implementation changes.
- * 
- * However, interface methods in the Business Delegate may still require
- * modification if the underlying business service API changes. Admittedly,
- * though, it is more likely that changes will be made to the business service
- * rather than to the Business Delegate.
- * 
- * Often, developers are skeptical when a design goal such as abstracting the
- * business layer causes additional upfront work in return for future gains.
- * However, using this pattern or its strategies results in only a small amount
- * of additional upfront work and provides considerable benefits. The main
- * benefit is hiding the details of the underlying service. For example, the
- * client can become transparent to naming and lookup services. The Business
- * Delegate also handles the exceptions from the business services, such as
- * java.rmi.Remote exceptions, Java Messages Service (JMS) exceptions and so on.
- * The Business Delegate may intercept such service level exceptions and
- * generate application level exceptions instead. Application level exceptions
- * are easier to handle by the clients, and may be user friendly. The Business
- * Delegate may also transparently perform any retry or recovery operations
- * necessary in the event of a service failure without exposing the client to
- * the problem until it is determined that the problem is not resolvable. These
- * gains present a compelling reason to use the pattern.
- * 
- * Another benefit is that the delegate may cache results and references to
- * remote business services. Caching can significantly improve performance,
- * because it limits unnecessary and potentially costly round trips over the
- * network.
- * 
- * A Business Delegate uses a component called the Lookup Service. The Lookup
- * Service is responsible for hiding the underlying implementation details of
- * the business service lookup code. The Lookup Service may be written as part
- * of the Delegate, but we recommend that it be implemented as a separate
- * component, as outlined in the Service Locator pattern (See "Service Locator"
- * on page 368.)
- * 
- * When the Business Delegate is used with a Session Facade, typically there is
- * a one-to-one relationship between the two. This one-to-one relationship
- * exists because logic that might have been encapsulated in a Business Delegate
- * relating to its interaction with multiple business services (creating a
- * one-to-many relationship) will often be factored back into a Session Facade.
- * 
- * Finally, it should be noted that this pattern could be used to reduce
- * coupling between other tiers, not simply the presentation and the business
- * tiers.
- * 
  * @author Juan Felipe
- * 
  */
 public interface IBusinessDelegate {
 
-	public void save(LoginApp entity);
+    void save(LoginApp entity);
 
-	public LoginApp findLoginByID(String id);
+    LoginApp findLoginByID(String id);
 
-	public void update(LoginApp entity);
+    void update(LoginApp entity);
 
-	public void save(UsuarioApp entity);
+    void save(UsuarioApp entity);
 
-	public UsuarioApp findUsuarioByID(String id);
+    UsuarioApp findUsuarioByID(String id);
 
-	public void update(UsuarioApp entity);
+    void update(UsuarioApp entity);
 
-	public void save(CategoriaProducto entity);
+    void save(CategoriaProducto entity);
 
-	public CategoriaProducto findCategoriaByID(Integer id);
+    CategoriaProducto findCategoriaByID(Integer id);
 
-	public void update(CategoriaProducto entity);
+    void update(CategoriaProducto entity);
 
-	public List<CategoriaProducto> getCategoriasProducto();
+    List<CategoriaProducto> getCategoriasProductoSortByCategoria();
 
-	public List<CategoriaProducto> getCategoriasProductoSortByCategoria();
+    void save(Producto entity);
 
-	public void save(Producto entity);
+    Producto findProductoByID(Integer id);
 
-	public Producto findProductoByID(Integer id);
+    void update(Producto entity);
 
-	public void update(Producto entity);
+    List<Producto> getProductos();
 
-	public List<Producto> getProductos();
+    void save(StockProducto entity);
 
-	public void save(StockProducto entity);
+    void update(StockProducto entity);
 
-	public StockProducto findStockProductoByID(Integer id);
+    List<StockProducto> getStockProductos();
 
-	public void update(StockProducto entity);
+    StockProducto getStockProductoByProducto(Producto producto);
 
-	public List<StockProducto> getStockProductos();
+    Object getMaximoStockProductoByPropertyName(String propertyName);
 
-	public StockProducto getStockProductoByProducto(Producto producto);
+    List<Producto> getProductosByCategoriaProductoSortByProducto(CategoriaProducto categoriaProducto);
 
-	public Object getMaximoStockProductoByPropertyName(String propertyName);
+    List<Producto> getProductosByCategoriasProducto(List<CategoriaProducto> categoriasProducto);
 
-	public Object getMinimoStockProductoByPropertyName(String propertyName);
+    void save(FacturaCabecera entity);
 
-	public Object getPromedioStockProductoByPropertyName(String propertyName);
+    FacturaCabecera findFacturaCabeceraByID(Integer id);
 
-	public List<Producto> getProductosByCategoriaProducto(CategoriaProducto categoriaProducto);
+    void update(FacturaCabecera entity);
 
-	public List<Producto> getProductosByCategoriaProductoSortByProducto(CategoriaProducto categoriaProducto);
+    List<FacturaCabecera> getFacturaCabeceras();
 
-	public List<Producto> getProductosByCategoriasProducto(List<CategoriaProducto> categoriasProducto);
+    List<FacturaCabecera> getFacturaCabecerasByCriteria(FacturaCabecera entity);
 
-	public void save(FacturaCabecera entity);
+    Object getMaximaFacturaCabeceraByPropertyName(String propertyName);
 
-	public FacturaCabecera findFacturaCabeceraByID(Integer id);
+    Object getMinimaFacturaCabeceraByPropertyName(String propertyName);
 
-	public void update(FacturaCabecera entity);
+    void save(FacturaDetalle entity);
 
-	public List<FacturaCabecera> getFacturaCabeceras();
+    void update(FacturaDetalle entity);
 
-	public List<FacturaCabecera> getFacturaCabecerasByCriteria(FacturaCabecera entity);
+    void save(ProveedorApp entity);
 
-	public Object getMaximaFacturaCabeceraByPropertyName(String propertyName);
+    ProveedorApp findProveedorByID(Integer id);
 
-	public Object getMinimaFacturaCabeceraByPropertyName(String propertyName);
+    void update(ProveedorApp entity);
 
-	public Object getPromedioFacturaCabeceraByPropertyName(String propertyName);
+    List<ProveedorApp> getProveedores();
 
-	public void save(FacturaDetalle entity);
+    void save(CompraCabecera entity);
 
-	public FacturaDetalle findFacturaDetalleByID(FacturaDetalleId id);
+    CompraCabecera findCompraCabeceraByID(CompraCabeceraId id);
 
-	public void update(FacturaDetalle entity);
+    void update(CompraCabecera entity);
 
-	public List<FacturaDetalle> getFacturaDetalles();
+    List<CompraCabecera> getCompraCabeceras();
 
-	public List<FacturaDetalle> getFacturaDetallesByFactura(FacturaCabecera facturaCabecera);
+    List<CompraCabecera> getCompraCabeceras(CompraCabeceraId id);
 
-	public void save(ProveedorApp entity);
+    void save(CompraDetalle entity);
 
-	public ProveedorApp findProveedorByID(Integer id);
+    void update(CompraDetalle entity);
 
-	public void update(ProveedorApp entity);
+    ReporteVentaDiaria getReporteVentaDiaria();
 
-	public List<ProveedorApp> getProveedores();
+    ReporteDevolucionDiaria getReporteDevolucionDiaria();
 
-	public void save(CompraCabecera entity);
+    ReporteCompraDiaria getReporteCompraDiaria();
 
-	public CompraCabecera findCompraCabeceraByID(CompraCabeceraId id);
+    void save(DevolucionCabecera entity);
 
-	public void update(CompraCabecera entity);
+    DevolucionCabecera findDevolucionCabeceraByID(Integer id);
 
-	public List<CompraCabecera> getCompraCabeceras();
+    void update(DevolucionCabecera entity);
 
-	public List<CompraCabecera> getCompraCabeceras(CompraCabeceraId id);
+    List<DevolucionCabecera> getDevolucionCabeceras();
 
-	public void save(CompraDetalle entity);
+    List<DevolucionCabecera> getDevolucionCabecerasByCriteria(DevolucionCabecera entity);
 
-	public CompraDetalle findCompraDetalleByID(CompraDetalleId id);
+    void save(DevolucionDetalle entity);
 
-	public void update(CompraDetalle entity);
+    DevolucionDetalle findDevolucionDetalleByID(Integer idFactura, Integer idProducto);
 
-	public List<CompraDetalle> getCompraDetalles();
+    void update(DevolucionDetalle entity);
 
-	public ReporteVentaDiaria getReporteVentaDiaria();
+    void update(AppConfig entity);
 
-	public ReporteDevolucionDiaria getReporteDevolucionDiaria();
+    List<AppConfig> getAppConfigs();
 
-	public ReporteCompraDiaria getReporteCompraDiaria();
+    List<ReporteVentaMensual> getReporteVentaMensual();
 
-	public void save(DevolucionCabecera entity);
+    List<ReporteDevolucionMensual> getReporteDevolucionMensual();
 
-	public DevolucionCabecera findDevolucionCabeceraByID(Integer id);
+    List<ReporteCompraMensual> getReporteCompraMensual();
 
-	public void update(DevolucionCabecera entity);
+    List<AppMenu> getAppMenus();
 
-	public List<DevolucionCabecera> getDevolucionCabeceras();
+    List<CompraDetalle> findCompraDetalleByProducto(Producto producto);
 
-	public List<DevolucionCabecera> getDevolucionCabecerasByCriteria(DevolucionCabecera entity);
+    List<FacturaDetalle> getFacturaDetalleDevolucionByIdFactura(Integer idFactura);
 
-	public void save(DevolucionDetalle entity);
+    void save(TipoUnidadMedida entity);
 
-	public DevolucionDetalle findDevolucionDetalleByID(Integer idFactura, Integer idProducto);
+    TipoUnidadMedida findTipoUnidadMedidaByID(Integer id);
 
-	public void update(DevolucionDetalle entity);
+    void update(TipoUnidadMedida entity);
 
-	public List<DevolucionDetalle> getDevolucionDetalles();
+    List<TipoUnidadMedida> getTiposUnidadMedida();
 
-	public void save(AppConfig entity);
+    void save(TipoPeriodo entity);
 
-	public AppConfig findAppConfigByID(String id);
+    TipoPeriodo findTipoPeriodoByID(Integer id);
 
-	public void update(AppConfig entity);
+    void update(TipoPeriodo entity);
 
-	public List<AppConfig> getAppConfigs();
+    List<TipoPeriodo> getTiposPeriodo();
 
-	public List<ReporteVentaMensual> getReporteVentaMensual();
+    void save(ClienteApp entity);
 
-	public List<ReporteDevolucionMensual> getReporteDevolucionMensual();
+    ClienteApp findClienteByID(Integer id);
 
-	public List<ReporteCompraMensual> getReporteCompraMensual();
+    void update(ClienteApp entity);
 
-	public List<AppMenu> getAppMenus();
-
-	public List<CompraDetalle> findCompraDetalleByProducto(Producto producto);
-
-	public List<FacturaDetalle> getFacturaDetalleDevolucionByIdFactura(Integer idFactura);
-
-	public void save(TipoUnidadMedida entity);
-
-	public TipoUnidadMedida findTipoUnidadMedidaByID(Integer id);
-
-	public void update(TipoUnidadMedida entity);
-
-	public List<TipoUnidadMedida> getTiposUnidadMedida();
-
-	public void save(TipoPeriodo entity);
-
-	public TipoPeriodo findTipoPeriodoByID(Integer id);
-
-	public void update(TipoPeriodo entity);
-
-	public List<TipoPeriodo> getTiposPeriodo();
-
-	public void save(ClienteApp entity);
-
-	public ClienteApp findClienteByID(Integer id);
-
-	public void update(ClienteApp entity);
-
-	public List<ClienteApp> getClientes();
-
-	public List<Producto> getReporteProductosByCriteria(Producto entity);
+    List<ClienteApp> getClientes();
 
 }

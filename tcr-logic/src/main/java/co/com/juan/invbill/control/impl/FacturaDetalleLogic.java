@@ -8,12 +8,12 @@ import co.com.juan.invbill.model.FacturaDetalleId;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -26,9 +26,12 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
 
     private static final Logger log = LoggerFactory.getLogger(FacturaDetalleLogic.class);
     private static final String DETALLE_FACTURA_DEVOLUCION = "SPDetalleFacturaDevolucion";
+    private final IFacturaDetalleDao facturaDetalleDao;
 
-    @Autowired
-    private IFacturaDetalleDao facturaDetalleDao;
+    @Inject
+    public FacturaDetalleLogic(IFacturaDetalleDao facturaDetalleDao) {
+        this.facturaDetalleDao = facturaDetalleDao;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -41,7 +44,7 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
             list = facturaDetalleDao.findAll();
         } catch (Exception e) {
             log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new GettingException(EntityException.ALL + Constant.ENTITY_NAME);
+            throw new EntityException.GettingException(EntityException.ALL + Constant.ENTITY_NAME);
         }
 
         return list;
@@ -64,7 +67,7 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
             log.debug("save {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new SavingException(Constant.ENTITY_NAME);
+            throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -81,7 +84,7 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
             log.debug("update {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new UpdatingException(Constant.ENTITY_NAME);
+            throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -97,7 +100,7 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
 
         } catch (Exception e) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return entity;
@@ -117,7 +120,7 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
             list = facturaDetalleDao.findByCriteria(where);
         } catch (Exception e) {
             log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
         return list;
     }
@@ -133,7 +136,7 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
             list = facturaDetalleDao.findByProperty(propertyName, value);
         } catch (Exception e) {
             log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -141,30 +144,30 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
 
     private void checkFields(FacturaDetalle entity) {
         if (entity.getCantidad() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_CANTIDAD);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_CANTIDAD);
         }
 
         if ((entity.getCantidad() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getCantidad().toString(), 11, 0))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_CANTIDAD);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_CANTIDAD);
         }
 
         if (entity.getPrecioVenta() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_PRECIO_VENTA);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_PRECIO_VENTA);
         }
 
         if ((entity.getPrecioVenta() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getPrecioVenta().toString(), 22, 2))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_PRECIO_VENTA);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_PRECIO_VENTA);
         }
 
         if (entity.getValorIva() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_VALOR_IVA);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_VALOR_IVA);
         }
 
         if ((entity.getValorIva() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getValorIva().toString(), 22, 2))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_VALOR_IVA);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_VALOR_IVA);
         }
     }
 
@@ -180,7 +183,7 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
 
         } catch (Exception e) {
             log.error("get {} by IdFactura failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return list;

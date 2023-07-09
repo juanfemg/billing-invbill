@@ -33,7 +33,7 @@ public class ConsultarCompraView implements Serializable {
 	private static final long serialVersionUID = 4670229557589957806L;
 	private static final Logger log = LoggerFactory.getLogger(ConsultarCompraView.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	private List<CompraCabecera> compraCabeceras;

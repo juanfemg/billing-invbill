@@ -30,7 +30,7 @@ public class CrearCategoriaView implements Serializable {
 	private static final Logger log = LoggerFactory
 			.getLogger(CrearCategoriaView.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	private CategoriaProducto categoriaProducto;

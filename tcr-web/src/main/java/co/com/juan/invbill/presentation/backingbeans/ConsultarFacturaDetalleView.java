@@ -34,7 +34,7 @@ public class ConsultarFacturaDetalleView implements Serializable {
 	private static final long serialVersionUID = -6989714907754566718L;
 	private static final Logger log = LoggerFactory.getLogger(ConsultarFacturaDetalleView.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	private FacturaCabecera facturaCabecera;

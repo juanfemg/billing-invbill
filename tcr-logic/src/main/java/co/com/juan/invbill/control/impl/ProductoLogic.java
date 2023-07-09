@@ -7,12 +7,12 @@ import co.com.juan.invbill.model.Producto;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,9 +24,12 @@ import java.util.List;
 public class ProductoLogic implements IProductoLogic {
 
     private static final Logger log = LoggerFactory.getLogger(ProductoLogic.class);
+    private final IProductoDao productoDao;
 
-    @Autowired
-    private IProductoDao productoDao;
+    @Inject
+    public ProductoLogic(IProductoDao productoDao) {
+        this.productoDao = productoDao;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -39,7 +42,7 @@ public class ProductoLogic implements IProductoLogic {
             list = productoDao.findAll();
         } catch (Exception e) {
             log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new GettingException(EntityException.ALL + Constant.ENTITY_NAME);
+            throw new EntityException.GettingException(EntityException.ALL + Constant.ENTITY_NAME);
         }
 
         return list;
@@ -58,7 +61,7 @@ public class ProductoLogic implements IProductoLogic {
             log.debug("save {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new SavingException(Constant.ENTITY_NAME);
+            throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -75,7 +78,7 @@ public class ProductoLogic implements IProductoLogic {
             log.debug("update {} successful", Constant.ENTITY_NAME);
         } catch (Exception e) {
             log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new UpdatingException(Constant.ENTITY_NAME);
+            throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
 
@@ -91,7 +94,7 @@ public class ProductoLogic implements IProductoLogic {
 
         } catch (Exception e) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return entity;
@@ -111,7 +114,7 @@ public class ProductoLogic implements IProductoLogic {
             list = productoDao.findByCriteria(where);
         } catch (Exception e) {
             log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
         return list;
     }
@@ -127,7 +130,7 @@ public class ProductoLogic implements IProductoLogic {
             list = productoDao.findByProperty(propertyName, value);
         } catch (Exception e) {
             log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -145,7 +148,7 @@ public class ProductoLogic implements IProductoLogic {
             list = productoDao.findByPropertySort(propertyName, value, sortColumnName, sortAscending);
         } catch (Exception e) {
             log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -162,7 +165,7 @@ public class ProductoLogic implements IProductoLogic {
             list = productoDao.findByProperty(propertyName, values);
         } catch (Exception e) {
             log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -170,37 +173,37 @@ public class ProductoLogic implements IProductoLogic {
 
     private void checkFields(Producto entity) {
         if (entity.getProducto() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_DES_PRODUCTO);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_DES_PRODUCTO);
         }
 
         if ((entity.getProducto() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getProducto(), 50))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_DES_PRODUCTO);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_DES_PRODUCTO);
         }
 
         if (entity.getEstado() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_ESTADO);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
         }
 
         if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getEstado().name(), 1))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_ESTADO);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
         }
 
         if (entity.getCategoriaProducto() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_CATEGORIA);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_CATEGORIA);
         }
 
         if ((entity.getCategoriaProducto() != null)
                 && !(Utilities.checkWordAndCheckWithlength(entity.getCategoriaProducto().getCategoria(), 50))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_CATEGORIA);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_CATEGORIA);
         }
 
         if (entity.getTipoUnidadMedida() == null) {
-            throw new EntityException().new EmptyFieldException(Constant.FIELD_TIPO_UNIDAD_MEDIDA);
+            throw new EntityException.EmptyFieldException(Constant.FIELD_TIPO_UNIDAD_MEDIDA);
         }
 
         if ((entity.getTipoUnidadMedida() != null)
                 && !(Utilities.checkWordAndCheckWithlength(entity.getTipoUnidadMedida().getUnidad(), 45))) {
-            throw new EntityException().new NotValidFormatException(Constant.FIELD_TIPO_UNIDAD_MEDIDA);
+            throw new EntityException.NotValidFormatException(Constant.FIELD_TIPO_UNIDAD_MEDIDA);
         }
     }
 

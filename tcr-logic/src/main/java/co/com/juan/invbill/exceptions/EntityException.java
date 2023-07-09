@@ -39,7 +39,7 @@ public class EntityException extends RuntimeException {
 		}
 	}
 
-	public class EmptyFieldException extends EntityException {
+	public static class EmptyFieldException extends EntityException {
 		private static final long serialVersionUID = 1L;
 
 		public EmptyFieldException(String info) {
@@ -47,7 +47,7 @@ public class EntityException extends RuntimeException {
 		}
 	}
 
-	public class NotValidFormatException extends EntityException {
+	public static class NotValidFormatException extends EntityException {
 		private static final long serialVersionUID = 1L;
 
 		public NotValidFormatException(String info) {
@@ -55,7 +55,7 @@ public class EntityException extends RuntimeException {
 		}
 	}
 
-	public class SavingException extends EntityException {
+	public static class SavingException extends EntityException {
 		private static final long serialVersionUID = 1L;
 
 		public SavingException(String info) {
@@ -64,16 +64,7 @@ public class EntityException extends RuntimeException {
 		}
 	}
 
-	public class DeletingException extends EntityException {
-		private static final long serialVersionUID = 1L;
-
-		public DeletingException(String info) {
-			super("La entidad que intenta borrar tiene informacion relacionada con otras entidades, por favor antes de volver a intentarlo, compruebe los datos de la entidad, \""
-					+ info + "\"");
-		}
-	}
-
-	public class UpdatingException extends EntityException {
+	public static class UpdatingException extends EntityException {
 		private static final long serialVersionUID = 1L;
 
 		public UpdatingException(String info) {
@@ -82,15 +73,7 @@ public class EntityException extends RuntimeException {
 		}
 	}
 
-	public class ForeignException extends EntityException {
-		private static final long serialVersionUID = 1L;
-
-		public ForeignException(String info) {
-			super("No se encontro informacion relacionada con \"" + info + "\"");
-		}
-	}
-
-	public class GettingException extends EntityException {
+	public static class GettingException extends EntityException {
 		private static final long serialVersionUID = 1L;
 
 		public GettingException(String info) {
@@ -98,7 +81,7 @@ public class EntityException extends RuntimeException {
 		}
 	}
 
-	public class FindingException extends EntityException {
+	public static class FindingException extends EntityException {
 		private static final long serialVersionUID = 1L;
 
 		public FindingException(String info) {

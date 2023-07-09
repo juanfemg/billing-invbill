@@ -7,11 +7,11 @@ import co.com.juan.invbill.model.RolApp;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -23,9 +23,12 @@ import java.util.List;
 public class RolAppLogic implements IRolAppLogic {
 
     private static final Logger log = LoggerFactory.getLogger(RolAppLogic.class);
+    private final IRolAppDao rolAppDao;
 
-    @Autowired
-    private IRolAppDao rolAppDao;
+    @Inject
+    public RolAppLogic(IRolAppDao rolAppDao) {
+        this.rolAppDao = rolAppDao;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -40,7 +43,7 @@ public class RolAppLogic implements IRolAppLogic {
             list = rolAppDao.findByCriteria(where);
         } catch (Exception e) {
             log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
         return list;
     }
@@ -56,7 +59,7 @@ public class RolAppLogic implements IRolAppLogic {
             list = rolAppDao.findByProperty(propertyName, value);
         } catch (Exception e) {
             log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException().new FindingException(Constant.ENTITY_NAME);
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
         return list;

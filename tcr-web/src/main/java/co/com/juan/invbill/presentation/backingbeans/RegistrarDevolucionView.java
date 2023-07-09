@@ -37,7 +37,7 @@ public class RegistrarDevolucionView implements Serializable {
 	private static final long serialVersionUID = 1475142644023643893L;
 	private static final Logger log = LoggerFactory.getLogger(RegistrarDevolucionView.class);
 
-	@ManagedProperty(value = "#{BusinessDelegate}")
+	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
 	private FacturaCabecera facturaCabecera;
