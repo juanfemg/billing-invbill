@@ -50,10 +50,10 @@ public class CrearProveedorView implements Serializable {
 		try {
 			businessDelegate.save(proveedorApp);
 			log.info("=== Creacion de proveedor: Proveedor creado {}", proveedorApp.getIdProveedorApp());
-			addInfoMessage(properties.getParametroString("MSG_PROVEEDOR_CREADO"));
+			addInfoMessage(properties.getParameterByKey("MSG_PROVEEDOR_CREADO"));
 			proveedorApp = new ProveedorApp();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CREACION_PROVEEDOR"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CREACION_PROVEEDOR"));
 			log.error("=== Creacion de proveedor: Fallo la creacion del proveedor {}. Se ha producido un error: {}",
 					proveedorApp.getIdProveedorApp(), e.getMessage());
 		}

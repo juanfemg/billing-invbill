@@ -15,9 +15,6 @@ public interface ICompraDetalleLogic {
 
     void updateCompraDetalle(CompraDetalle entity) throws EntityException;
 
-    List<CompraDetalle> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                       Object[] variablesBetweenDates) throws EntityException;
-
     List<CompraDetalle> findByProperty(String propertyName, Object value) throws EntityException;
 
 }

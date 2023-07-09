@@ -47,10 +47,10 @@ public class CrearUsuarioView implements Serializable {
 		try {
 			businessDelegate.save(usuarioApp);
 			log.info("=== Creacion de usuario: Usuario creado {}", usuarioApp.getIdUsuarioApp());
-			addInfoMessage(properties.getParametroString("MSG_USUARIO_CREADO"));
+			addInfoMessage(properties.getParameterByKey("MSG_USUARIO_CREADO"));
 			usuarioApp = new UsuarioApp();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CREACION_USUARIO"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CREACION_USUARIO"));
 			log.error("=== Creacion de usuario: Fallo la creacion del usuario {}. Se ha producido un error: {}",
 					usuarioApp.getIdUsuarioApp(), e.getMessage());
 		}

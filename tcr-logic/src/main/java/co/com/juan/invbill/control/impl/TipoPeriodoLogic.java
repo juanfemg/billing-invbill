@@ -119,7 +119,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_PERIODO);
         }
 
-        if ((entity.getPeriodo() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getPeriodo(), 45))) {
+        if ((entity.getPeriodo() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getPeriodo(), 45))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_PERIODO);
         }
 
@@ -136,7 +136,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
         }
 
-        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getEstado().name(), 1))) {
+        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
         }
     }

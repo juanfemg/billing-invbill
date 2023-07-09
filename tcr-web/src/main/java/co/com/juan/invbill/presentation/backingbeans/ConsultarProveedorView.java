@@ -66,7 +66,7 @@ public class ConsultarProveedorView implements Serializable {
 		try {
 			proveedoresApp = businessDelegate.getProveedores();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_PROVEEDORES"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_PROVEEDORES"));
 			log.error("=== Consulta de Proveedores: Fallo la consulta de los proveedores", e);
 		}
 	}
@@ -81,9 +81,9 @@ public class ConsultarProveedorView implements Serializable {
 			showDialogModificarProveedor = false;
 			log.info("=== Actualizacion de proveedor: Proveedor actualizado. Id={}, descripcion={} ===",
 					proveedorModApp.getIdProveedorApp(), proveedorModApp.getRazonSocial());
-			addInfoMessage(properties.getParametroString("MSG_PROVEEDOR_ACTUALIZADO"));
+			addInfoMessage(properties.getParameterByKey("MSG_PROVEEDOR_ACTUALIZADO"));
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_ACTUALIZACION_PROVEEDOR"), ID_DIALOG_MESSAGES);
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_ACTUALIZACION_PROVEEDOR"), ID_DIALOG_MESSAGES);
 			log.error(
 					"=== Actualizacion de proveedor: Fallo la actualizacion del proveedor {}. Se ha producido un error: {}",
 					proveedorModApp.getIdProveedorApp(), e.getMessage());

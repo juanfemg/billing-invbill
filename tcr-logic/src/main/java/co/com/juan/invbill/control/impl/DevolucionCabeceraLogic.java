@@ -147,7 +147,7 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
         }
 
         if ((entity.getUsuarioCreacion() != null)
-                && !(Utilities.checkWordAndCheckWithlength(entity.getUsuarioCreacion(), 20))) {
+                && !(Utilities.checkWordAndCheckWithLength(entity.getUsuarioCreacion(), 20))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_USUARIO_CREACION);
         }
     }

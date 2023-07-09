@@ -134,7 +134,7 @@ public class StockProductoLogic implements IStockProductoLogic {
         }
 
         if ((entity.getProducto() != null)
-                && !(Utilities.checkWordAndCheckWithlength(entity.getProducto().getProducto(), 50))) {
+                && !(Utilities.checkWordAndCheckWithLength(entity.getProducto().getProducto(), 50))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_PRODUCTO);
         }
     }

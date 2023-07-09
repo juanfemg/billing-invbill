@@ -10,7 +10,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -27,7 +26,7 @@ import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.AppConfig;
 import co.com.juan.invbill.model.LoginApp;
-import co.com.juan.invbill.util.ParameterApp;
+import co.com.juan.invbill.enums.ParameterEnum;
 import co.com.juan.invbill.util.Properties;
 
 /**
@@ -95,7 +94,7 @@ public class LoginView implements Serializable {
 						session.setAttribute(SessionEnum.LOGIN.name(), loginApp.getIdLoginApp());
 						initParametrosConfiguracion();
 					} else {
-						addErrorMessage(properties.getParametroString("MSG_USER_NO_FOUND"));
+						addErrorMessage(properties.getParameterByKey("MSG_USER_NO_FOUND"));
 						log.error(
 								"=== Login de usuario: Fallo la consulta del usuario o no existe el usuario con las credenciales indicadas");
 						return "error";
@@ -103,7 +102,7 @@ public class LoginView implements Serializable {
 				}
 			}
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_USER_NO_FOUND"));
+			addErrorMessage(properties.getParameterByKey("MSG_USER_NO_FOUND"));
 			log.error(
 					"=== Login de usuario: Fallo la consulta del usuario o no existe el usuario con las credenciales indicadas",
 					e);
@@ -139,12 +138,12 @@ public class LoginView implements Serializable {
 
 			if (!appConfigs.isEmpty()) {
 				for (AppConfig appConfig : appConfigs) {
-					if (appConfig.getIdAppConfig().equalsIgnoreCase(ParameterApp.IMPRESORA_PREDETERMINADA.toString())) {
-						session.setAttribute(ParameterApp.IMPRESORA_PREDETERMINADA.toString(), appConfig);
-					} else if (appConfig.getIdAppConfig().equalsIgnoreCase(ParameterApp.IMPUESTO_IVA.toString())) {
-						session.setAttribute(ParameterApp.IMPUESTO_IVA.toString(), appConfig);
-					} else if (appConfig.getIdAppConfig().equalsIgnoreCase(ParameterApp.TOPE_STOCK.toString())) {
-						session.setAttribute(ParameterApp.TOPE_STOCK.toString(), appConfig);
+					if (appConfig.getIdAppConfig().equalsIgnoreCase(ParameterEnum.IMPRESORA_PREDETERMINADA.name())) {
+						session.setAttribute(ParameterEnum.IMPRESORA_PREDETERMINADA.name(), appConfig);
+					} else if (appConfig.getIdAppConfig().equalsIgnoreCase(ParameterEnum.IVA.name())) {
+						session.setAttribute(ParameterEnum.IVA.name(), appConfig);
+					} else if (appConfig.getIdAppConfig().equalsIgnoreCase(ParameterEnum.TOPE_STOCK.name())) {
+						session.setAttribute(ParameterEnum.TOPE_STOCK.name(), appConfig);
 					}
 				}
 			}

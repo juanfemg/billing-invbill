@@ -70,11 +70,11 @@ public class CrearProductoView implements Serializable {
 			}
 
 			if (categorias.isEmpty()) {
-				addWarnMessage(properties.getParametroString("MSG_CATEGORIAS_INACTIVAS"));
+				addWarnMessage(properties.getParameterByKey("MSG_CATEGORIAS_INACTIVAS"));
 			}
 
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_CATEGORIAS"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_CATEGORIAS"));
 			log.error("=== Consulta de Categorias: Fallo la consulta de las categorias", e);
 		}
 	}
@@ -90,11 +90,11 @@ public class CrearProductoView implements Serializable {
 			}
 
 			if (unidades.isEmpty()) {
-				addWarnMessage(properties.getParametroString("MSG_UNIDADES_MEDIDA_INACTIVAS"));
+				addWarnMessage(properties.getParameterByKey("MSG_UNIDADES_MEDIDA_INACTIVAS"));
 			}
 
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_UNIDADES_MEDIDA"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_UNIDADES_MEDIDA"));
 			log.error("=== Consulta de Tipos de Unidades de Medida: Fallo la consulta de las unidades de medida", e);
 		}
 	}
@@ -103,10 +103,10 @@ public class CrearProductoView implements Serializable {
 		try {
 			businessDelegate.save(producto);
 			log.info("=== Creacion de producto: Producto creado {}", producto.getIdProducto());
-			addInfoMessage(properties.getParametroString("MSG_PRODUCTO_CREADO"));
+			addInfoMessage(properties.getParameterByKey("MSG_PRODUCTO_CREADO"));
 			producto = new Producto();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CREACION_PRODUCTO"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CREACION_PRODUCTO"));
 			log.error("=== Creacion de producto: Fallo la creacion del producto {}. Se ha producido un error: {}",
 					producto.getIdProducto(), e.getMessage());
 		}

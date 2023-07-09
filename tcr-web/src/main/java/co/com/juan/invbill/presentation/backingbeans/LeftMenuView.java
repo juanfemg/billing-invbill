@@ -2,7 +2,9 @@ package co.com.juan.invbill.presentation.backingbeans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -72,7 +74,10 @@ public class LeftMenuView implements Serializable {
 		try {
 			appMenus = businessDelegate.getAppMenus();
 
-			for (AppMenu appMenu : appMenus) {
+			// TODO cambio para ordenar
+			for (AppMenu appMenu : appMenus.stream()
+					.sorted(Comparator.comparing(AppMenu::getOrden))
+					.collect(Collectors.toList())) {
 				if (appMenu.getMenu() == null) {
 					loadMenuPrincipal(appMenu);
 				} else {

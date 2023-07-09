@@ -38,7 +38,7 @@ public class LoginAppLogic implements ILoginAppLogic {
             this.checkFields(entity);
 
             if (this.getLoginApp(entity.getIdLoginApp()) != null) {
-                throw new EntityException(EntityException.ENTITY_WITHSAMEKEY);
+                throw new EntityException(EntityException.ENTITY_WITH_SAME_KEY);
             }
 
             this.loginAppDao.save(entity);
@@ -110,7 +110,7 @@ public class LoginAppLogic implements ILoginAppLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_ID_ENTITY);
         }
 
-        if ((entity.getIdLoginApp() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getIdLoginApp(), 20))) {
+        if ((entity.getIdLoginApp() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getIdLoginApp(), 20))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_ID_ENTITY);
         }
 
@@ -119,7 +119,7 @@ public class LoginAppLogic implements ILoginAppLogic {
             throw new EntityException.NotValidFormatException(Constant.FIELD_ULTIMO_LOGIN);
         }
 
-        if ((entity.getIdSession() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getIdSession(), 100))) {
+        if ((entity.getIdSession() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getIdSession(), 100))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_ULTIMO_LOGIN);
         }
     }

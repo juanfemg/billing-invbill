@@ -149,7 +149,7 @@ public class ProductoLogic implements IProductoLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_DES_PRODUCTO);
         }
 
-        if ((entity.getProducto() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getProducto(), 50))) {
+        if ((entity.getProducto() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getProducto(), 50))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_DES_PRODUCTO);
         }
 
@@ -157,7 +157,7 @@ public class ProductoLogic implements IProductoLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
         }
 
-        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getEstado().name(), 1))) {
+        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
         }
 
@@ -166,7 +166,7 @@ public class ProductoLogic implements IProductoLogic {
         }
 
         if ((entity.getCategoriaProducto() != null)
-                && !(Utilities.checkWordAndCheckWithlength(entity.getCategoriaProducto().getCategoria(), 50))) {
+                && !(Utilities.checkWordAndCheckWithLength(entity.getCategoriaProducto().getCategoria(), 50))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_CATEGORIA);
         }
 
@@ -175,7 +175,7 @@ public class ProductoLogic implements IProductoLogic {
         }
 
         if ((entity.getTipoUnidadMedida() != null)
-                && !(Utilities.checkWordAndCheckWithlength(entity.getTipoUnidadMedida().getUnidad(), 45))) {
+                && !(Utilities.checkWordAndCheckWithLength(entity.getTipoUnidadMedida().getUnidad(), 45))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_TIPO_UNIDAD_MEDIDA);
         }
     }

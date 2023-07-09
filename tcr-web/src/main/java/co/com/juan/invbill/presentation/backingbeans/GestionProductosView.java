@@ -19,7 +19,7 @@ import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
 import co.com.juan.invbill.model.AppConfig;
 import co.com.juan.invbill.model.CompraDetalle;
 import co.com.juan.invbill.model.StockProducto;
-import co.com.juan.invbill.util.ParameterApp;
+import co.com.juan.invbill.enums.ParameterEnum;
 import co.com.juan.invbill.util.Properties;
 
 /**
@@ -64,14 +64,14 @@ public class GestionProductosView implements Serializable {
 		try {
 			stockProductos = businessDelegate.getStockProductos();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_STOCK_PRODUCTOS"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_STOCK_PRODUCTOS"));
 			log.error("=== Consulta de Stock Productos: Fallo la consulta del stock de los productos", e);
 		}
 	}
 
 	public void initTopeStockProductos() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		topeStock = (AppConfig) session.getAttribute(ParameterApp.TOPE_STOCK.toString());
+		topeStock = (AppConfig) session.getAttribute(ParameterEnum.TOPE_STOCK.name());
 	}
 
 	public void actionEditar() {
@@ -82,7 +82,7 @@ public class GestionProductosView implements Serializable {
 		try {
 			compraDetalles = businessDelegate.findCompraDetalleByProducto(stockProductoCurrent.getProducto());
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_HISTORICO_COMPRA"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_HISTORICO_COMPRA"));
 			log.error(
 					"=== Consulta de Historico Compra Detalle: Fallo la consulta del detalle de la compra del producto {}. Se ha producido un error: {}",
 					stockProductoCurrent.getProducto().getIdProducto(), e.getMessage());
@@ -95,9 +95,9 @@ public class GestionProductosView implements Serializable {
 			showDialogModificarStockProducto = false;
 			log.info("=== Actualizacion de stock producto: Stock Producto actualizado. Id={}, precioVenta={} ",
 					stockProductoMod.getIdStockProducto(), stockProductoMod.getPrecioVenta());
-			addInfoMessage(properties.getParametroString("MSG_STOCK_PRODUCTO_ACTUALIZADO"));
+			addInfoMessage(properties.getParameterByKey("MSG_STOCK_PRODUCTO_ACTUALIZADO"));
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_ACTUALIZACION_STOCK_PRODUCTO"),
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_ACTUALIZACION_STOCK_PRODUCTO"),
 					ID_DIALOG_MESSAGES);
 			log.error(
 					"=== Actualizacion de stock producto: Fallo la actualizacion del stock producto {}. Se ha producido un error: {}",

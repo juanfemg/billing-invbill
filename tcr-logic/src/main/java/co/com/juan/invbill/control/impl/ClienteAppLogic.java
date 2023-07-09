@@ -53,7 +53,7 @@ public class ClienteAppLogic implements IClienteAppLogic {
             this.checkSecondaryFields(entity);
 
             if (this.getClienteApp(entity.getIdClienteApp()) != null) {
-                throw new EntityException(EntityException.ENTITY_WITHSAMEKEY);
+                throw new EntityException(EntityException.ENTITY_WITH_SAME_KEY);
             }
 
             this.clienteAppDao.save(entity);
@@ -90,37 +90,6 @@ public class ClienteAppLogic implements IClienteAppLogic {
         return entity;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<ClienteApp> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                           Object[] variablesBetweenDates) throws EntityException {
-        List<ClienteApp> list;
-        String where;
-        try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = this.clienteAppDao.findByCriteria(where);
-        } catch (DaoException de) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<ClienteApp> findByProperty(String propertyName, Object value) throws EntityException {
-        List<ClienteApp> list;
-        try {
-            list = this.clienteAppDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
     private void checkFields(ClienteApp entity) {
         if (entity.getIdClienteApp() == null) {
             throw new EntityException.EmptyFieldException(Constant.FIELD_ID_ENTITY);
@@ -136,7 +105,7 @@ public class ClienteAppLogic implements IClienteAppLogic {
         }
 
         if ((entity.getRazonSocial() != null)
-                && !(Utilities.checkWordAndCheckWithlength(entity.getRazonSocial(), 200))) {
+                && !(Utilities.checkWordAndCheckWithLength(entity.getRazonSocial(), 200))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_RAZON_SOCIAL);
         }
 
@@ -144,7 +113,7 @@ public class ClienteAppLogic implements IClienteAppLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
         }
 
-        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getEstado().name(), 1))) {
+        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
         }
     }

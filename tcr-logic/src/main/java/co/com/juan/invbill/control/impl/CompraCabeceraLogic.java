@@ -101,20 +101,6 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
         return list;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<CompraCabecera> findByProperty(String propertyName, Object value) throws EntityException {
-        List<CompraCabecera> list;
-        try {
-            list = this.compraCabeceraDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
     private void checkFields(CompraCabecera entity) {
         if (entity.getValorNeto() == null) {
             throw new EntityException.EmptyFieldException(Constant.FIELD_VALOR_NETO);
@@ -148,7 +134,7 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
         }
 
         if ((entity.getUsuarioCreacion() != null)
-                && !(Utilities.checkWordAndCheckWithlength(entity.getUsuarioCreacion(), 20))) {
+                && !(Utilities.checkWordAndCheckWithLength(entity.getUsuarioCreacion(), 20))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_USUARIO_CREACION);
         }
     }

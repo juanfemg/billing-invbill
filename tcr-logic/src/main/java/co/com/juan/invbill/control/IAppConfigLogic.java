@@ -14,9 +14,4 @@ public interface IAppConfigLogic {
 
     List<AppConfig> getDataAppConfig() throws EntityException;
 
-    List<AppConfig> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                   Object[] variablesBetweenDates) throws EntityException;
-
-    List<AppConfig> findByProperty(String propertyName, Object value) throws EntityException;
-
 }

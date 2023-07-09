@@ -28,7 +28,7 @@ import co.com.juan.invbill.model.CompraDetalleId;
 import co.com.juan.invbill.model.Producto;
 import co.com.juan.invbill.model.ProveedorApp;
 import co.com.juan.invbill.model.StockProducto;
-import co.com.juan.invbill.util.ParameterApp;
+import co.com.juan.invbill.enums.ParameterEnum;
 import co.com.juan.invbill.util.Properties;
 
 /**
@@ -100,10 +100,10 @@ public class RegistrarCompraView implements Serializable {
 
 	public void initParametrosConfiguracion() {
 		session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		AppConfig appConfig = (AppConfig) session.getAttribute(ParameterApp.IMPUESTO_IVA.toString());
+		AppConfig appConfig = (AppConfig) session.getAttribute(ParameterEnum.IVA.name());
 
 		if (appConfig.getValor() == null) {
-			addErrorMessage(properties.getParametroString("MSG_IVA_NO_PARAMETRIZADO"));
+			addErrorMessage(properties.getParameterByKey("MSG_IVA_NO_PARAMETRIZADO"));
 			showDialogAdicionarItem = false;
 			showDialogProveedor = false;
 		} else {
@@ -112,7 +112,7 @@ public class RegistrarCompraView implements Serializable {
 
 				initCategoriasProducto();
 			} catch (NumberFormatException nfe) {
-				addErrorMessage(properties.getParametroString("MSG_IVA_NO_PARAMETRIZADO"));
+				addErrorMessage(properties.getParameterByKey("MSG_IVA_NO_PARAMETRIZADO"));
 				showDialogAdicionarItem = false;
 				showDialogProveedor = false;
 				log.error("=== Consulta de parametros de configuracion: Fallo la consulta del iva", nfe);
@@ -133,14 +133,14 @@ public class RegistrarCompraView implements Serializable {
 			}
 
 			if (categorias.isEmpty()) {
-				addWarnMessage(properties.getParametroString("MSG_CATEGORIAS_INACTIVAS"), ID_DIALOG_MESSAGES_CATEGORIA);
+				addWarnMessage(properties.getParameterByKey("MSG_CATEGORIAS_INACTIVAS"), ID_DIALOG_MESSAGES_CATEGORIA);
 			} else {
 				categoriaProducto = categoria.get(0);
 				initProductos();
 			}
 
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_CATEGORIAS"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_CATEGORIAS"));
 			log.error("=== Consulta de Categorias de Productos: Fallo la consulta de las categorias de productos", e);
 		}
 	}
@@ -158,13 +158,13 @@ public class RegistrarCompraView implements Serializable {
 			}
 
 			if (productos.isEmpty()) {
-				addWarnMessage(properties.getParametroString("MSG_PRODUCTOS_INACTIVOS"), ID_DIALOG_MESSAGES_PRODUCTO);
+				addWarnMessage(properties.getParameterByKey("MSG_PRODUCTOS_INACTIVOS"), ID_DIALOG_MESSAGES_PRODUCTO);
 			} else {
 				compraModDetalle.setProducto((Producto) productos.get(0).getValue());
 			}
 
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_PRODUCTOS"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_PRODUCTOS"));
 			log.error("=== Consulta de Productos: Fallo la consulta de los productos", e);
 		}
 	}
@@ -189,17 +189,17 @@ public class RegistrarCompraView implements Serializable {
 	public void actionIngresarProveedor() {
 		try {
 			if (proveedorApp == null) {
-				addWarnMessage(properties.getParametroString("MSG_PROVEEDOR_NO_EXISTE"));
+				addWarnMessage(properties.getParameterByKey("MSG_PROVEEDOR_NO_EXISTE"));
 			} else {
 				if (proveedorApp.getEstado().equals(StatusEnum.I)) {
-					addWarnMessage(properties.getParametroString("MSG_PROVEEDOR_INACTIVO"));
+					addWarnMessage(properties.getParameterByKey("MSG_PROVEEDOR_INACTIVO"));
 				} else {
 					compraCabeceraId.setIdProveedorApp(proveedorApp.getIdProveedorApp());
 					findCompraCabeceraByID();
 				}
 			}
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_PROVEEDOR"),
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_PROVEEDOR"),
 					ID_DIALOG_MESSAGES_PROVEEDOR);
 			log.error("=== Consulta de Proovedor: Fallo la consulta del proveedor {}. Se ha producido un error: {}",
 					proveedorApp.getIdProveedorApp(), e.getMessage());
@@ -214,14 +214,14 @@ public class RegistrarCompraView implements Serializable {
 
 			if (compraCabeceraTemp != null) {
 				String[] parameters = { proveedorApp.getRazonSocial() };
-				addWarnMessage(properties.getParametroString("MSG_FACTURA_EXISTE", parameters));
+				addWarnMessage(properties.getParameterByKeyAndNameArray("MSG_FACTURA_EXISTE", parameters));
 			} else {
 				showDialogAdicionarItem = true;
 				initParametrosConfiguracion();
 				compraCabecera.setProveedorApp(proveedorApp);
 			}
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_BY_FACTURA_PROVEEDOR"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_BY_FACTURA_PROVEEDOR"));
 			log.error(
 					"=== Consulta de compra: Fallo la consulta de la compra con factura {} y proveedor {}. Se ha producido un error: {}",
 					compraCabeceraId.getIdFacturaCompra(), compraCabeceraId.getIdProveedorApp(), e.getMessage());
@@ -335,11 +335,11 @@ public class RegistrarCompraView implements Serializable {
 
 			FacesContext.getCurrentInstance().getViewRoot().getViewMap().clear();
 
-			addInfoMessage(properties.getParametroString("MSG_COMPRA_CREADA"));
+			addInfoMessage(properties.getParameterByKey("MSG_COMPRA_CREADA"));
 			compraDetalle.clear();
 
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CREACION_COMPRA"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CREACION_COMPRA"));
 			log.error(
 					"=== Creacion de compra Cabecera: Fallo la creacion de la compra asociada al proveedor {} con factura {}. Se ha producido un error: {}",
 					compraCabecera.getId().getIdProveedorApp(), compraCabecera.getId().getIdFacturaCompra(),
@@ -362,7 +362,7 @@ public class RegistrarCompraView implements Serializable {
 
 				getStockProducto(compraDetalleTemp);
 			} catch (Exception e) {
-				addErrorMessage(properties.getParametroString("MSG_ERROR_CREACION_COMPRA_DETALLE"));
+				addErrorMessage(properties.getParameterByKey("MSG_ERROR_CREACION_COMPRA_DETALLE"));
 				log.error(
 						"=== Creacion de compra Detalle: Fallo la creacion del detalle de la compra. IdProveedor={}, idFactura={}, idProducto={}. Se ha producido un error: {}",
 						compraDetalleTemp.getId().getIdProveedorApp(), compraDetalleTemp.getId().getIdFacturaCompra(),
@@ -377,7 +377,7 @@ public class RegistrarCompraView implements Serializable {
 
 			updateStockProducto(compraDetalleTemp);
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_STOCK_PRODUCTO",
+			addErrorMessage(properties.getParameterByKeyAndName("MSG_ERROR_CONSULTA_STOCK_PRODUCTO",
 					compraDetalleTemp.getProducto().getProducto()));
 			log.error(
 					"=== Consulta de Stock de Producto: Fallo la consulta del stock de producto {}. Se ha producido un error: {}",
@@ -398,7 +398,7 @@ public class RegistrarCompraView implements Serializable {
 			log.info("=== Actualizacion de stock de producto: Stock de producto actualizado. IdProducto={}, valor={} ",
 					stockProducto.getProducto().getIdProducto(), stockProducto.getStock());
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_ACTUALIZACION_STOCK_PRODUCTO",
+			addErrorMessage(properties.getParameterByKeyAndName("MSG_ERROR_ACTUALIZACION_STOCK_PRODUCTO",
 					stockProducto.getProducto().getProducto()));
 			log.error(
 					"=== Actualizacion de Stock de Producto: Fallo la actualizacion del stock de producto {}. Se ha producido un error: {}",

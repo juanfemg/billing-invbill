@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
 import co.com.juan.invbill.model.AppConfig;
-import co.com.juan.invbill.util.ParameterApp;
+import co.com.juan.invbill.enums.ParameterEnum;
 import co.com.juan.invbill.util.Properties;
 
 /**
@@ -61,9 +61,9 @@ public class GestionConfiguracionView implements Serializable {
 	}
 
 	public void initParametros() {
-		impresora = (AppConfig) session.getAttribute(ParameterApp.IMPRESORA_PREDETERMINADA.toString());
-		iva = (AppConfig) session.getAttribute(ParameterApp.IMPUESTO_IVA.toString());
-		topeStock = (AppConfig) session.getAttribute(ParameterApp.TOPE_STOCK.toString());
+		impresora = (AppConfig) session.getAttribute(ParameterEnum.IMPRESORA_PREDETERMINADA.name());
+		iva = (AppConfig) session.getAttribute(ParameterEnum.IVA.name());
+		topeStock = (AppConfig) session.getAttribute(ParameterEnum.TOPE_STOCK.name());
 		initImpresoras();
 	}
 
@@ -76,7 +76,7 @@ public class GestionConfiguracionView implements Serializable {
 			}
 
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_IMPRESORAS"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_IMPRESORAS"));
 			log.error("=== Consulta de Impresoras: Fallo la consulta de las impresoras", e);
 		}
 	}
@@ -87,12 +87,12 @@ public class GestionConfiguracionView implements Serializable {
 
 			log.info("=== Actualizacion de configuracion de impresora: Parametro actualizado. Id={}, valor={} === ",
 					impresora.getIdAppConfig(), impresora.getValor());
-			addInfoMessage(properties.getParametroString("MSG_CONFIGURACION_IMPRESORA_ACTUALIZADA"));
+			addInfoMessage(properties.getParameterByKey("MSG_CONFIGURACION_IMPRESORA_ACTUALIZADA"));
 
-			session.setAttribute(ParameterApp.IMPRESORA_PREDETERMINADA.toString(), impresora);
+			session.setAttribute(ParameterEnum.IMPRESORA_PREDETERMINADA.name(), impresora);
 
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_ACTUALIZACION_IMPRESORA"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_ACTUALIZACION_IMPRESORA"));
 			log.error(
 					"=== Actualizacion de configuracion de impresora: Fallo la actualizacion del parametro {}. Se ha producido un error: {}",
 					impresora.getIdAppConfig(), e.getMessage());
@@ -105,12 +105,12 @@ public class GestionConfiguracionView implements Serializable {
 
 			log.info("=== Actualizacion de configuracion de iva: Parametro actualizado. Id={}, valor={} === ",
 					iva.getIdAppConfig(), iva.getValor());
-			addInfoMessage(properties.getParametroString("MSG_CONFIGURACION_IVA_ACTUALIZADA"));
+			addInfoMessage(properties.getParameterByKey("MSG_CONFIGURACION_IVA_ACTUALIZADA"));
 
-			session.setAttribute(ParameterApp.IMPUESTO_IVA.toString(), iva);
+			session.setAttribute(ParameterEnum.IVA.name(), iva);
 
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_ACTUALIZACION_IVA"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_ACTUALIZACION_IVA"));
 			log.error(
 					"=== Actualizacion de configuracion de IVA: Fallo la actualizacion del parametro {}. Se ha producido un error: {}",
 					iva.getIdAppConfig(), e.getMessage());
@@ -123,12 +123,12 @@ public class GestionConfiguracionView implements Serializable {
 
 			log.info("=== Actualizacion de configuracion de tope de stock: Parametro actualizado. Id={}, valor={} === ",
 					topeStock.getIdAppConfig(), topeStock.getValor());
-			addInfoMessage(properties.getParametroString("MSG_CONFIGURACION_TOPE_STOCK_ACTUALIZADA"));
+			addInfoMessage(properties.getParameterByKey("MSG_CONFIGURACION_TOPE_STOCK_ACTUALIZADA"));
 
-			session.setAttribute(ParameterApp.TOPE_STOCK.toString(), topeStock);
+			session.setAttribute(ParameterEnum.TOPE_STOCK.name(), topeStock);
 
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_ACTUALIZACION_TOPE_STOCK"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_ACTUALIZACION_TOPE_STOCK"));
 			log.error(
 					"=== Actualizacion de configuracion del tope de stock: Fallo la actualizacion del parametro {}. Se ha producido un error: {}",
 					topeStock.getIdAppConfig(), e.getMessage());

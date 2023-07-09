@@ -2,89 +2,59 @@ package co.com.juan.invbill.exceptions;
 
 /**
  * @author Juan Felipe
- * 
  */
 public class EntityException extends RuntimeException {
 
-	private static final long serialVersionUID = -6090627865213545701L;
-	public static final String ENTCHILD = "Tablas relacionadas(menores)";
-	public static final String FOREIGNDATA = "Datos de clases externos ";
-	public static final String ENTITY_SUCCESFULLYSAVED = "Creado exitosamente";
-	public static final String ENTITY_SUCCESFULLYDELETED = "Eliminado exitosamente";
-	public static final String ENTITY_SUCCESFULLYMODIFIED = "Modificado exitosamente";
-	public static final String ENTITY_WITHSAMEKEY = "Hay otra entidad con el mismo ID";
-	public static final String ENTITY_NOENTITYTOUPDATE = "Ninguna entidad se encontro, con el id especificado";
+    public static final String ENTITY_WITH_SAME_KEY = "There's another entity with same key";
 
-	public EntityException() {
-	}
+    public EntityException() {
+    }
 
-	public EntityException(String exception) {
-		super(exception);
-	}
+    public EntityException(String exception) {
+        super(exception);
+    }
 
-	public class NotValidFieldException extends EntityException {
-		private static final long serialVersionUID = 1L;
+    public static class EmptyFieldException extends EntityException {
 
-		public NotValidFieldException(String info) {
-			super("El valor para el campo: \"" + info + "\" no es valido");
-		}
-	}
+        public EmptyFieldException(String info) {
+            super(String.format("The value for field: %s cannot be empty or null", info));
+        }
+    }
 
-	public class NullEntityExcepcion extends EntityException {
-		private static final long serialVersionUID = 1L;
+    public static class NotValidFormatException extends EntityException {
 
-		public NullEntityExcepcion(String info) {
-			super("La entidad" + info + " no puede estar vacia o nula");
-		}
-	}
+        public NotValidFormatException(String info) {
+            super(String.format("The data type or the length for field: %s is not valid", info));
+        }
+    }
 
-	public static class EmptyFieldException extends EntityException {
-		private static final long serialVersionUID = 1L;
+    public static class SavingException extends EntityException {
 
-		public EmptyFieldException(String info) {
-			super("El valor para el campo: \"" + info + "\" no puede estar vacio o nulo");
-		}
-	}
+        public SavingException(String info) {
+            super(String.format("The entity: %s has constraints in some fields, please check the data before trying again to save it", info));
+        }
+    }
 
-	public static class NotValidFormatException extends EntityException {
-		private static final long serialVersionUID = 1L;
+    public static class UpdatingException extends EntityException {
+        private static final long serialVersionUID = 1L;
 
-		public NotValidFormatException(String info) {
-			super("El tipo de dato o la longitud para el campo: \"" + info + "\" no es valido");
-		}
-	}
+        public UpdatingException(String info) {
+            super(String.format("The entity: %s has constraints in some fields, please check the data before trying again to update it", info));
+        }
+    }
 
-	public static class SavingException extends EntityException {
-		private static final long serialVersionUID = 1L;
+    public static class GettingException extends EntityException {
 
-		public SavingException(String info) {
-			super("La entidad que intenta guardar tiene restricciones en algunos campos, porfavor antes de volver a intentarlo, compruebe los datos de la entidad, \""
-					+ info + "\"");
-		}
-	}
+        public GettingException(String info) {
+            super(String.format("An exception has occurred getting %s", info));
+        }
+    }
 
-	public static class UpdatingException extends EntityException {
-		private static final long serialVersionUID = 1L;
+    public static class FindingException extends EntityException {
 
-		public UpdatingException(String info) {
-			super("La entidad que intenta actualizar tiene restricciones en algunos campos, por favor antes de volver a intentarlo, compruebe los datos de la entidad, \""
-					+ info + "\"");
-		}
-	}
+        public FindingException(String info) {
+            super(String.format("An exception has occurred finding %s", info));
+        }
+    }
 
-	public static class GettingException extends EntityException {
-		private static final long serialVersionUID = 1L;
-
-		public GettingException(String info) {
-			super("Ocurrio una excepcion obteniendo " + info);
-		}
-	}
-
-	public static class FindingException extends EntityException {
-		private static final long serialVersionUID = 1L;
-
-		public FindingException(String info) {
-			super("Ocurrio una excepcion tratando de encontrar " + info);
-		}
-	}
 }

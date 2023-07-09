@@ -57,44 +57,13 @@ public class AppConfigLogic implements IAppConfigLogic {
         return list;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<AppConfig> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                          Object[] variablesBetweenDates) throws EntityException {
-        List<AppConfig> list;
-        String where;
-        try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = this.appConfigDao.findByCriteria(where);
-        } catch (DaoException de) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<AppConfig> findByProperty(String propertyName, Object value) throws EntityException {
-        List<AppConfig> list;
-        try {
-            list = this.appConfigDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
     private void checkFields(AppConfig entity) {
         if (entity.getIdAppConfig() == null) {
             throw new EntityException.EmptyFieldException(Constant.FIELD_ID_ENTITY);
         }
 
         if ((entity.getIdAppConfig() != null)
-                && !(Utilities.checkWordAndCheckWithlength(entity.getIdAppConfig(), 50))) {
+                && !(Utilities.checkWordAndCheckWithLength(entity.getIdAppConfig(), 50))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_ID_ENTITY);
         }
 
@@ -103,7 +72,7 @@ public class AppConfigLogic implements IAppConfigLogic {
         }
 
         if ((entity.getDescripcion() != null)
-                && !(Utilities.checkWordAndCheckWithlength(entity.getDescripcion(), 200))) {
+                && !(Utilities.checkWordAndCheckWithLength(entity.getDescripcion(), 200))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_DESCRIPCION);
         }
     }

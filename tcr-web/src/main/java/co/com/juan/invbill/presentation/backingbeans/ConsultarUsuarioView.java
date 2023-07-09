@@ -68,11 +68,11 @@ public class ConsultarUsuarioView implements Serializable {
 			if (usuarioModApp != null)
 				showPanelModificarUsuario = true;
 			else
-				addWarnMessage(properties.getParametroString("MSG_DATA_NO_FOUND"));
+				addWarnMessage(properties.getParameterByKey("MSG_DATA_NO_FOUND"));
 
 			log.info("=== Consulta de usuario: Usuario consultado {} ===", usuarioApp.getIdUsuarioApp());
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_USUARIO"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_USUARIO"));
 			log.error("=== Consulta de usuario: Fallo la consulta del usuario {}. Se ha producido un error: {}",
 					usuarioApp.getIdUsuarioApp(), e.getMessage());
 		}
@@ -84,9 +84,9 @@ public class ConsultarUsuarioView implements Serializable {
 			showPanelModificarUsuario = false;
 			log.info("=== Actualizacion de usuario: Usuario actualizado. Id={}, descripcion={} === ",
 					usuarioModApp.getIdUsuarioApp(), usuarioModApp.getNombre());
-			addInfoMessage(properties.getParametroString("MSG_USUARIO_ACTUALIZADO"));
+			addInfoMessage(properties.getParameterByKey("MSG_USUARIO_ACTUALIZADO"));
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_ACTUALIZACION_USUARIO"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_ACTUALIZACION_USUARIO"));
 			log.error(
 					"=== Actualizacion de usuario: Fallo la actualizacion del usuario {}. Se ha producido un error: {}",
 					usuarioModApp.getIdUsuarioApp(), e.getMessage());

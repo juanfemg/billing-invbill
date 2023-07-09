@@ -57,23 +57,6 @@ public class CompraDetalleLogic implements ICompraDetalleLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CompraDetalle> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                              Object[] variablesBetweenDates) throws EntityException {
-        List<CompraDetalle> list;
-        String where;
-        try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = this.compraDetalleDao.findByCriteria(where);
-        } catch (DaoException de) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<CompraDetalle> findByProperty(String propertyName, Object value) throws EntityException {
         List<CompraDetalle> list;
         try {

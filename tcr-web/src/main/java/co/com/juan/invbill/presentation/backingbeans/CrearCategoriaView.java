@@ -51,7 +51,7 @@ public class CrearCategoriaView implements Serializable {
 			log.info("=== Creacion de categoria : Categoria creada "
 					+ categoriaProducto.getIdCategoria() + " exitosamente ===");
 			addInfoMessage(properties
-					.getParametroString("MSG_CATEGORIA_CREADA"));
+					.getParameterByKey("MSG_CATEGORIA_CREADA"));
 			categoriaProducto = new CategoriaProducto();
 		} catch (Exception e) {
 			addErrorMessage(e.getMessage());

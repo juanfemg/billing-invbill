@@ -53,7 +53,7 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
             this.checkSecondaryFields(entity);
 
             if (this.getProveedorApp(entity.getIdProveedorApp()) != null) {
-                throw new EntityException(EntityException.ENTITY_WITHSAMEKEY);
+                throw new EntityException(EntityException.ENTITY_WITH_SAME_KEY);
             }
 
             this.proveedorAppDao.save(entity);
@@ -145,7 +145,7 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
         }
 
         if ((entity.getRazonSocial() != null)
-                && !(Utilities.checkWordAndCheckWithlength(entity.getRazonSocial(), 200))) {
+                && !(Utilities.checkWordAndCheckWithLength(entity.getRazonSocial(), 200))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_RAZON_SOCIAL);
         }
 
@@ -153,13 +153,13 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
         }
 
-        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getEstado().name(), 1))) {
+        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
         }
     }
 
     private void checkSecondaryFields(ProveedorApp entity) {
-        if ((entity.getDireccion() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getDireccion(), 200))) {
+        if ((entity.getDireccion() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getDireccion(), 200))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_DIRECCION);
         }
 

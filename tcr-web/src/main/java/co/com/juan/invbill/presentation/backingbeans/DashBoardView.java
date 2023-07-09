@@ -140,7 +140,7 @@ public class DashBoardView implements Serializable {
 			usuarioApp = businessDelegate.findUsuarioByID(session.getAttribute(SessionEnum.LOGIN.name()).toString());
 			loginApp.setUltimoLogin((Date) session.getAttribute(SessionEnum.LAST_LOGIN.name()));
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_USUARIO"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_USUARIO"));
 			log.error("=== Consulta de usuario: Fallo la consulta del usuario {}. Se ha producido un error: {}",
 					session.getAttribute("LOGIN"), e.getMessage());
 		}
@@ -150,7 +150,7 @@ public class DashBoardView implements Serializable {
 		try {
 			reporteVentaDiaria = businessDelegate.getReporteVentaDiaria();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_REPORTE_VENTA_DIARIA"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_REPORTE_VENTA_DIARIA"));
 			log.error(
 					"=== Consulta de reporte de venta diaria: Fallo la consulta del reporte. Se ha producido un error: {}",
 					e.getMessage());
@@ -161,7 +161,7 @@ public class DashBoardView implements Serializable {
 		try {
 			reporteDevolucionDiaria = businessDelegate.getReporteDevolucionDiaria();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_REPORTE_DEVOLUCION_DIARIA"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_REPORTE_DEVOLUCION_DIARIA"));
 			log.error(
 					"=== Consulta de reporte de devolucion diaria: Fallo la consulta del reporte. Se ha producido un error: {}",
 					e.getMessage());
@@ -172,7 +172,7 @@ public class DashBoardView implements Serializable {
 		try {
 			reporteCompraDiaria = businessDelegate.getReporteCompraDiaria();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_REPORTE_COMPRA_DIARIA"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_REPORTE_COMPRA_DIARIA"));
 			log.error(
 					"=== Consulta de reporte de compra diaria: Fallo la consulta del reporte. Se ha producido un error: {}",
 					e.getMessage());
@@ -183,7 +183,7 @@ public class DashBoardView implements Serializable {
 		try {
 			reporteVentaMensuales = businessDelegate.getReporteVentaMensual();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_REPORTE_VENTA_MENSUAL"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_REPORTE_VENTA_MENSUAL"));
 			log.error(
 					"=== Consulta de reporte de venta mensual: Fallo la consulta del reporte. Se ha producido un error: {}",
 					e.getMessage());
@@ -194,7 +194,7 @@ public class DashBoardView implements Serializable {
 		try {
 			reporteDevolucionMensuales = businessDelegate.getReporteDevolucionMensual();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_REPORTE_DEVOLUCION_MENSUAL"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_REPORTE_DEVOLUCION_MENSUAL"));
 			log.error(
 					"=== Consulta de reporte de devolucion mensual: Fallo la consulta del reporte. Se ha producido un error: {}",
 					e.getMessage());
@@ -205,7 +205,7 @@ public class DashBoardView implements Serializable {
 		try {
 			reporteCompraMensuales = businessDelegate.getReporteCompraMensual();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_REPORTE_COMPRA_MENSUAL"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_REPORTE_COMPRA_MENSUAL"));
 			log.error(
 					"=== Consulta de reporte de compra mensual: Fallo la consulta del reporte. Se ha producido un error: {}",
 					e.getMessage());
@@ -222,7 +222,7 @@ public class DashBoardView implements Serializable {
 		try {
 			proveedoresApp = businessDelegate.getProveedores();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_PROVEEDORES"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_PROVEEDORES"));
 			log.error("=== Consulta de Proveedores: Fallo la consulta de los proveedores", e);
 		}
 	}
@@ -317,12 +317,12 @@ public class DashBoardView implements Serializable {
 				showDialogCambiarPassword = false;
 				log.info("=== Actualizacion de usuario: Usuario actualizado. Id={}, descripcion={} === ",
 						usuarioApp.getIdUsuarioApp(), usuarioApp.getNombre());
-				addInfoMessage(properties.getParametroString("MSG_USUARIO_ACTUALIZADO"));
+				addInfoMessage(properties.getParameterByKey("MSG_USUARIO_ACTUALIZADO"));
 			} else {
-				addErrorMessage(properties.getParametroString("MSG_ERROR_PASSWORD_INCORRECTO"));
+				addErrorMessage(properties.getParameterByKey("MSG_ERROR_PASSWORD_INCORRECTO"));
 			}
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_ACTUALIZACION_USUARIO"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_ACTUALIZACION_USUARIO"));
 			log.error(
 					"=== Actualizacion de usuario: Fallo la actualizacion del usuario {}. Se ha producido un error: {}",
 					usuarioApp.getIdUsuarioApp(), e.getMessage());
@@ -355,9 +355,9 @@ public class DashBoardView implements Serializable {
 				throw new Exception();
 			}
 
-			addInfoMessage(properties.getParametroString("MSG_REPORTE_GENERADO"));
+			addInfoMessage(properties.getParameterByKey("MSG_REPORTE_GENERADO"));
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_GENERACION_REPORTE"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_GENERACION_REPORTE"));
 			log.error("=== Generacion Reporte Consolidado Facturas : Fallo la generacion del reporte", e);
 		}
 	}

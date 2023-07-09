@@ -32,20 +32,6 @@ public class CategoriaProductoLogic implements ICategoriaProductoLogic {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<CategoriaProducto> getCategoriaProducto() throws EntityException {
-        List<CategoriaProducto> list;
-        try {
-            list = this.categoriaProductoDao.findAll();
-        } catch (DaoException de) {
-            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.GettingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveCategoriaProducto(CategoriaProducto entity) throws EntityException {
         try {
@@ -97,42 +83,12 @@ public class CategoriaProductoLogic implements ICategoriaProductoLogic {
         return entity;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<CategoriaProducto> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                                  Object[] variablesBetweenDates) throws EntityException {
-        List<CategoriaProducto> list;
-        String where;
-        try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = this.categoriaProductoDao.findByCriteria(where);
-        } catch (DaoException de) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<CategoriaProducto> findByProperty(String propertyName, Object value) throws EntityException {
-        List<CategoriaProducto> list;
-        try {
-            list = this.categoriaProductoDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
     private void checkFields(CategoriaProducto entity) {
         if (entity.getCategoria() == null) {
             throw new EntityException.EmptyFieldException(Constant.FIELD_CATEGORIA);
         }
 
-        if ((entity.getCategoria() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getCategoria(), 50))) {
+        if ((entity.getCategoria() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getCategoria(), 50))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_CATEGORIA);
         }
 
@@ -140,7 +96,7 @@ public class CategoriaProductoLogic implements ICategoriaProductoLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
         }
 
-        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getEstado().name(), 1))) {
+        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
         }
     }

@@ -119,7 +119,7 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_TIPO_UNIDAD);
         }
 
-        if ((entity.getTipoUnidad() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getTipoUnidad(), 45))) {
+        if ((entity.getTipoUnidad() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getTipoUnidad(), 45))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_TIPO_UNIDAD);
         }
 
@@ -127,7 +127,7 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_UNIDAD);
         }
 
-        if ((entity.getUnidad() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getUnidad(), 45))) {
+        if ((entity.getUnidad() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getUnidad(), 45))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_UNIDAD);
         }
 
@@ -135,7 +135,7 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
         }
 
-        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getEstado().name(), 1))) {
+        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
         }
     }

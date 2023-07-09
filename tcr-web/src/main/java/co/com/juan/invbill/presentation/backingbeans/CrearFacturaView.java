@@ -126,7 +126,7 @@ public class CrearFacturaView implements Serializable {
 			}
 
 			if (categorias.isEmpty())
-				addWarnMessage(properties.getParametroString("MSG_CATEGORIAS_INACTIVAS"));
+				addWarnMessage(properties.getParameterByKey("MSG_CATEGORIAS_INACTIVAS"));
 			else {
 				categoriaProducto = categoria.get(0);
 				initProductos();
@@ -151,7 +151,7 @@ public class CrearFacturaView implements Serializable {
 			}
 
 			if (productos.isEmpty())
-				addWarnMessage(properties.getParametroString("MSG_PRODUCTOS_INACTIVOS"));
+				addWarnMessage(properties.getParameterByKey("MSG_PRODUCTOS_INACTIVOS"));
 			else {
 				facturaModDetalle.setProducto((Producto) productos.get(0).getValue());
 				initStockProducto();
@@ -233,7 +233,7 @@ public class CrearFacturaView implements Serializable {
 				if (stockProducto.getStock() < cantidad) {
 					String[] parameters = { facturaModDetalle.getProducto().getProducto(),
 							String.valueOf(stockProducto.getStock()) };
-					addWarnMessage(properties.getParametroString("MSG_PRODUCTO_SIN_STOCK", parameters),
+					addWarnMessage(properties.getParameterByKeyAndNameArray("MSG_PRODUCTO_SIN_STOCK", parameters),
 							ID_DIALOG_MESSAGES);
 				} else {
 					facturaModDetalle.setCantidad(cantidad);
@@ -261,7 +261,7 @@ public class CrearFacturaView implements Serializable {
 		if (stockProducto.getStock() < cantidad) {
 			String[] parameters = { facturaModDetalle.getProducto().getProducto(),
 					String.valueOf(stockProducto.getStock()) };
-			addWarnMessage(properties.getParametroString("MSG_PRODUCTO_SIN_STOCK", parameters));
+			addWarnMessage(properties.getParameterByKeyAndNameArray("MSG_PRODUCTO_SIN_STOCK", parameters));
 			showDialogConfirmacionActualizacion = false;
 		} else {
 			facturaModDetalle.setCantidad(cantidad);
@@ -353,7 +353,7 @@ public class CrearFacturaView implements Serializable {
 
 	public void actionGuardar() {
 		if (facturaCabecera.getValorTotal() > metodoPago) {
-			addWarnMessage(properties.getParametroString("MSG_VALOR_RECIBIDO_INFERIOR"));
+			addWarnMessage(properties.getParameterByKey("MSG_VALOR_RECIBIDO_INFERIOR"));
 		} else {
 			try {
 				if (clienteApp.getIdClienteApp() != null) {
@@ -401,9 +401,9 @@ public class CrearFacturaView implements Serializable {
 			if (reportController.getDefaultPrinter())
 				showButtonImprimir = true;
 			else
-				addWarnMessage(properties.getParametroString("MSG_IMPRESORA_NO_CONFIGURADA"));
+				addWarnMessage(properties.getParameterByKey("MSG_IMPRESORA_NO_CONFIGURADA"));
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_IMPRESORA_NO_CONFIGURADA"));
+			addErrorMessage(properties.getParameterByKey("MSG_IMPRESORA_NO_CONFIGURADA"));
 			log.error("=== Impresion de factura : Fallo la impresion de la factura" + ". ERROR : " + e.getMessage());
 		}
 	}
@@ -464,7 +464,7 @@ public class CrearFacturaView implements Serializable {
 			parameters.put("FACTURA_ORIGINAL", Boolean.TRUE);
 			reportController.printReport(REPORTE_FACTURA_VENTA, parameters);
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_IMPRESION"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_IMPRESION"));
 			log.error("=== Impresion de factura : Fallo la impresion de la factura", e);
 		}
 	}

@@ -18,9 +18,4 @@ public interface IClienteAppLogic {
 
     ClienteApp getClienteApp(Integer id) throws EntityException;
 
-    List<ClienteApp> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                    Object[] variablesBetweenDates) throws EntityException;
-
-    List<ClienteApp> findByProperty(String propertyName, Object value) throws EntityException;
-
 }

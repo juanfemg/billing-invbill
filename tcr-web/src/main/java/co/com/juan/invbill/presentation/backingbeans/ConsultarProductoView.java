@@ -76,7 +76,7 @@ public class ConsultarProductoView implements Serializable {
 		try {
 			productos = businessDelegate.getProductos();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_PRODUCTOS"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_PRODUCTOS"));
 			log.error("=== Consulta de Productos: Fallo la consulta de los productos", e);
 		}
 	}
@@ -92,11 +92,11 @@ public class ConsultarProductoView implements Serializable {
 			}
 
 			if (categorias.isEmpty()) {
-				addWarnMessage(properties.getParametroString("MSG_MODIFICACION_CATEGORIAS_INACTIVAS"));
+				addWarnMessage(properties.getParameterByKey("MSG_MODIFICACION_CATEGORIAS_INACTIVAS"));
 			}
 
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_CATEGORIAS"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_CATEGORIAS"));
 			log.error("=== Consulta de Categorias: Fallo la consulta de las categorias", e);
 		}
 	}
@@ -112,11 +112,11 @@ public class ConsultarProductoView implements Serializable {
 			}
 
 			if (unidades.isEmpty()) {
-				addWarnMessage(properties.getParametroString("MSG_MODIFICACION_UNIDADES_MEDIDA_INACTIVAS"));
+				addWarnMessage(properties.getParameterByKey("MSG_MODIFICACION_UNIDADES_MEDIDA_INACTIVAS"));
 			}
 
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_UNIDADES_MEDIDA"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_UNIDADES_MEDIDA"));
 			log.error("=== Consulta de Tipos de Unidades de Medida: Fallo la consulta de las unidades de medida", e);
 		}
 	}
@@ -134,9 +134,9 @@ public class ConsultarProductoView implements Serializable {
 			showDialogModificarProducto = false;
 			log.info("=== Actualizacion de producto: Producto actualizado. Id={}, descripcion={} === ",
 					productoMod.getIdProducto(), productoMod.getProducto());
-			addInfoMessage(properties.getParametroString("MSG_PRODUCTO_ACTUALIZADO"));
+			addInfoMessage(properties.getParameterByKey("MSG_PRODUCTO_ACTUALIZADO"));
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_ACTUALIZACION_PRODUCTO"), ID_DIALOG_MESSAGES);
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_ACTUALIZACION_PRODUCTO"), ID_DIALOG_MESSAGES);
 			log.error(
 					"=== Actualizacion de producto: Fallo la actualizacion del producto {}. Se ha producido un error: {}",
 					productoMod.getIdProducto(), e.getMessage());

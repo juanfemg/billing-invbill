@@ -95,7 +95,7 @@ public class RegistrarDevolucionView implements Serializable {
 			if (!facturaDetalles.isEmpty()) {
 				findDevolucionCabeceraByID();
 			} else {
-				addWarnMessage(properties.getParametroString("MSG_DATA_NO_FOUND"));
+				addWarnMessage(properties.getParameterByKey("MSG_DATA_NO_FOUND"));
 			}
 
 			devolucionDetalles.clear();
@@ -105,7 +105,7 @@ public class RegistrarDevolucionView implements Serializable {
 
 			log.info("=== Consulta de factura: Factura consultada {}", facturaCabecera.getIdFactura());
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_FACTURA"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_FACTURA"));
 			log.error("=== Consulta de facturas: Fallo la consulta de la factura {}. Se ha producido un error: {}",
 					facturaCabecera.getIdFactura(), e.getMessage());
 		}
@@ -119,14 +119,14 @@ public class RegistrarDevolucionView implements Serializable {
 					facturaCabecera.getIdFactura());
 			if (devolucionCabecera != null) {
 				existDevolucionFactura = true;
-				addWarnMessage(properties.getParametroString("MSG_FACTURA_PRESENTA_DEVOLUCION"));
+				addWarnMessage(properties.getParameterByKey("MSG_FACTURA_PRESENTA_DEVOLUCION"));
 			} else {
 				devolucionCabecera = new DevolucionCabecera();
 				existDevolucionFactura = false;
 			}
 			showPanelRegistrarDevolucion = true;
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_DEVOLUCION"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_DEVOLUCION"));
 			log.error(
 					"=== Consulta de devolucion : Fallo la consulta de la devolucion asociada a la factura {}. Se ha producido un error: {}",
 					facturaCabecera.getIdFactura(), e.getMessage());
@@ -180,7 +180,7 @@ public class RegistrarDevolucionView implements Serializable {
 
 			log.info("=== Consulta de factura: Factura consultada {}", facturaCabecera.getIdFactura());
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_FACTURA"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_FACTURA"));
 			log.error("=== Consulta de facturas: Fallo la consulta de la factura {}. Se ha producido un error: {}",
 					facturaCabecera.getIdFactura(), e.getMessage());
 		}
@@ -258,10 +258,10 @@ public class RegistrarDevolucionView implements Serializable {
 
 			FacesContext.getCurrentInstance().getViewRoot().getViewMap().clear();
 
-			addInfoMessage(properties.getParametroString("MSG_DEVOLUCION_CREADA"));
+			addInfoMessage(properties.getParameterByKey("MSG_DEVOLUCION_CREADA"));
 
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CREACION_DEVOLUCION"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CREACION_DEVOLUCION"));
 			log.error(
 					"=== Creacion y/o actualizacion de devolucion Cabecera: Fallo la creacion de la devolucion asociada a la factura {}. Se ha producido un error: {}",
 					devolucionCabecera.getIdFactura(), e.getMessage());
@@ -304,7 +304,7 @@ public class RegistrarDevolucionView implements Serializable {
 					getStockProducto(devolucionDetalle);
 				}
 			} catch (Exception e) {
-				addErrorMessage(properties.getParametroString("MSG_ERROR_CREACION_DEVOLUCION_DETALLE"));
+				addErrorMessage(properties.getParameterByKey("MSG_ERROR_CREACION_DEVOLUCION_DETALLE"));
 				log.error(
 						"=== Creacion y/o actualizacion de devolucion Detalle: Fallo la creacion o actualizacion de la devolucion asociada a la factura {} y al producto {}. Se ha producido un error: {}",
 						devolucionDetalle.getDevolucionCabecera().getIdFactura(),
@@ -319,7 +319,7 @@ public class RegistrarDevolucionView implements Serializable {
 
 			updateStockProducto(devolucionDetalle);
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_STOCK_PRODUCTO",
+			addErrorMessage(properties.getParameterByKeyAndName("MSG_ERROR_CONSULTA_STOCK_PRODUCTO",
 					devolucionDetalle.getProducto().getProducto()));
 			log.error(
 					"=== Consulta de Stock de Producto: Fallo la consulta del stock de producto {}. Se ha producido un error: {}",
@@ -335,7 +335,7 @@ public class RegistrarDevolucionView implements Serializable {
 			log.info("=== Actualizacion de stock de producto: Stock de producto actualizado. IdProducto={}, valor={} ",
 					stockProducto.getProducto().getIdProducto(), stockProducto.getStock());
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_ACTUALIZACION_STOCK_PRODUCTO",
+			addErrorMessage(properties.getParameterByKeyAndName("MSG_ERROR_ACTUALIZACION_STOCK_PRODUCTO",
 					stockProducto.getProducto().getProducto()));
 			log.error(
 					"=== Actualizacion de Stock de Producto: Fallo la actualizacion del stock de producto {}. Se ha producido un error: {}",

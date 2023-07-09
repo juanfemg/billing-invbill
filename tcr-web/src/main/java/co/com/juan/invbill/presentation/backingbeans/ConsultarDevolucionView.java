@@ -62,7 +62,7 @@ public class ConsultarDevolucionView implements Serializable {
 		try {
 			devolucionCabeceras = businessDelegate.getDevolucionCabeceras();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_DEVOLUCIONES"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_DEVOLUCIONES"));
 			log.error("=== Consulta de devoluciones: Fallo la consulta de las devoluciones", e);
 		}
 	}
@@ -71,7 +71,7 @@ public class ConsultarDevolucionView implements Serializable {
 		try {
 			devolucionCabeceras = businessDelegate.getDevolucionCabecerasByCriteria(entity);
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_DEVOLUCIONES"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_DEVOLUCIONES"));
 			log.error("=== Consulta de devoluciones: Fallo la consulta de las devoluciones", e);
 		}
 	}
@@ -90,7 +90,7 @@ public class ConsultarDevolucionView implements Serializable {
 
 			log.info("=== Consulta de devoluciones: Devolucion consultada {} ===", devolucionCabecera.getIdFactura());
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_DEVOLUCION",
+			addErrorMessage(properties.getParameterByKeyAndName("MSG_ERROR_CONSULTA_DEVOLUCION",
 					devolucionCabecera.getIdFactura().toString()));
 			log.error("=== Consulta de devolucion: Fallo la consulta de la devolucion {}. Se ha producido un error: {}",
 					devolucionCabecera.getIdFactura(), e.getMessage());

@@ -22,6 +22,4 @@ public interface ICompraCabeceraLogic {
     List<CompraCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
                                         Object[] variablesBetweenDates) throws EntityException;
 
-    List<CompraCabecera> findByProperty(String propertyName, Object value) throws EntityException;
-
 }

@@ -196,6 +196,54 @@ CREATE TABLE `usuario_app` (
   CONSTRAINT `usuario_rol_fk` FOREIGN KEY (`id_rol_app`) REFERENCES `rol_app` (`id_rol_app`)
 );
 
+CREATE ALIAS getReporteCompraDiaria AS  $$
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+@CODE
+ResultSet getReporteCompraDiariaRS(final Connection conn, final Date fecha) throws SQLException
+{
+  StringBuffer sql = new StringBuffer();
+  sql.append("SELECT IFNULL(SUM(cantidad * (precio_compra + valor_iva)), 0) AS valorTotal, IFNULL(SUM(cantidad), 0) AS cantidadProductos FROM invbill.compra_detalle WHERE CAST(fecha_creacion AS date) = CAST(" + fecha + " AS date)");
+  PreparedStatement ps = conn.prepareStatement(sql.toString());
+  return ps.executeQuery();
+}
+$$;
+
+CREATE ALIAS getReporteDevolucionDiaria AS  $$
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+@CODE
+ResultSet getReporteDevolucionDiariaRS(final Connection conn, final Date fecha) throws SQLException
+{
+  StringBuffer sql = new StringBuffer();
+  sql.append("SELECT IFNULL(SUM(cantidad * precio_venta), 0) AS valorTotal, IFNULL(SUM(cantidad), 0) AS cantidadProductos FROM invbill.devolucion_detalle WHERE CAST(fecha_creacion AS date) = CAST(" + fecha + " AS date)");
+  PreparedStatement ps = conn.prepareStatement(sql.toString());
+  return ps.executeQuery();
+}
+$$;
+
+CREATE ALIAS getReporteVentaDiaria AS  $$
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+@CODE
+ResultSet getReporteVentaDiariaRS(final Connection conn, final Date fecha) throws SQLException
+{
+  StringBuffer sql = new StringBuffer();
+  sql.append("SELECT IFNULL((SUM(venta.cantidad * venta.precio_venta) - IFNULL(SUM(devolucion.cantidad * devolucion.precio_venta), 0)), 0) AS valorTotal, IFNULL((SUM(venta.cantidad) - IFNULL(SUM(devolucion.cantidad), 0)), 0) AS cantidadProductos FROM invbill.factura_detalle venta LEFT JOIN invbill.devolucion_detalle devolucion ON venta.id_factura = devolucion.id_factura AND venta.id_producto = devolucion.id_producto WHERE CAST(venta.fecha_creacion AS date) = CAST(" + fecha + " AS date)");
+  PreparedStatement ps = conn.prepareStatement(sql.toString());
+  return ps.executeQuery();
+}
+$$;
+
 INSERT INTO `app_config` VALUES ('IMPRESORA_PREDETERMINADA','Epson TM-T20II','Configuracion de Impresora Predeterminada','2017-10-21 18:21:09'),('IVA','19','Valor del impuesto a la venta de bienes de consumo','2017-10-21 18:21:09'),('TOPE_STOCK','3','Configuracion de alerta para tope minimo de stock','2018-07-27 19:33:20');
 
 INSERT INTO `tipo_periodo` VALUES (1,'ANUAL',12,'A'),(2,'SEMESTRAL',6,'A'),(3,'TRIMESTRAL',3,'A'),(4,'MENSUAL',1,'A');

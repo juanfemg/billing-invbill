@@ -28,7 +28,7 @@ import org.springframework.stereotype.Controller;
 import com.lowagie.text.pdf.PdfWriter;
 
 import co.com.juan.invbill.model.AppConfig;
-import co.com.juan.invbill.util.ParameterApp;
+import co.com.juan.invbill.enums.ParameterEnum;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -73,7 +73,7 @@ public class ReportController implements IReportController {
 		PrintService[] printServices;
 		List<PrintService> listPrinters;
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		AppConfig appConfig = (AppConfig) session.getAttribute(ParameterApp.IMPRESORA_PREDETERMINADA.toString());
+		AppConfig appConfig = (AppConfig) session.getAttribute(ParameterEnum.IMPRESORA_PREDETERMINADA.name());
 
 		if (appConfig.getValor() == null)
 			return false;

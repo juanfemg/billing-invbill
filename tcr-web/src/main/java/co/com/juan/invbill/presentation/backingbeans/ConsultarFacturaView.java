@@ -69,7 +69,7 @@ public class ConsultarFacturaView implements Serializable {
 		try {
 			facturaCabeceras = businessDelegate.getFacturaCabeceras();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_FACTURAS"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_FACTURAS"));
 			log.error("=== Consulta de facturas: Fallo la consulta de las facturas", e);
 		}
 	}
@@ -78,7 +78,7 @@ public class ConsultarFacturaView implements Serializable {
 		try {
 			facturaCabeceras = businessDelegate.getFacturaCabecerasByCriteria(entity);
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_FACTURAS"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_FACTURAS"));
 			log.error("=== Consulta de facturas: Fallo la consulta de las facturas", e);
 		}
 	}
@@ -97,7 +97,7 @@ public class ConsultarFacturaView implements Serializable {
 
 			log.info("=== Consulta de facturas: Factura consultada {} ===", facturaCabecera.getIdFactura());
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_FACTURA",
+			addErrorMessage(properties.getParameterByKeyAndName("MSG_ERROR_CONSULTA_FACTURA",
 					facturaCabecera.getIdFactura().toString()));
 			log.error("=== Consulta de factura: Fallo la consulta de la factura {}. Se ha producido un error: {}",
 					facturaCabecera.getIdFactura(), e.getMessage());
@@ -127,10 +127,10 @@ public class ConsultarFacturaView implements Serializable {
 			if (reportController.getDefaultPrinter()) {
 				printReporte();
 			} else {
-				addWarnMessage(properties.getParametroString("MSG_IMPRESORA_NO_CONFIGURADA"));
+				addWarnMessage(properties.getParameterByKey("MSG_IMPRESORA_NO_CONFIGURADA"));
 			}
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_IMPRESORA_NO_CONFIGURADA"));
+			addErrorMessage(properties.getParameterByKey("MSG_IMPRESORA_NO_CONFIGURADA"));
 			log.error(
 					"=== Impresion de copia de factura: Fallo la impresion de la factura {}. Se ha presentado un error: {}",
 					facturaCabecera.getIdFactura(), e.getMessage());
@@ -144,7 +144,7 @@ public class ConsultarFacturaView implements Serializable {
 			parameters.put("FACTURA_ORIGINAL", Boolean.FALSE);
 			reportController.printReport(REPORTE_FACTURA_VENTA, parameters);
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_IMPRESION"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_IMPRESION"));
 			log.error(
 					"=== Impresion de copia de factura: Fallo la impresion de la factura {}. Se ha presentado un error: {}",
 					facturaCabecera.getIdFactura(), e.getMessage());

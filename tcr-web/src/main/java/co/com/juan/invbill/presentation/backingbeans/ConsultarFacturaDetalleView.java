@@ -56,7 +56,7 @@ public class ConsultarFacturaDetalleView implements Serializable {
 				devolucionCabecera = businessDelegate.findDevolucionCabeceraByID(facturaCabecera.getIdFactura());
 			}
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_DEVOLUCION",
+			addErrorMessage(properties.getParameterByKeyAndName("MSG_ERROR_CONSULTA_DEVOLUCION",
 					facturaCabecera.getIdFactura().toString()));
 			log.error("=== Consulta de devolucion: Fallo la consulta de la devolucion {}. Se ha producido un error: {}",
 					facturaCabecera.getIdFactura(), e.getMessage());

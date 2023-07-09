@@ -38,7 +38,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
             this.checkFields(entity);
 
             if (this.getUsuarioApp(entity.getIdUsuarioApp()) != null) {
-                throw new EntityException(EntityException.ENTITY_WITHSAMEKEY);
+                throw new EntityException(EntityException.ENTITY_WITH_SAME_KEY);
             }
 
             this.usuarioAppDao.save(entity);
@@ -111,7 +111,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
         }
 
         if ((entity.getIdUsuarioApp() != null)
-                && !(Utilities.checkWordAndCheckWithlength(entity.getIdUsuarioApp(), 20))) {
+                && !(Utilities.checkWordAndCheckWithLength(entity.getIdUsuarioApp(), 20))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_ID_ENTITY);
         }
 
@@ -119,7 +119,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_NOMBRE);
         }
 
-        if ((entity.getNombre() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getNombre(), 50))) {
+        if ((entity.getNombre() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getNombre(), 50))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_NOMBRE);
         }
 
@@ -127,7 +127,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_PASSW);
         }
 
-        if ((entity.getPassword() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getPassword(), 45))) {
+        if ((entity.getPassword() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getPassword(), 45))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_PASSW);
         }
 
@@ -135,7 +135,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
         }
 
-        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getEstado().name(), 1))) {
+        if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
         }
 
@@ -143,7 +143,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
             throw new EntityException.EmptyFieldException(Constant.FIELD_ROL);
         }
 
-        if ((entity.getRolApp() != null) && !(Utilities.checkWordAndCheckWithlength(entity.getRolApp().getRol(), 45))) {
+        if ((entity.getRolApp() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getRolApp().getRol(), 45))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_ROL);
         }
     }

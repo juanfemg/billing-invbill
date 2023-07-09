@@ -65,7 +65,7 @@ public class ConsultarCompraView implements Serializable {
 		try {
 			compraCabeceras = businessDelegate.getCompraCabeceras();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_COMPRAS"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_COMPRAS"));
 			log.error("=== Consulta de compras: Fallo la consulta de las compras", e);
 		}
 	}
@@ -86,7 +86,7 @@ public class ConsultarCompraView implements Serializable {
 					compraCabeceraId.getIdFacturaCompra(), compraCabeceraId.getIdProveedorApp());
 		} catch (Exception e) {
 			addErrorMessage(
-					properties.getParametroString("MSG_ERROR_CONSULTA_COMPRA_BY_FACTURA_AND_PROVEEDOR", new String[] {
+					properties.getParameterByKeyAndNameArray("MSG_ERROR_CONSULTA_COMPRA_BY_FACTURA_AND_PROVEEDOR", new String[] {
 							compraCabeceraId.getIdFacturaCompra(), compraCabeceraId.getIdProveedorApp().toString() }));
 			log.error(
 					"=== Consulta de compras: Fallo la consulta de la compra, factura={}, proveedor={}. Se ha producido un error: {}",
@@ -102,10 +102,10 @@ public class ConsultarCompraView implements Serializable {
 					compraCabeceraId.getIdFacturaCompra(), compraCabeceraId.getIdProveedorApp());
 		} catch (Exception e) {
 			if (compraCabeceraId.getIdFacturaCompra().isEmpty()) {
-				addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_COMPRA_BY_PROVEEDOR",
+				addErrorMessage(properties.getParameterByKeyAndName("MSG_ERROR_CONSULTA_COMPRA_BY_PROVEEDOR",
 						compraCabeceraId.getIdProveedorApp().toString()));
 			} else {
-				addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_COMPRA_BY_FACTURA",
+				addErrorMessage(properties.getParameterByKeyAndName("MSG_ERROR_CONSULTA_COMPRA_BY_FACTURA",
 						compraCabeceraId.getIdFacturaCompra()));
 			}
 			log.error(

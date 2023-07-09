@@ -230,9 +230,9 @@ public class ReporteProductosView implements Serializable {
 				content = new DefaultStreamedContent(stream, STREAM_CONTENT_TYPE, REPORTE_PRODUCTOS.concat(SUFFIX_PDF));
 			}
 
-			addInfoMessage(properties.getParametroString("MSG_REPORTE_GENERADO"));
+			addInfoMessage(properties.getParameterByKey("MSG_REPORTE_GENERADO"));
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_GENERACION_REPORTE"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_GENERACION_REPORTE"));
 			log.error("=== Generacion Reporte Productos : Fallo la generacion del reporte", e);
 		}
 	}

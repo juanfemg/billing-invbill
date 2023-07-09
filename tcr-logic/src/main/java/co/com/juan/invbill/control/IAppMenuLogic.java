@@ -12,8 +12,4 @@ public interface IAppMenuLogic {
 
     List<AppMenu> getDataAppMenu() throws EntityException;
 
-    List<AppMenu> findByCriteria(Object[] variables, Object[] variablesBetween, Object[] variablesBetweenDates) throws EntityException;
-
-    List<AppMenu> findByProperty(String propertyName, Object value) throws EntityException;
-
 }

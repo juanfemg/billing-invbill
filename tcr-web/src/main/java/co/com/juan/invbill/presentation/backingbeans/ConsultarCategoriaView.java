@@ -66,7 +66,7 @@ public class ConsultarCategoriaView implements Serializable {
 		try {
 			categoriasProducto = businessDelegate.getCategoriasProductoSortByCategoria();
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_CONSULTA_CATEGORIAS"));
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_CATEGORIAS"));
 			log.error("=== Consulta de Categorias: Fallo la consulta de las categorias", e);
 		}
 	}
@@ -81,9 +81,9 @@ public class ConsultarCategoriaView implements Serializable {
 			showDialogModificarCategoria = false;
 			log.info("=== Actualizacion de categoria: Categoria actualizada. Id={}, descripcion={} ===",
 					categoriaModProducto.getIdCategoria(), categoriaModProducto.getCategoria());
-			addInfoMessage(properties.getParametroString("MSG_CATEGORIA_ACTUALIZADA"));
+			addInfoMessage(properties.getParameterByKey("MSG_CATEGORIA_ACTUALIZADA"));
 		} catch (Exception e) {
-			addErrorMessage(properties.getParametroString("MSG_ERROR_ACTUALIZACION_CATEGORIA"), ID_DIALOG_MESSAGES);
+			addErrorMessage(properties.getParameterByKey("MSG_ERROR_ACTUALIZACION_CATEGORIA"), ID_DIALOG_MESSAGES);
 			log.error(
 					"=== Actualizacion de categoria: Fallo la actualizacion de la categoria {}. Se ha producido un error: {}",
 					categoriaModProducto.getIdCategoria(), e.getMessage());
