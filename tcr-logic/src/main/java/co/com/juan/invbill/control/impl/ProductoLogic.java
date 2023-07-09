@@ -2,25 +2,26 @@ package co.com.juan.invbill.control.impl;
 
 import co.com.juan.invbill.control.IProductoLogic;
 import co.com.juan.invbill.dao.IProductoDao;
+import co.com.juan.invbill.dataaccess.api.DaoException;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.Producto;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.List;
 
 /**
  * @author Juan Felipe
  */
-@Scope("singleton")
-@Service("ProductoLogic")
+@Singleton
+@Service
 public class ProductoLogic implements IProductoLogic {
 
     private static final Logger log = LoggerFactory.getLogger(ProductoLogic.class);
@@ -34,15 +35,12 @@ public class ProductoLogic implements IProductoLogic {
     @Override
     @Transactional(readOnly = true)
     public List<Producto> getProducto() {
-        log.debug("finding all {} instances", Constant.ENTITY_NAME);
-
         List<Producto> list;
-
         try {
-            list = productoDao.findAll();
-        } catch (Exception e) {
-            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException.GettingException(EntityException.ALL + Constant.ENTITY_NAME);
+            list = this.productoDao.findAll();
+        } catch (DaoException de) {
+            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
+            throw new EntityException.GettingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -51,16 +49,11 @@ public class ProductoLogic implements IProductoLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveProducto(Producto entity) {
-        log.debug("saving {} instance", Constant.ENTITY_NAME);
-
         try {
-            checkFields(entity);
-
-            productoDao.save(entity);
-
-            log.debug("save {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.productoDao.save(entity);
+        } catch (DaoException de) {
+            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
@@ -68,16 +61,11 @@ public class ProductoLogic implements IProductoLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateProducto(Producto entity) {
-        log.debug("updating {} instance", Constant.ENTITY_NAME);
-
         try {
-            checkFields(entity);
-
-            productoDao.update(entity);
-
-            log.debug("update {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.productoDao.update(entity);
+        } catch (DaoException de) {
+            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
@@ -85,15 +73,11 @@ public class ProductoLogic implements IProductoLogic {
     @Override
     @Transactional(readOnly = true)
     public Producto getProducto(Integer id) {
-        log.debug("getting {} instance", Constant.ENTITY_NAME);
-
         Producto entity;
-
         try {
-            entity = productoDao.findById(id);
-
-        } catch (Exception e) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            entity = this.productoDao.findById(id);
+        } catch (DaoException de) {
+            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
@@ -104,32 +88,27 @@ public class ProductoLogic implements IProductoLogic {
     @Transactional(readOnly = true)
     public List<Producto> findByCriteria(Object[] variables, Object[] variablesBetween,
                                          Object[] variablesBetweenDates) {
-        log.debug("getting {} instance by criteria", Constant.ENTITY_NAME);
-
         List<Producto> list;
         String where;
-
         try {
             where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = productoDao.findByCriteria(where);
-        } catch (Exception e) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.productoDao.findByCriteria(where);
+        } catch (DaoException de) {
+            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
+
         return list;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Producto> findByProperty(String propertyName, Object value) {
-        log.debug("finding {} instance", Constant.ENTITY_NAME);
-
         List<Producto> list;
-
         try {
-            list = productoDao.findByProperty(propertyName, value);
-        } catch (Exception e) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.productoDao.findByProperty(propertyName, value);
+        } catch (DaoException de) {
+            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
@@ -140,14 +119,11 @@ public class ProductoLogic implements IProductoLogic {
     @Transactional(readOnly = true)
     public List<Producto> findByPropertySort(String propertyName, Object value, String sortColumnName,
                                              boolean sortAscending) {
-        log.debug("finding {} instance", Constant.ENTITY_NAME);
-
         List<Producto> list;
-
         try {
-            list = productoDao.findByPropertySort(propertyName, value, sortColumnName, sortAscending);
-        } catch (Exception e) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.productoDao.findByPropertySort(propertyName, value, sortColumnName, sortAscending);
+        } catch (DaoException de) {
+            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
@@ -157,14 +133,11 @@ public class ProductoLogic implements IProductoLogic {
     @Override
     @Transactional(readOnly = true)
     public List<Producto> findByProperty(String propertyName, Collection<?> values) {
-        log.debug("finding {} instance", Constant.ENTITY_NAME);
-
         List<Producto> list;
-
         try {
-            list = productoDao.findByProperty(propertyName, values);
-        } catch (Exception e) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.productoDao.findByProperty(propertyName, values);
+        } catch (DaoException de) {
+            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 

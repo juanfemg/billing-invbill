@@ -2,25 +2,25 @@ package co.com.juan.invbill.control.impl;
 
 import co.com.juan.invbill.control.IDevolucionCabeceraLogic;
 import co.com.juan.invbill.dao.IDevolucionCabeceraDao;
+import co.com.juan.invbill.dataaccess.api.DaoException;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.DevolucionCabecera;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 /**
  * @author Juan Felipe
  */
-
-@Scope("singleton")
-@Service("DevolucionCabeceraLogic")
+@Singleton
+@Service
 public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
 
     private static final Logger log = LoggerFactory.getLogger(DevolucionCabeceraLogic.class);
@@ -34,20 +34,11 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveDevolucionCabecera(DevolucionCabecera entity) {
-        log.debug("saving {} instance", Constant.ENTITY_NAME);
-
         try {
-            checkFields(entity);
-
-            if (getDevolucionCabecera(entity.getIdFactura()) != null) {
-                throw new EntityException(EntityException.ENTITY_WITHSAMEKEY);
-            }
-
-            devolucionCabeceraDao.save(entity);
-
-            log.debug("save {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.devolucionCabeceraDao.save(entity);
+        } catch (DaoException de) {
+            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
@@ -55,16 +46,11 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateDevolucionCabecera(DevolucionCabecera entity) {
-        log.debug("updating {} instance", Constant.ENTITY_NAME);
-
         try {
-            checkFields(entity);
-
-            devolucionCabeceraDao.update(entity);
-
-            log.debug("update {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.devolucionCabeceraDao.update(entity);
+        } catch (DaoException de) {
+            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
@@ -72,15 +58,11 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
     @Override
     @Transactional(readOnly = true)
     public DevolucionCabecera getDevolucionCabecera(Integer id) {
-        log.debug("getting {} instance", Constant.ENTITY_NAME);
-
         DevolucionCabecera entity;
-
         try {
-            entity = devolucionCabeceraDao.findById(id);
-
-        } catch (Exception e) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            entity = this.devolucionCabeceraDao.findById(id);
+        } catch (DaoException de) {
+            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
@@ -90,14 +72,11 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
     @Override
     @Transactional(readOnly = true)
     public List<DevolucionCabecera> getDataDevolucionCabecera() {
-        log.debug("getting {} instance", Constant.ENTITY_NAME);
-
         List<DevolucionCabecera> list;
-
         try {
-            list = devolucionCabeceraDao.findAll();
-        } catch (Exception e) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.devolucionCabeceraDao.findAll();
+        } catch (DaoException de) {
+            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
@@ -108,32 +87,27 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
     @Transactional(readOnly = true)
     public List<DevolucionCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
                                                    Object[] variablesBetweenDates) {
-        log.debug("getting {} instance by criteria", Constant.ENTITY_NAME);
-
         List<DevolucionCabecera> list;
         String where;
-
         try {
             where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = devolucionCabeceraDao.findByCriteria(where);
-        } catch (Exception e) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.devolucionCabeceraDao.findByCriteria(where);
+        } catch (DaoException de) {
+            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
+
         return list;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<DevolucionCabecera> findByProperty(String propertyName, Object value) {
-        log.debug("finding {} instance", Constant.ENTITY_NAME);
-
         List<DevolucionCabecera> list;
-
         try {
-            list = devolucionCabeceraDao.findByProperty(propertyName, value);
-        } catch (Exception e) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.devolucionCabeceraDao.findByProperty(propertyName, value);
+        } catch (DaoException de) {
+            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 

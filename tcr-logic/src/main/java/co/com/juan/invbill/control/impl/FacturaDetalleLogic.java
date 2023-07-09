@@ -2,26 +2,26 @@ package co.com.juan.invbill.control.impl;
 
 import co.com.juan.invbill.control.IFacturaDetalleLogic;
 import co.com.juan.invbill.dao.IFacturaDetalleDao;
+import co.com.juan.invbill.dataaccess.api.DaoException;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.FacturaDetalle;
 import co.com.juan.invbill.model.FacturaDetalleId;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 /**
  * @author Juan Felipe
  */
-
-@Scope("singleton")
-@Service("FacturaDetalleLogic")
+@Singleton
+@Service
 public class FacturaDetalleLogic implements IFacturaDetalleLogic {
 
     private static final Logger log = LoggerFactory.getLogger(FacturaDetalleLogic.class);
@@ -36,15 +36,12 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
     @Override
     @Transactional(readOnly = true)
     public List<FacturaDetalle> getFacturaDetalle() {
-        log.debug("finding all {} instances", Constant.ENTITY_NAME);
-
         List<FacturaDetalle> list;
-
         try {
-            list = facturaDetalleDao.findAll();
-        } catch (Exception e) {
-            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException.GettingException(EntityException.ALL + Constant.ENTITY_NAME);
+            list = this.facturaDetalleDao.findAll();
+        } catch (DaoException de) {
+            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
+            throw new EntityException.GettingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -53,20 +50,11 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveFacturaDetalle(FacturaDetalle entity) {
-        log.debug("saving {} instance", Constant.ENTITY_NAME);
-
         try {
-            checkFields(entity);
-
-            if (getFacturaDetalle(entity.getId()) != null) {
-                throw new EntityException(EntityException.ENTITY_WITHSAMEKEY);
-            }
-
-            facturaDetalleDao.save(entity);
-
-            log.debug("save {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.facturaDetalleDao.save(entity);
+        } catch (DaoException de) {
+            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
@@ -74,16 +62,11 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateFacturaDetalle(FacturaDetalle entity) {
-        log.debug("updating FacturaDetalle instance");
-
         try {
-            checkFields(entity);
-
-            facturaDetalleDao.update(entity);
-
-            log.debug("update {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.facturaDetalleDao.update(entity);
+        } catch (DaoException de) {
+            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
@@ -91,15 +74,11 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
     @Override
     @Transactional(readOnly = true)
     public FacturaDetalle getFacturaDetalle(FacturaDetalleId id) {
-        log.debug("getting {} instance", Constant.ENTITY_NAME);
-
         FacturaDetalle entity;
-
         try {
-            entity = facturaDetalleDao.findById(id);
-
-        } catch (Exception e) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            entity = this.facturaDetalleDao.findById(id);
+        } catch (DaoException de) {
+            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
@@ -110,32 +89,41 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
     @Transactional(readOnly = true)
     public List<FacturaDetalle> findByCriteria(Object[] variables, Object[] variablesBetween,
                                                Object[] variablesBetweenDates) {
-        log.debug("getting {} instance by criteria", Constant.ENTITY_NAME);
-
         List<FacturaDetalle> list;
         String where;
-
         try {
             where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = facturaDetalleDao.findByCriteria(where);
-        } catch (Exception e) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.facturaDetalleDao.findByCriteria(where);
+        } catch (DaoException de) {
+            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
+
         return list;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<FacturaDetalle> findByProperty(String propertyName, Object value) {
-        log.debug("finding {} instance", Constant.ENTITY_NAME);
-
         List<FacturaDetalle> list;
-
         try {
-            list = facturaDetalleDao.findByProperty(propertyName, value);
-        } catch (Exception e) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.facturaDetalleDao.findByProperty(propertyName, value);
+        } catch (DaoException de) {
+            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
+            throw new EntityException.FindingException(Constant.ENTITY_NAME);
+        }
+
+        return list;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<FacturaDetalle> getFacturaDetalleDevolucionByIdFactura(Integer idFactura) {
+        List<FacturaDetalle> list;
+        try {
+            list = this.facturaDetalleDao.findByNamedQueryWithoutAlias(DETALLE_FACTURA_DEVOLUCION, idFactura);
+        } catch (DaoException de) {
+            log.error("get {} by IdFactura failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
@@ -169,24 +157,6 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getValorIva().toString(), 22, 2))) {
             throw new EntityException.NotValidFormatException(Constant.FIELD_VALOR_IVA);
         }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<FacturaDetalle> getFacturaDetalleDevolucionByIdFactura(Integer idFactura) {
-        log.debug("getting {} instance by IdFactura", Constant.ENTITY_NAME);
-
-        List<FacturaDetalle> list;
-
-        try {
-            list = facturaDetalleDao.findByNamedQueryWithoutAlias(DETALLE_FACTURA_DEVOLUCION, idFactura);
-
-        } catch (Exception e) {
-            log.error("get {} by IdFactura failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
     }
 
     private static class Constant {

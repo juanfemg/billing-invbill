@@ -2,24 +2,25 @@ package co.com.juan.invbill.control.impl;
 
 import co.com.juan.invbill.control.ITipoPeriodoLogic;
 import co.com.juan.invbill.dao.ITipoPeriodoDao;
+import co.com.juan.invbill.dataaccess.api.DaoException;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.TipoPeriodo;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 /**
  * @author Juan Felipe
  */
-@Scope("singleton")
-@Service("TipoPeriodoLogic")
+@Singleton
+@Service
 public class TipoPeriodoLogic implements ITipoPeriodoLogic {
 
     private static final Logger log = LoggerFactory.getLogger(TipoPeriodoLogic.class);
@@ -33,15 +34,12 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
     @Override
     @Transactional(readOnly = true)
     public List<TipoPeriodo> getTipoPeriodo() {
-        log.debug("finding all {} instances", Constant.ENTITY_NAME);
-
         List<TipoPeriodo> list;
-
         try {
-            list = tipoPeriodoDao.findAll();
-        } catch (Exception e) {
-            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException.GettingException(EntityException.ALL + Constant.ENTITY_NAME);
+            list = this.tipoPeriodoDao.findAll();
+        } catch (DaoException de) {
+            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
+            throw new EntityException.GettingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -50,20 +48,11 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveTipoPeriodo(TipoPeriodo entity) {
-        log.debug("saving {} instance", Constant.ENTITY_NAME);
-
         try {
-            checkFields(entity);
-
-            if (getTipoPeriodo(entity.getIdPeriodo()) != null) {
-                throw new EntityException(EntityException.ENTITY_WITHSAMEKEY);
-            }
-
-            tipoPeriodoDao.save(entity);
-
-            log.debug("save {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.tipoPeriodoDao.save(entity);
+        } catch (DaoException de) {
+            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
@@ -71,16 +60,11 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateTipoPeriodo(TipoPeriodo entity) {
-        log.debug("updating {} instance", Constant.ENTITY_NAME);
-
         try {
-            checkFields(entity);
-
-            tipoPeriodoDao.update(entity);
-
-            log.debug("update {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.tipoPeriodoDao.update(entity);
+        } catch (DaoException de) {
+            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
@@ -88,15 +72,11 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
     @Override
     @Transactional(readOnly = true)
     public TipoPeriodo getTipoPeriodo(Integer id) {
-        log.debug("getting {} instance", Constant.ENTITY_NAME);
-
         TipoPeriodo entity;
-
         try {
-            entity = tipoPeriodoDao.findById(id);
-
-        } catch (Exception e) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            entity = this.tipoPeriodoDao.findById(id);
+        } catch (DaoException de) {
+            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
@@ -107,32 +87,27 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
     @Transactional(readOnly = true)
     public List<TipoPeriodo> findByCriteria(Object[] variables, Object[] variablesBetween,
                                             Object[] variablesBetweenDates) {
-        log.debug("getting {} instance by criteria", Constant.ENTITY_NAME);
-
         List<TipoPeriodo> list;
         String where;
-
         try {
             where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = tipoPeriodoDao.findByCriteria(where);
-        } catch (Exception e) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.tipoPeriodoDao.findByCriteria(where);
+        } catch (DaoException de) {
+            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
+
         return list;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<TipoPeriodo> findByProperty(String propertyName, Object value) {
-        log.debug("finding {} instance", Constant.ENTITY_NAME);
-
         List<TipoPeriodo> list;
-
         try {
-            list = tipoPeriodoDao.findByProperty(propertyName, value);
-        } catch (Exception e) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.tipoPeriodoDao.findByProperty(propertyName, value);
+        } catch (DaoException de) {
+            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 

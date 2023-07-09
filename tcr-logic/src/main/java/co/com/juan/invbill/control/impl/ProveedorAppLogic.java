@@ -8,20 +8,19 @@ import co.com.juan.invbill.model.ProveedorApp;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 /**
  * @author Juan Felipe
  */
-
-@Scope("singleton")
-@Service("ProveedorAppLogic")
+@Singleton
+@Service
 public class ProveedorAppLogic implements IProveedorAppLogic {
 
     private static final Logger log = LoggerFactory.getLogger(ProveedorAppLogic.class);
@@ -35,15 +34,12 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
     @Override
     @Transactional(readOnly = true)
     public List<ProveedorApp> getProveedorApp() {
-        log.debug("finding all {} instances", Constant.ENTITY_NAME);
-
         List<ProveedorApp> list;
-
         try {
-            list = proveedorAppDao.findAll();
-        } catch (Exception e) {
-            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException.GettingException(EntityException.ALL + Constant.ENTITY_NAME);
+            list = this.proveedorAppDao.findAll();
+        } catch (DaoException de) {
+            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
+            throw new EntityException.GettingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -52,21 +48,17 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveProveedorApp(ProveedorApp entity) {
-        log.debug("saving {} instance", Constant.ENTITY_NAME);
-
         try {
-            checkFields(entity);
-            checkSecondaryFields(entity);
+            this.checkFields(entity);
+            this.checkSecondaryFields(entity);
 
-            if (getProveedorApp(entity.getIdProveedorApp()) != null) {
+            if (this.getProveedorApp(entity.getIdProveedorApp()) != null) {
                 throw new EntityException(EntityException.ENTITY_WITHSAMEKEY);
             }
 
-            proveedorAppDao.save(entity);
-
-            log.debug("save {} successful", Constant.ENTITY_NAME);
-        } catch (DaoException e) {
-            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.proveedorAppDao.save(entity);
+        } catch (DaoException de) {
+            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
@@ -74,17 +66,12 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateProveedorApp(ProveedorApp entity) {
-        log.debug("updating {} instance", Constant.ENTITY_NAME);
-
         try {
-            checkFields(entity);
-            checkSecondaryFields(entity);
-
-            proveedorAppDao.update(entity);
-
-            log.debug("update {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.checkSecondaryFields(entity);
+            this.proveedorAppDao.update(entity);
+        } catch (DaoException de) {
+            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
@@ -92,15 +79,11 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
     @Override
     @Transactional(readOnly = true)
     public ProveedorApp getProveedorApp(Integer id) {
-        log.debug("getting {} instance", Constant.ENTITY_NAME);
-
         ProveedorApp entity;
-
         try {
-            entity = proveedorAppDao.findById(id);
-
-        } catch (Exception e) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            entity = this.proveedorAppDao.findById(id);
+        } catch (DaoException de) {
+            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
@@ -111,32 +94,27 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
     @Transactional(readOnly = true)
     public List<ProveedorApp> findByCriteria(Object[] variables, Object[] variablesBetween,
                                              Object[] variablesBetweenDates) {
-        log.debug("getting {} instance by criteria", Constant.ENTITY_NAME);
-
         List<ProveedorApp> list;
         String where;
-
         try {
             where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = proveedorAppDao.findByCriteria(where);
-        } catch (Exception e) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.proveedorAppDao.findByCriteria(where);
+        } catch (DaoException de) {
+            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
+
         return list;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ProveedorApp> findByProperty(String propertyName, Object value) {
-        log.debug("finding {} instance", Constant.ENTITY_NAME);
-
         List<ProveedorApp> list;
-
         try {
-            list = proveedorAppDao.findByProperty(propertyName, value);
-        } catch (Exception e) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.proveedorAppDao.findByProperty(propertyName, value);
+        } catch (DaoException de) {
+            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 

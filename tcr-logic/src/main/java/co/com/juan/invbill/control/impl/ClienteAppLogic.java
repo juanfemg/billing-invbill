@@ -39,7 +39,7 @@ public class ClienteAppLogic implements IClienteAppLogic {
             list = this.clienteAppDao.findAll();
         } catch (DaoException de) {
             log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.GettingException(EntityException.ALL + Constant.ENTITY_NAME);
+            throw new EntityException.GettingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -52,7 +52,7 @@ public class ClienteAppLogic implements IClienteAppLogic {
             this.checkFields(entity);
             this.checkSecondaryFields(entity);
 
-            if (getClienteApp(entity.getIdClienteApp()) != null) {
+            if (this.getClienteApp(entity.getIdClienteApp()) != null) {
                 throw new EntityException(EntityException.ENTITY_WITHSAMEKEY);
             }
 

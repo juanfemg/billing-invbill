@@ -2,24 +2,25 @@ package co.com.juan.invbill.control.impl;
 
 import co.com.juan.invbill.control.ITipoUnidadMedidaLogic;
 import co.com.juan.invbill.dao.ITipoUnidadMedidaDao;
+import co.com.juan.invbill.dataaccess.api.DaoException;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.TipoUnidadMedida;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 /**
  * @author Juan Felipe
  */
-@Scope("singleton")
-@Service("TipoUnidadMedidaLogic")
+@Singleton
+@Service
 public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
 
     private static final Logger log = LoggerFactory.getLogger(TipoUnidadMedidaLogic.class);
@@ -33,15 +34,12 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
     @Override
     @Transactional(readOnly = true)
     public List<TipoUnidadMedida> getTipoUnidadMedida() {
-        log.debug("finding all {} instances", Constant.ENTITY_NAME);
-
         List<TipoUnidadMedida> list;
-
         try {
-            list = tipoUnidadMedidaDao.findAll();
-        } catch (Exception e) {
-            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException.GettingException(EntityException.ALL + Constant.ENTITY_NAME);
+            list = this.tipoUnidadMedidaDao.findAll();
+        } catch (DaoException de) {
+            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
+            throw new EntityException.GettingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -50,20 +48,11 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveTipoUnidadMedida(TipoUnidadMedida entity) {
-        log.debug("saving {} instance", Constant.ENTITY_NAME);
-
         try {
-            checkFields(entity);
-
-            if (getTipoUnidadMedida(entity.getIdUnidadMedida()) != null) {
-                throw new EntityException(EntityException.ENTITY_WITHSAMEKEY);
-            }
-
-            tipoUnidadMedidaDao.save(entity);
-
-            log.debug("save {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.tipoUnidadMedidaDao.save(entity);
+        } catch (DaoException de) {
+            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
@@ -71,16 +60,11 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateTipoUnidadMedida(TipoUnidadMedida entity) {
-        log.debug("updating {} instance", Constant.ENTITY_NAME);
-
         try {
-            checkFields(entity);
-
-            tipoUnidadMedidaDao.update(entity);
-
-            log.debug("update {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.tipoUnidadMedidaDao.update(entity);
+        } catch (DaoException de) {
+            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
@@ -88,15 +72,11 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
     @Override
     @Transactional(readOnly = true)
     public TipoUnidadMedida getTipoUnidadMedida(Integer id) {
-        log.debug("getting {} instance", Constant.ENTITY_NAME);
-
         TipoUnidadMedida entity;
-
         try {
-            entity = tipoUnidadMedidaDao.findById(id);
-
-        } catch (Exception e) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            entity = this.tipoUnidadMedidaDao.findById(id);
+        } catch (DaoException de) {
+            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
@@ -107,32 +87,27 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
     @Transactional(readOnly = true)
     public List<TipoUnidadMedida> findByCriteria(Object[] variables, Object[] variablesBetween,
                                                  Object[] variablesBetweenDates) {
-        log.debug("getting {} instance by criteria", Constant.ENTITY_NAME);
-
         List<TipoUnidadMedida> list;
         String where;
-
         try {
             where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = tipoUnidadMedidaDao.findByCriteria(where);
-        } catch (Exception e) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.tipoUnidadMedidaDao.findByCriteria(where);
+        } catch (DaoException de) {
+            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
+
         return list;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<TipoUnidadMedida> findByProperty(String propertyName, Object value) {
-        log.debug("finding {} instance", Constant.ENTITY_NAME);
-
         List<TipoUnidadMedida> list;
-
         try {
-            list = tipoUnidadMedidaDao.findByProperty(propertyName, value);
-        } catch (Exception e) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.tipoUnidadMedidaDao.findByProperty(propertyName, value);
+        } catch (DaoException de) {
+            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 

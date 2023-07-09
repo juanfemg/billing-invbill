@@ -2,13 +2,13 @@ package co.com.juan.invbill.control.impl;
 
 import co.com.juan.invbill.control.ICompraCabeceraLogic;
 import co.com.juan.invbill.dao.ICompraCabeceraDao;
+import co.com.juan.invbill.dataaccess.api.DaoException;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.CompraCabecera;
 import co.com.juan.invbill.model.CompraCabeceraId;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ import java.util.List;
  * @author Juan Felipe
  */
 @Singleton
-@Service("CompraCabeceraLogic")
+@Service
 public class CompraCabeceraLogic implements ICompraCabeceraLogic {
 
     private static final Logger log = LoggerFactory.getLogger(CompraCabeceraLogic.class);
@@ -34,54 +34,36 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveCompraCabecera(CompraCabecera entity) {
-        log.debug("saving {} instance", Constant.ENTITY_NAME);
-
+    public void saveCompraCabecera(CompraCabecera entity) throws EntityException {
         try {
-            checkFields(entity);
-
-            if (getCompraCabecera(entity.getId()) != null) {
-                throw new EntityException(EntityException.ENTITY_WITHSAMEKEY);
-            }
-
-            compraCabeceraDao.save(entity);
-
-            log.debug("save {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.compraCabeceraDao.save(entity);
+        } catch (DaoException de) {
+            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateCompraCabecera(CompraCabecera entity) {
-        log.debug("updating {} instance", Constant.ENTITY_NAME);
-
+    public void updateCompraCabecera(CompraCabecera entity) throws EntityException {
         try {
-            checkFields(entity);
-
-            compraCabeceraDao.update(entity);
-
-            log.debug("update {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.compraCabeceraDao.update(entity);
+        } catch (DaoException de) {
+            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
 
     @Override
     @Transactional(readOnly = true)
-    public CompraCabecera getCompraCabecera(CompraCabeceraId id) {
-        log.debug("getting {} instance", Constant.ENTITY_NAME);
-
+    public CompraCabecera getCompraCabecera(CompraCabeceraId id) throws EntityException {
         CompraCabecera entity;
-
         try {
-            entity = compraCabeceraDao.findById(id);
-
-        } catch (Exception e) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            entity = this.compraCabeceraDao.findById(id);
+        } catch (DaoException de) {
+            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
@@ -90,15 +72,12 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CompraCabecera> getDataCompraCabecera() {
-        log.debug("getting {} instance", Constant.ENTITY_NAME);
-
+    public List<CompraCabecera> getDataCompraCabecera() throws EntityException {
         List<CompraCabecera> list;
-
         try {
-            list = compraCabeceraDao.findAll();
-        } catch (Exception e) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.compraCabeceraDao.findAll();
+        } catch (DaoException de) {
+            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
@@ -108,33 +87,28 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
     @Override
     @Transactional(readOnly = true)
     public List<CompraCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                               Object[] variablesBetweenDates) {
-        log.debug("getting {} instance by criteria", Constant.ENTITY_NAME);
-
+                                               Object[] variablesBetweenDates) throws EntityException {
         List<CompraCabecera> list;
         String where;
-
         try {
             where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = compraCabeceraDao.findByCriteria(where);
-        } catch (Exception e) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.compraCabeceraDao.findByCriteria(where);
+        } catch (DaoException de) {
+            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
+
         return list;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<CompraCabecera> findByProperty(String propertyName, Object value) {
-        log.debug("finding {} instance", Constant.ENTITY_NAME);
-
+    public List<CompraCabecera> findByProperty(String propertyName, Object value) throws EntityException {
         List<CompraCabecera> list;
-
         try {
-            list = compraCabeceraDao.findByProperty(propertyName, value);
-        } catch (Exception e) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.compraCabeceraDao.findByProperty(propertyName, value);
+        } catch (DaoException de) {
+            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 

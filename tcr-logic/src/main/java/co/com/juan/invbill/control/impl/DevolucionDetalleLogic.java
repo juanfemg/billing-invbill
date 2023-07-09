@@ -2,26 +2,26 @@ package co.com.juan.invbill.control.impl;
 
 import co.com.juan.invbill.control.IDevolucionDetalleLogic;
 import co.com.juan.invbill.dao.IDevolucionDetalleDao;
+import co.com.juan.invbill.dataaccess.api.DaoException;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.DevolucionDetalle;
 import co.com.juan.invbill.model.DevolucionDetalleId;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 /**
  * @author Juan Felipe
  */
-
-@Scope("singleton")
-@Service("DevolucionDetalleLogic")
+@Singleton
+@Service
 public class DevolucionDetalleLogic implements IDevolucionDetalleLogic {
 
     private static final Logger log = LoggerFactory.getLogger(DevolucionDetalleLogic.class);
@@ -35,15 +35,12 @@ public class DevolucionDetalleLogic implements IDevolucionDetalleLogic {
     @Override
     @Transactional(readOnly = true)
     public List<DevolucionDetalle> getDevolucionDetalle() {
-        log.debug("finding all {} instances", Constant.ENTITY_NAME);
-
         List<DevolucionDetalle> list;
-
         try {
-            list = devolucionDetalleDao.findAll();
-        } catch (Exception e) {
-            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
-            throw new EntityException.GettingException(EntityException.ALL + Constant.ENTITY_NAME);
+            list = this.devolucionDetalleDao.findAll();
+        } catch (DaoException de) {
+            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
+            throw new EntityException.GettingException(Constant.ENTITY_NAME);
         }
 
         return list;
@@ -52,20 +49,11 @@ public class DevolucionDetalleLogic implements IDevolucionDetalleLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveDevolucionDetalle(DevolucionDetalle entity) {
-        log.debug("saving {} instance", Constant.ENTITY_NAME);
-
         try {
-            checkFields(entity);
-
-            if (getDevolucionDetalle(entity.getId()) != null) {
-                throw new EntityException(EntityException.ENTITY_WITHSAMEKEY);
-            }
-
-            devolucionDetalleDao.save(entity);
-
-            log.debug("save {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.devolucionDetalleDao.save(entity);
+        } catch (DaoException de) {
+            log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.SavingException(Constant.ENTITY_NAME);
         }
     }
@@ -73,16 +61,11 @@ public class DevolucionDetalleLogic implements IDevolucionDetalleLogic {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateDevolucionDetalle(DevolucionDetalle entity) {
-        log.debug("updating {} instance", Constant.ENTITY_NAME);
-
         try {
-            checkFields(entity);
-
-            devolucionDetalleDao.update(entity);
-
-            log.debug("update {} successful", Constant.ENTITY_NAME);
-        } catch (Exception e) {
-            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            this.checkFields(entity);
+            this.devolucionDetalleDao.update(entity);
+        } catch (DaoException de) {
+            log.error("update {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.UpdatingException(Constant.ENTITY_NAME);
         }
     }
@@ -90,15 +73,11 @@ public class DevolucionDetalleLogic implements IDevolucionDetalleLogic {
     @Override
     @Transactional(readOnly = true)
     public DevolucionDetalle getDevolucionDetalle(DevolucionDetalleId id) {
-        log.debug("getting {} instance", Constant.ENTITY_NAME);
-
         DevolucionDetalle entity;
-
         try {
-            entity = devolucionDetalleDao.findById(id);
-
-        } catch (Exception e) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            entity = this.devolucionDetalleDao.findById(id);
+        } catch (DaoException de) {
+            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 
@@ -109,32 +88,27 @@ public class DevolucionDetalleLogic implements IDevolucionDetalleLogic {
     @Transactional(readOnly = true)
     public List<DevolucionDetalle> findByCriteria(Object[] variables, Object[] variablesBetween,
                                                   Object[] variablesBetweenDates) {
-        log.debug("getting {} instance by criteria", Constant.ENTITY_NAME);
-
         List<DevolucionDetalle> list;
         String where;
-
         try {
             where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = devolucionDetalleDao.findByCriteria(where);
-        } catch (Exception e) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.devolucionDetalleDao.findByCriteria(where);
+        } catch (DaoException de) {
+            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
+
         return list;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<DevolucionDetalle> findByProperty(String propertyName, Object value) {
-        log.debug("finding {} instance", Constant.ENTITY_NAME);
-
         List<DevolucionDetalle> list;
-
         try {
-            list = devolucionDetalleDao.findByProperty(propertyName, value);
-        } catch (Exception e) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, e.getMessage());
+            list = this.devolucionDetalleDao.findByProperty(propertyName, value);
+        } catch (DaoException de) {
+            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);
         }
 

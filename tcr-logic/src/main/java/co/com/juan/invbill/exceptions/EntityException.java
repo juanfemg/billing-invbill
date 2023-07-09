@@ -7,7 +7,6 @@ package co.com.juan.invbill.exceptions;
 public class EntityException extends RuntimeException {
 
 	private static final long serialVersionUID = -6090627865213545701L;
-	public static final String ALL = "TODO(S) ";
 	public static final String ENTCHILD = "Tablas relacionadas(menores)";
 	public static final String FOREIGNDATA = "Datos de clases externos ";
 	public static final String ENTITY_SUCCESFULLYSAVED = "Creado exitosamente";
