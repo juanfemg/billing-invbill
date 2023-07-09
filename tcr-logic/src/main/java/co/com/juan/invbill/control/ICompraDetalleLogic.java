@@ -2,6 +2,7 @@ package co.com.juan.invbill.control;
 
 import java.util.List;
 
+import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.CompraDetalle;
 import co.com.juan.invbill.model.CompraDetalleId;
 
@@ -10,17 +11,13 @@ import co.com.juan.invbill.model.CompraDetalleId;
  */
 public interface ICompraDetalleLogic {
 
-    List<CompraDetalle> getCompraDetalle();
+    void saveCompraDetalle(CompraDetalle entity) throws EntityException;
 
-    void saveCompraDetalle(CompraDetalle entity);
-
-    void updateCompraDetalle(CompraDetalle entity);
-
-    CompraDetalle getCompraDetalle(CompraDetalleId id);
+    void updateCompraDetalle(CompraDetalle entity) throws EntityException;
 
     List<CompraDetalle> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                       Object[] variablesBetweenDates);
+                                       Object[] variablesBetweenDates) throws EntityException;
 
-    List<CompraDetalle> findByProperty(String propertyName, Object value);
+    List<CompraDetalle> findByProperty(String propertyName, Object value) throws EntityException;
 
 }

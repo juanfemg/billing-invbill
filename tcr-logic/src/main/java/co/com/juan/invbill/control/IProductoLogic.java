@@ -3,6 +3,7 @@ package co.com.juan.invbill.control;
 import java.util.Collection;
 import java.util.List;
 
+import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.Producto;
 
 /**
@@ -10,21 +11,21 @@ import co.com.juan.invbill.model.Producto;
  */
 public interface IProductoLogic {
 
-    List<Producto> getProducto();
+    List<Producto> getProducto() throws EntityException;
 
-    void saveProducto(Producto entity);
+    void saveProducto(Producto entity) throws EntityException;
 
-    void updateProducto(Producto entity);
+    void updateProducto(Producto entity) throws EntityException;
 
-    Producto getProducto(Integer id);
+    Producto getProducto(Integer id) throws EntityException;
 
-    List<Producto> findByCriteria(Object[] variables, Object[] variablesBetween, Object[] variablesBetweenDates);
+    List<Producto> findByCriteria(Object[] variables, Object[] variablesBetween, Object[] variablesBetweenDates) throws EntityException;
 
-    List<Producto> findByProperty(String propertyName, Object value);
+    List<Producto> findByProperty(String propertyName, Object value) throws EntityException;
 
     List<Producto> findByPropertySort(String propertyName, Object value, String sortColumnName,
-                                      boolean sortAscending);
+                                      boolean sortAscending) throws EntityException;
 
-    List<Producto> findByProperty(String propertyName, Collection<?> values);
+    List<Producto> findByProperty(String propertyName, Collection<?> values) throws EntityException;
 
 }

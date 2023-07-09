@@ -34,7 +34,7 @@ public class ProductoLogic implements IProductoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Producto> getProducto() {
+    public List<Producto> getProducto() throws EntityException {
         List<Producto> list;
         try {
             list = this.productoDao.findAll();
@@ -48,7 +48,7 @@ public class ProductoLogic implements IProductoLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveProducto(Producto entity) {
+    public void saveProducto(Producto entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.productoDao.save(entity);
@@ -60,7 +60,7 @@ public class ProductoLogic implements IProductoLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateProducto(Producto entity) {
+    public void updateProducto(Producto entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.productoDao.update(entity);
@@ -72,7 +72,7 @@ public class ProductoLogic implements IProductoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public Producto getProducto(Integer id) {
+    public Producto getProducto(Integer id) throws EntityException {
         Producto entity;
         try {
             entity = this.productoDao.findById(id);
@@ -87,7 +87,7 @@ public class ProductoLogic implements IProductoLogic {
     @Override
     @Transactional(readOnly = true)
     public List<Producto> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                         Object[] variablesBetweenDates) {
+                                         Object[] variablesBetweenDates) throws EntityException {
         List<Producto> list;
         String where;
         try {
@@ -103,7 +103,7 @@ public class ProductoLogic implements IProductoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Producto> findByProperty(String propertyName, Object value) {
+    public List<Producto> findByProperty(String propertyName, Object value) throws EntityException {
         List<Producto> list;
         try {
             list = this.productoDao.findByProperty(propertyName, value);
@@ -118,7 +118,7 @@ public class ProductoLogic implements IProductoLogic {
     @Override
     @Transactional(readOnly = true)
     public List<Producto> findByPropertySort(String propertyName, Object value, String sortColumnName,
-                                             boolean sortAscending) {
+                                             boolean sortAscending) throws EntityException {
         List<Producto> list;
         try {
             list = this.productoDao.findByPropertySort(propertyName, value, sortColumnName, sortAscending);
@@ -132,7 +132,7 @@ public class ProductoLogic implements IProductoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Producto> findByProperty(String propertyName, Collection<?> values) {
+    public List<Producto> findByProperty(String propertyName, Collection<?> values) throws EntityException {
         List<Producto> list;
         try {
             list = this.productoDao.findByProperty(propertyName, values);

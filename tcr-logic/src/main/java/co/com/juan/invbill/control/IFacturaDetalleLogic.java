@@ -2,6 +2,7 @@ package co.com.juan.invbill.control;
 
 import java.util.List;
 
+import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.FacturaDetalle;
 import co.com.juan.invbill.model.FacturaDetalleId;
 
@@ -10,19 +11,15 @@ import co.com.juan.invbill.model.FacturaDetalleId;
  */
 public interface IFacturaDetalleLogic {
 
-    List<FacturaDetalle> getFacturaDetalle();
+    void saveFacturaDetalle(FacturaDetalle entity) throws EntityException;
 
-    void saveFacturaDetalle(FacturaDetalle entity);
-
-    void updateFacturaDetalle(FacturaDetalle entity);
-
-    FacturaDetalle getFacturaDetalle(FacturaDetalleId id);
+    void updateFacturaDetalle(FacturaDetalle entity) throws EntityException;
 
     List<FacturaDetalle> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                        Object[] variablesBetweenDates);
+                                        Object[] variablesBetweenDates) throws EntityException;
 
-    List<FacturaDetalle> findByProperty(String propertyName, Object value);
+    List<FacturaDetalle> findByProperty(String propertyName, Object value) throws EntityException;
 
-    List<FacturaDetalle> getFacturaDetalleDevolucionByIdFactura(Integer idFactura);
+    List<FacturaDetalle> getFacturaDetalleDevolucionByIdFactura(Integer idFactura) throws EntityException;
 
 }

@@ -2,6 +2,7 @@ package co.com.juan.invbill.control;
 
 import java.util.List;
 
+import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.StockProducto;
 
 /**
@@ -9,25 +10,19 @@ import co.com.juan.invbill.model.StockProducto;
  */
 public interface IStockProductoLogic {
 
-    List<StockProducto> getStockProducto();
+    List<StockProducto> getStockProducto() throws EntityException;
 
-    void saveStockProducto(StockProducto entity);
+    void saveStockProducto(StockProducto entity) throws EntityException;
 
-    void updateStockProducto(StockProducto entity);
-
-    StockProducto getStockProducto(Integer id);
+    void updateStockProducto(StockProducto entity) throws EntityException;
 
     List<StockProducto> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                       Object[] variablesBetweenDates);
+                                       Object[] variablesBetweenDates) throws EntityException;
 
-    List<StockProducto> findByProperty(String propertyName, Object value);
+    List<StockProducto> findByProperty(String propertyName, Object value) throws EntityException;
 
-    StockProducto findObjectByProperty(String propertyName, Object value);
+    StockProducto findObjectByProperty(String propertyName, Object value) throws EntityException;
 
-    Object findMaxObjectByCriteria(String propertyName);
-
-    Object findMinObjectByCriteria(String propertyName);
-
-    Object findAvgObjectByCriteria(String propertyName);
+    Object findMaxObjectByCriteria(String propertyName) throws EntityException;
 
 }

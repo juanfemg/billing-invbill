@@ -5,7 +5,6 @@ import co.com.juan.invbill.dao.ICompraDetalleDao;
 import co.com.juan.invbill.dataaccess.api.DaoException;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.CompraDetalle;
-import co.com.juan.invbill.model.CompraDetalleId;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,22 +32,8 @@ public class CompraDetalleLogic implements ICompraDetalleLogic {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<CompraDetalle> getCompraDetalle() {
-        List<CompraDetalle> list;
-        try {
-            list = this.compraDetalleDao.findAll();
-        } catch (DaoException de) {
-            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.GettingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveCompraDetalle(CompraDetalle entity) {
+    public void saveCompraDetalle(CompraDetalle entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.compraDetalleDao.save(entity);
@@ -60,7 +45,7 @@ public class CompraDetalleLogic implements ICompraDetalleLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateCompraDetalle(CompraDetalle entity) {
+    public void updateCompraDetalle(CompraDetalle entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.compraDetalleDao.update(entity);
@@ -72,22 +57,8 @@ public class CompraDetalleLogic implements ICompraDetalleLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public CompraDetalle getCompraDetalle(CompraDetalleId id) {
-        CompraDetalle entity;
-        try {
-            entity = this.compraDetalleDao.findById(id);
-        } catch (DaoException de) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return entity;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<CompraDetalle> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                              Object[] variablesBetweenDates) {
+                                              Object[] variablesBetweenDates) throws EntityException {
         List<CompraDetalle> list;
         String where;
         try {
@@ -103,7 +74,7 @@ public class CompraDetalleLogic implements ICompraDetalleLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CompraDetalle> findByProperty(String propertyName, Object value) {
+    public List<CompraDetalle> findByProperty(String propertyName, Object value) throws EntityException {
         List<CompraDetalle> list;
         try {
             list = this.compraDetalleDao.findByProperty(propertyName, value);

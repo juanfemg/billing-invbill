@@ -33,7 +33,7 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<TipoUnidadMedida> getTipoUnidadMedida() {
+    public List<TipoUnidadMedida> getTipoUnidadMedida() throws EntityException {
         List<TipoUnidadMedida> list;
         try {
             list = this.tipoUnidadMedidaDao.findAll();
@@ -47,7 +47,7 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveTipoUnidadMedida(TipoUnidadMedida entity) {
+    public void saveTipoUnidadMedida(TipoUnidadMedida entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.tipoUnidadMedidaDao.save(entity);
@@ -59,7 +59,7 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateTipoUnidadMedida(TipoUnidadMedida entity) {
+    public void updateTipoUnidadMedida(TipoUnidadMedida entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.tipoUnidadMedidaDao.update(entity);
@@ -71,7 +71,7 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public TipoUnidadMedida getTipoUnidadMedida(Integer id) {
+    public TipoUnidadMedida getTipoUnidadMedida(Integer id) throws EntityException {
         TipoUnidadMedida entity;
         try {
             entity = this.tipoUnidadMedidaDao.findById(id);
@@ -86,7 +86,7 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
     @Override
     @Transactional(readOnly = true)
     public List<TipoUnidadMedida> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                                 Object[] variablesBetweenDates) {
+                                                 Object[] variablesBetweenDates) throws EntityException {
         List<TipoUnidadMedida> list;
         String where;
         try {
@@ -102,7 +102,7 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<TipoUnidadMedida> findByProperty(String propertyName, Object value) {
+    public List<TipoUnidadMedida> findByProperty(String propertyName, Object value) throws EntityException {
         List<TipoUnidadMedida> list;
         try {
             list = this.tipoUnidadMedidaDao.findByProperty(propertyName, value);

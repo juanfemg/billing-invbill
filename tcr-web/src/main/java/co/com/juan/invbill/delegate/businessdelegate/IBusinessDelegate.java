@@ -1,6 +1,5 @@
 package co.com.juan.invbill.delegate.businessdelegate;
 
-import co.com.juan.invbill.dto.*;
 import co.com.juan.invbill.model.*;
 
 import java.util.List;

@@ -33,7 +33,7 @@ public class StockProductoLogic implements IStockProductoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<StockProducto> getStockProducto() {
+    public List<StockProducto> getStockProducto() throws EntityException {
         List<StockProducto> list;
         try {
             list = this.stockProductoDao.findAll();
@@ -47,7 +47,7 @@ public class StockProductoLogic implements IStockProductoLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveStockProducto(StockProducto entity) {
+    public void saveStockProducto(StockProducto entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.stockProductoDao.save(entity);
@@ -59,7 +59,7 @@ public class StockProductoLogic implements IStockProductoLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateStockProducto(StockProducto entity) {
+    public void updateStockProducto(StockProducto entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.stockProductoDao.update(entity);
@@ -71,22 +71,8 @@ public class StockProductoLogic implements IStockProductoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public StockProducto getStockProducto(Integer id) {
-        StockProducto entity;
-        try {
-            entity = this.stockProductoDao.findById(id);
-        } catch (DaoException de) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return entity;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<StockProducto> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                              Object[] variablesBetweenDates) {
+                                              Object[] variablesBetweenDates) throws EntityException {
         List<StockProducto> list;
         String where;
         try {
@@ -102,7 +88,7 @@ public class StockProductoLogic implements IStockProductoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<StockProducto> findByProperty(String propertyName, Object value) {
+    public List<StockProducto> findByProperty(String propertyName, Object value) throws EntityException {
         List<StockProducto> list;
         try {
             list = this.stockProductoDao.findByProperty(propertyName, value);
@@ -116,7 +102,7 @@ public class StockProductoLogic implements IStockProductoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public StockProducto findObjectByProperty(String propertyName, Object value) {
+    public StockProducto findObjectByProperty(String propertyName, Object value) throws EntityException {
         StockProducto entity;
         try {
             entity = this.stockProductoDao.findObjectByProperty(propertyName, value);
@@ -130,38 +116,10 @@ public class StockProductoLogic implements IStockProductoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public Object findMaxObjectByCriteria(String propertyName) {
+    public Object findMaxObjectByCriteria(String propertyName) throws EntityException {
         Object object;
         try {
             object = this.stockProductoDao.maxByCriteria(propertyName);
-        } catch (DaoException de) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return object;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Object findMinObjectByCriteria(String propertyName) {
-        Object object;
-        try {
-            object = this.stockProductoDao.minByCriteria(propertyName);
-        } catch (DaoException de) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return object;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Object findAvgObjectByCriteria(String propertyName) {
-        Object object;
-        try {
-            object = this.stockProductoDao.avgByCriteria(propertyName);
         } catch (DaoException de) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);

@@ -2,6 +2,7 @@ package co.com.juan.invbill.control;
 
 import java.util.List;
 
+import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.FacturaCabecera;
 
 /**
@@ -9,25 +10,21 @@ import co.com.juan.invbill.model.FacturaCabecera;
  */
 public interface IFacturaCabeceraLogic {
 
-    List<FacturaCabecera> getFacturaCabecera();
+    void saveFacturaCabecera(FacturaCabecera entity) throws EntityException;
 
-    void saveFacturaCabecera(FacturaCabecera entity);
+    void updateFacturaCabecera(FacturaCabecera entity) throws EntityException;
 
-    void updateFacturaCabecera(FacturaCabecera entity);
+    FacturaCabecera getFacturaCabecera(Integer id) throws EntityException;
 
-    FacturaCabecera getFacturaCabecera(Integer id);
-
-    List<FacturaCabecera> getDataFacturaCabecera();
+    List<FacturaCabecera> getDataFacturaCabecera() throws EntityException;
 
     List<FacturaCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                         Object[] variablesBetweenDates);
+                                         Object[] variablesBetweenDates) throws EntityException;
 
-    List<FacturaCabecera> findByProperty(String propertyName, Object value);
+    List<FacturaCabecera> findByProperty(String propertyName, Object value) throws EntityException;
 
-    Object findMaxObjectByCriteria(String propertyName);
+    Object findMaxObjectByCriteria(String propertyName) throws EntityException;
 
-    Object findMinObjectByCriteria(String propertyName);
-
-    Object findAvgObjectByCriteria(String propertyName);
+    Object findMinObjectByCriteria(String propertyName) throws EntityException;
 
 }

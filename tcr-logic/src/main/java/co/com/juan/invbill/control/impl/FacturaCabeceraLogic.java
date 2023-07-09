@@ -32,22 +32,8 @@ public class FacturaCabeceraLogic implements IFacturaCabeceraLogic {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<FacturaCabecera> getFacturaCabecera() {
-        List<FacturaCabecera> list;
-        try {
-            list = this.facturaCabeceraDao.findAll();
-        } catch (DaoException de) {
-            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.GettingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveFacturaCabecera(FacturaCabecera entity) {
+    public void saveFacturaCabecera(FacturaCabecera entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.facturaCabeceraDao.save(entity);
@@ -59,7 +45,7 @@ public class FacturaCabeceraLogic implements IFacturaCabeceraLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateFacturaCabecera(FacturaCabecera entity) {
+    public void updateFacturaCabecera(FacturaCabecera entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.facturaCabeceraDao.update(entity);
@@ -71,7 +57,7 @@ public class FacturaCabeceraLogic implements IFacturaCabeceraLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public FacturaCabecera getFacturaCabecera(Integer id) {
+    public FacturaCabecera getFacturaCabecera(Integer id) throws EntityException {
         FacturaCabecera entity;
         try {
             entity = this.facturaCabeceraDao.findById(id);
@@ -85,7 +71,7 @@ public class FacturaCabeceraLogic implements IFacturaCabeceraLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<FacturaCabecera> getDataFacturaCabecera() {
+    public List<FacturaCabecera> getDataFacturaCabecera() throws EntityException {
         List<FacturaCabecera> list;
         try {
             list = this.facturaCabeceraDao.findAll();
@@ -100,7 +86,7 @@ public class FacturaCabeceraLogic implements IFacturaCabeceraLogic {
     @Override
     @Transactional(readOnly = true)
     public List<FacturaCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                                Object[] variablesBetweenDates) {
+                                                Object[] variablesBetweenDates) throws EntityException {
         List<FacturaCabecera> list;
         String where;
         try {
@@ -116,7 +102,7 @@ public class FacturaCabeceraLogic implements IFacturaCabeceraLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<FacturaCabecera> findByProperty(String propertyName, Object value) {
+    public List<FacturaCabecera> findByProperty(String propertyName, Object value) throws EntityException {
         List<FacturaCabecera> list;
         try {
             list = this.facturaCabeceraDao.findByProperty(propertyName, value);
@@ -130,7 +116,7 @@ public class FacturaCabeceraLogic implements IFacturaCabeceraLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public Object findMaxObjectByCriteria(String propertyName) {
+    public Object findMaxObjectByCriteria(String propertyName) throws EntityException {
         Object object;
         try {
             object = this.facturaCabeceraDao.maxByCriteria(propertyName);
@@ -144,24 +130,10 @@ public class FacturaCabeceraLogic implements IFacturaCabeceraLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public Object findMinObjectByCriteria(String propertyName) {
+    public Object findMinObjectByCriteria(String propertyName) throws EntityException {
         Object object;
         try {
             object = this.facturaCabeceraDao.minByCriteria(propertyName);
-        } catch (DaoException de) {
-            log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return object;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Object findAvgObjectByCriteria(String propertyName) {
-        Object object;
-        try {
-            object = this.facturaCabeceraDao.avgByCriteria(propertyName);
         } catch (DaoException de) {
             log.error("get {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.FindingException(Constant.ENTITY_NAME);

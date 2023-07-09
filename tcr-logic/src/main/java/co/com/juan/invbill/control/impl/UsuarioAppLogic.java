@@ -33,7 +33,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveUsuarioApp(UsuarioApp entity) {
+    public void saveUsuarioApp(UsuarioApp entity) throws EntityException {
         try {
             this.checkFields(entity);
 
@@ -50,7 +50,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateUsuarioApp(UsuarioApp entity) {
+    public void updateUsuarioApp(UsuarioApp entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.usuarioAppDao.update(entity);
@@ -62,7 +62,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public UsuarioApp getUsuarioApp(String id) {
+    public UsuarioApp getUsuarioApp(String id) throws EntityException {
         UsuarioApp entity;
         try {
             entity = this.usuarioAppDao.findById(id);
@@ -77,7 +77,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
     @Override
     @Transactional(readOnly = true)
     public List<UsuarioApp> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                           Object[] variablesBetweenDates) {
+                                           Object[] variablesBetweenDates) throws EntityException {
         List<UsuarioApp> list;
         String where;
         try {
@@ -93,7 +93,7 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<UsuarioApp> findByProperty(String propertyName, Object value) {
+    public List<UsuarioApp> findByProperty(String propertyName, Object value) throws EntityException {
         List<UsuarioApp> list;
         try {
             list = this.usuarioAppDao.findByProperty(propertyName, value);

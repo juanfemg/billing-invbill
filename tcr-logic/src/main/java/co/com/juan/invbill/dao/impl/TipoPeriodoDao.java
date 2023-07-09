@@ -1,7 +1,7 @@
 package co.com.juan.invbill.dao.impl;
 
 import co.com.juan.invbill.dao.ITipoPeriodoDao;
-import co.com.juan.invbill.dataaccess.api.HibernateDaoImpl;
+import co.com.juan.invbill.dataaccess.api.impl.HibernateDaoImpl;
 import co.com.juan.invbill.model.TipoPeriodo;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;

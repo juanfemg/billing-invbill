@@ -2,6 +2,7 @@ package co.com.juan.invbill.control;
 
 import java.util.List;
 
+import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.TipoPeriodo;
 
 /**
@@ -9,17 +10,17 @@ import co.com.juan.invbill.model.TipoPeriodo;
  */
 public interface ITipoPeriodoLogic {
 
-    List<TipoPeriodo> getTipoPeriodo();
+    List<TipoPeriodo> getTipoPeriodo() throws EntityException;
 
-    void saveTipoPeriodo(TipoPeriodo entity);
+    void saveTipoPeriodo(TipoPeriodo entity) throws EntityException;
 
-    void updateTipoPeriodo(TipoPeriodo entity);
+    void updateTipoPeriodo(TipoPeriodo entity) throws EntityException;
 
-    TipoPeriodo getTipoPeriodo(Integer id);
+    TipoPeriodo getTipoPeriodo(Integer id) throws EntityException;
 
     List<TipoPeriodo> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                     Object[] variablesBetweenDates);
+                                     Object[] variablesBetweenDates) throws EntityException;
 
-    List<TipoPeriodo> findByProperty(String propertyName, Object value);
+    List<TipoPeriodo> findByProperty(String propertyName, Object value) throws EntityException;
 
 }

@@ -33,7 +33,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<TipoPeriodo> getTipoPeriodo() {
+    public List<TipoPeriodo> getTipoPeriodo() throws EntityException {
         List<TipoPeriodo> list;
         try {
             list = this.tipoPeriodoDao.findAll();
@@ -47,7 +47,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveTipoPeriodo(TipoPeriodo entity) {
+    public void saveTipoPeriodo(TipoPeriodo entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.tipoPeriodoDao.save(entity);
@@ -59,7 +59,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateTipoPeriodo(TipoPeriodo entity) {
+    public void updateTipoPeriodo(TipoPeriodo entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.tipoPeriodoDao.update(entity);
@@ -71,7 +71,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public TipoPeriodo getTipoPeriodo(Integer id) {
+    public TipoPeriodo getTipoPeriodo(Integer id) throws EntityException {
         TipoPeriodo entity;
         try {
             entity = this.tipoPeriodoDao.findById(id);
@@ -86,7 +86,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
     @Override
     @Transactional(readOnly = true)
     public List<TipoPeriodo> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                            Object[] variablesBetweenDates) {
+                                            Object[] variablesBetweenDates) throws EntityException {
         List<TipoPeriodo> list;
         String where;
         try {
@@ -102,7 +102,7 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<TipoPeriodo> findByProperty(String propertyName, Object value) {
+    public List<TipoPeriodo> findByProperty(String propertyName, Object value) throws EntityException {
         List<TipoPeriodo> list;
         try {
             list = this.tipoPeriodoDao.findByProperty(propertyName, value);

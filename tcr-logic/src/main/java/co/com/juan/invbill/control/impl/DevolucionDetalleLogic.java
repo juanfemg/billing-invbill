@@ -33,22 +33,8 @@ public class DevolucionDetalleLogic implements IDevolucionDetalleLogic {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<DevolucionDetalle> getDevolucionDetalle() {
-        List<DevolucionDetalle> list;
-        try {
-            list = this.devolucionDetalleDao.findAll();
-        } catch (DaoException de) {
-            log.error("finding all {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.GettingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveDevolucionDetalle(DevolucionDetalle entity) {
+    public void saveDevolucionDetalle(DevolucionDetalle entity)  throws EntityException{
         try {
             this.checkFields(entity);
             this.devolucionDetalleDao.save(entity);
@@ -60,7 +46,7 @@ public class DevolucionDetalleLogic implements IDevolucionDetalleLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateDevolucionDetalle(DevolucionDetalle entity) {
+    public void updateDevolucionDetalle(DevolucionDetalle entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.devolucionDetalleDao.update(entity);
@@ -72,7 +58,7 @@ public class DevolucionDetalleLogic implements IDevolucionDetalleLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public DevolucionDetalle getDevolucionDetalle(DevolucionDetalleId id) {
+    public DevolucionDetalle getDevolucionDetalle(DevolucionDetalleId id) throws EntityException {
         DevolucionDetalle entity;
         try {
             entity = this.devolucionDetalleDao.findById(id);
@@ -87,7 +73,7 @@ public class DevolucionDetalleLogic implements IDevolucionDetalleLogic {
     @Override
     @Transactional(readOnly = true)
     public List<DevolucionDetalle> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                                  Object[] variablesBetweenDates) {
+                                                  Object[] variablesBetweenDates)  throws EntityException{
         List<DevolucionDetalle> list;
         String where;
         try {
@@ -103,7 +89,7 @@ public class DevolucionDetalleLogic implements IDevolucionDetalleLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DevolucionDetalle> findByProperty(String propertyName, Object value) {
+    public List<DevolucionDetalle> findByProperty(String propertyName, Object value) throws EntityException {
         List<DevolucionDetalle> list;
         try {
             list = this.devolucionDetalleDao.findByProperty(propertyName, value);

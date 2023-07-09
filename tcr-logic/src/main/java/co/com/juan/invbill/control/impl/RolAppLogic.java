@@ -32,7 +32,7 @@ public class RolAppLogic implements IRolAppLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<RolApp> findByCriteria(Object[] variables, Object[] variablesBetween, Object[] variablesBetweenDates) {
+    public List<RolApp> findByCriteria(Object[] variables, Object[] variablesBetween, Object[] variablesBetweenDates) throws EntityException {
         List<RolApp> list;
         String where;
         try {
@@ -48,7 +48,7 @@ public class RolAppLogic implements IRolAppLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<RolApp> findByProperty(String propertyName, Object value) {
+    public List<RolApp> findByProperty(String propertyName, Object value) throws EntityException {
         List<RolApp> list;
         try {
             list = this.rolAppDao.findByProperty(propertyName, value);

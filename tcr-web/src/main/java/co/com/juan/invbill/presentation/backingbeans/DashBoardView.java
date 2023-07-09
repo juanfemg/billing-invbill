@@ -29,12 +29,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
-import co.com.juan.invbill.dto.ReporteCompraDiaria;
-import co.com.juan.invbill.dto.ReporteCompraMensual;
-import co.com.juan.invbill.dto.ReporteDevolucionDiaria;
-import co.com.juan.invbill.dto.ReporteDevolucionMensual;
-import co.com.juan.invbill.dto.ReporteVentaDiaria;
-import co.com.juan.invbill.dto.ReporteVentaMensual;
+import co.com.juan.invbill.model.ReporteCompraDiaria;
+import co.com.juan.invbill.model.ReporteCompraMensual;
+import co.com.juan.invbill.model.ReporteDevolucionDiaria;
+import co.com.juan.invbill.model.ReporteDevolucionMensual;
+import co.com.juan.invbill.model.ReporteVentaDiaria;
+import co.com.juan.invbill.model.ReporteVentaMensual;
 import co.com.juan.invbill.enums.ReportFormatEnum;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.LoginApp;

@@ -33,7 +33,7 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProveedorApp> getProveedorApp() {
+    public List<ProveedorApp> getProveedorApp() throws EntityException {
         List<ProveedorApp> list;
         try {
             list = this.proveedorAppDao.findAll();
@@ -47,7 +47,7 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveProveedorApp(ProveedorApp entity) {
+    public void saveProveedorApp(ProveedorApp entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.checkSecondaryFields(entity);
@@ -65,7 +65,7 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateProveedorApp(ProveedorApp entity) {
+    public void updateProveedorApp(ProveedorApp entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.checkSecondaryFields(entity);
@@ -78,7 +78,7 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public ProveedorApp getProveedorApp(Integer id) {
+    public ProveedorApp getProveedorApp(Integer id) throws EntityException {
         ProveedorApp entity;
         try {
             entity = this.proveedorAppDao.findById(id);
@@ -93,7 +93,7 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
     @Override
     @Transactional(readOnly = true)
     public List<ProveedorApp> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                             Object[] variablesBetweenDates) {
+                                             Object[] variablesBetweenDates) throws EntityException {
         List<ProveedorApp> list;
         String where;
         try {
@@ -109,7 +109,7 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProveedorApp> findByProperty(String propertyName, Object value) {
+    public List<ProveedorApp> findByProperty(String propertyName, Object value) throws EntityException {
         List<ProveedorApp> list;
         try {
             list = this.proveedorAppDao.findByProperty(propertyName, value);

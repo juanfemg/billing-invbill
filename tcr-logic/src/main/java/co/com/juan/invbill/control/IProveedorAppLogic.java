@@ -2,6 +2,7 @@ package co.com.juan.invbill.control;
 
 import java.util.List;
 
+import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.ProveedorApp;
 
 /**
@@ -9,17 +10,17 @@ import co.com.juan.invbill.model.ProveedorApp;
  */
 public interface IProveedorAppLogic {
 
-    List<ProveedorApp> getProveedorApp();
+    List<ProveedorApp> getProveedorApp() throws EntityException;
 
-    void saveProveedorApp(ProveedorApp entity);
+    void saveProveedorApp(ProveedorApp entity) throws EntityException;
 
-    void updateProveedorApp(ProveedorApp entity);
+    void updateProveedorApp(ProveedorApp entity) throws EntityException;
 
-    ProveedorApp getProveedorApp(Integer id);
+    ProveedorApp getProveedorApp(Integer id) throws EntityException;
 
     List<ProveedorApp> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                      Object[] variablesBetweenDates);
+                                      Object[] variablesBetweenDates) throws EntityException;
 
-    List<ProveedorApp> findByProperty(String propertyName, Object value);
+    List<ProveedorApp> findByProperty(String propertyName, Object value) throws EntityException;
 
 }

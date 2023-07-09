@@ -33,7 +33,7 @@ public class LoginAppLogic implements ILoginAppLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveLoginApp(LoginApp entity) {
+    public void saveLoginApp(LoginApp entity) throws EntityException {
         try {
             this.checkFields(entity);
 
@@ -50,7 +50,7 @@ public class LoginAppLogic implements ILoginAppLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateLoginApp(LoginApp entity) {
+    public void updateLoginApp(LoginApp entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.loginAppDao.update(entity);
@@ -62,7 +62,7 @@ public class LoginAppLogic implements ILoginAppLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public LoginApp getLoginApp(String id) {
+    public LoginApp getLoginApp(String id) throws EntityException {
         LoginApp entity;
         try {
             entity = this.loginAppDao.findById(id);
@@ -77,7 +77,7 @@ public class LoginAppLogic implements ILoginAppLogic {
     @Override
     @Transactional(readOnly = true)
     public List<LoginApp> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                         Object[] variablesBetweenDates) {
+                                         Object[] variablesBetweenDates) throws EntityException {
         List<LoginApp> list;
         String where;
         try {
@@ -93,7 +93,7 @@ public class LoginAppLogic implements ILoginAppLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<LoginApp> findByProperty(String propertyName, Object value) {
+    public List<LoginApp> findByProperty(String propertyName, Object value) throws EntityException {
         List<LoginApp> list;
         try {
             list = this.loginAppDao.findByProperty(propertyName, value);

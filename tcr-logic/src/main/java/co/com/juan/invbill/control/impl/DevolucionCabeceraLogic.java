@@ -33,7 +33,7 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveDevolucionCabecera(DevolucionCabecera entity) {
+    public void saveDevolucionCabecera(DevolucionCabecera entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.devolucionCabeceraDao.save(entity);
@@ -45,7 +45,7 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateDevolucionCabecera(DevolucionCabecera entity) {
+    public void updateDevolucionCabecera(DevolucionCabecera entity) throws EntityException {
         try {
             this.checkFields(entity);
             this.devolucionCabeceraDao.update(entity);
@@ -57,7 +57,7 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public DevolucionCabecera getDevolucionCabecera(Integer id) {
+    public DevolucionCabecera getDevolucionCabecera(Integer id) throws EntityException {
         DevolucionCabecera entity;
         try {
             entity = this.devolucionCabeceraDao.findById(id);
@@ -71,7 +71,7 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DevolucionCabecera> getDataDevolucionCabecera() {
+    public List<DevolucionCabecera> getDataDevolucionCabecera() throws EntityException {
         List<DevolucionCabecera> list;
         try {
             list = this.devolucionCabeceraDao.findAll();
@@ -86,7 +86,7 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
     @Override
     @Transactional(readOnly = true)
     public List<DevolucionCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                                   Object[] variablesBetweenDates) {
+                                                   Object[] variablesBetweenDates) throws EntityException {
         List<DevolucionCabecera> list;
         String where;
         try {
@@ -102,7 +102,7 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DevolucionCabecera> findByProperty(String propertyName, Object value) {
+    public List<DevolucionCabecera> findByProperty(String propertyName, Object value) throws EntityException {
         List<DevolucionCabecera> list;
         try {
             list = this.devolucionCabeceraDao.findByProperty(propertyName, value);

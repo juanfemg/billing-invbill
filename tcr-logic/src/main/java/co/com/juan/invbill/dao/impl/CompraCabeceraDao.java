@@ -1,7 +1,7 @@
 package co.com.juan.invbill.dao.impl;
 
 import co.com.juan.invbill.dao.ICompraCabeceraDao;
-import co.com.juan.invbill.dataaccess.api.HibernateDaoImpl;
+import co.com.juan.invbill.dataaccess.api.impl.HibernateDaoImpl;
 import co.com.juan.invbill.model.CompraCabecera;
 import co.com.juan.invbill.model.CompraCabeceraId;
 import org.hibernate.SessionFactory;

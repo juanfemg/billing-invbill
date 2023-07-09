@@ -2,6 +2,7 @@ package co.com.juan.invbill.control;
 
 import java.util.List;
 
+import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.LoginApp;
 
 /**
@@ -9,14 +10,14 @@ import co.com.juan.invbill.model.LoginApp;
  */
 public interface ILoginAppLogic {
 
-    void saveLoginApp(LoginApp entity);
+    void saveLoginApp(LoginApp entity) throws EntityException;
 
-    void updateLoginApp(LoginApp entity);
+    void updateLoginApp(LoginApp entity) throws EntityException;
 
-    LoginApp getLoginApp(String id);
+    LoginApp getLoginApp(String id) throws EntityException;
 
-    List<LoginApp> findByCriteria(Object[] variables, Object[] variablesBetween, Object[] variablesBetweenDates);
+    List<LoginApp> findByCriteria(Object[] variables, Object[] variablesBetween, Object[] variablesBetweenDates) throws EntityException;
 
-    List<LoginApp> findByProperty(String propertyName, Object value);
+    List<LoginApp> findByProperty(String propertyName, Object value) throws EntityException;
 
 }
