@@ -21,8 +21,6 @@ public interface IFacturaCabeceraLogic {
     List<FacturaCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
                                          Object[] variablesBetweenDates) throws EntityException;
 
-    List<FacturaCabecera> findByProperty(String propertyName, Object value) throws EntityException;
-
     Object findMaxObjectByCriteria(String propertyName) throws EntityException;
 
     Object findMinObjectByCriteria(String propertyName) throws EntityException;

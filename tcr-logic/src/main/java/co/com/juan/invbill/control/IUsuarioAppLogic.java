@@ -16,9 +16,4 @@ public interface IUsuarioAppLogic {
 
     UsuarioApp getUsuarioApp(String id) throws EntityException;
 
-    List<UsuarioApp> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                    Object[] variablesBetweenDates) throws EntityException;
-
-    List<UsuarioApp> findByProperty(String propertyName, Object value) throws EntityException;
-
 }

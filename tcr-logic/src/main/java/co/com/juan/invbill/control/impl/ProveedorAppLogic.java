@@ -90,37 +90,6 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
         return entity;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<ProveedorApp> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                             Object[] variablesBetweenDates) throws EntityException {
-        List<ProveedorApp> list;
-        String where;
-        try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = this.proveedorAppDao.findByCriteria(where);
-        } catch (DaoException de) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<ProveedorApp> findByProperty(String propertyName, Object value) throws EntityException {
-        List<ProveedorApp> list;
-        try {
-            list = this.proveedorAppDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
     private void checkFields(ProveedorApp entity) {
         if (entity.getIdProveedorApp() == null) {
             throw new EntityException.EmptyFieldException(Constant.FIELD_ID_ENTITY);

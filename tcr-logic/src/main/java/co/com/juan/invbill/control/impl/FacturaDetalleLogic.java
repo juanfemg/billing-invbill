@@ -58,37 +58,6 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<FacturaDetalle> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                               Object[] variablesBetweenDates) throws EntityException {
-        List<FacturaDetalle> list;
-        String where;
-        try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = this.facturaDetalleDao.findByCriteria(where);
-        } catch (DaoException de) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<FacturaDetalle> findByProperty(String propertyName, Object value) throws EntityException {
-        List<FacturaDetalle> list;
-        try {
-            list = this.facturaDetalleDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<FacturaDetalle> getFacturaDetalleDevolucionByIdFactura(Integer idFactura) throws EntityException {
         List<FacturaDetalle> list;
         try {

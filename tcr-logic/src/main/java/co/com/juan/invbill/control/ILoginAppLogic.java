@@ -16,8 +16,4 @@ public interface ILoginAppLogic {
 
     LoginApp getLoginApp(String id) throws EntityException;
 
-    List<LoginApp> findByCriteria(Object[] variables, Object[] variablesBetween, Object[] variablesBetweenDates) throws EntityException;
-
-    List<LoginApp> findByProperty(String propertyName, Object value) throws EntityException;
-
 }

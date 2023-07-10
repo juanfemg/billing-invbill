@@ -18,9 +18,4 @@ public interface IProveedorAppLogic {
 
     ProveedorApp getProveedorApp(Integer id) throws EntityException;
 
-    List<ProveedorApp> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                      Object[] variablesBetweenDates) throws EntityException;
-
-    List<ProveedorApp> findByProperty(String propertyName, Object value) throws EntityException;
-
 }

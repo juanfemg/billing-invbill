@@ -83,37 +83,6 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
         return entity;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<TipoUnidadMedida> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                                 Object[] variablesBetweenDates) throws EntityException {
-        List<TipoUnidadMedida> list;
-        String where;
-        try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = this.tipoUnidadMedidaDao.findByCriteria(where);
-        } catch (DaoException de) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<TipoUnidadMedida> findByProperty(String propertyName, Object value) throws EntityException {
-        List<TipoUnidadMedida> list;
-        try {
-            list = this.tipoUnidadMedidaDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
     private void checkFields(TipoUnidadMedida entity) {
         if (entity.getTipoUnidad() == null) {
             throw new EntityException.EmptyFieldException(Constant.FIELD_TIPO_UNIDAD);

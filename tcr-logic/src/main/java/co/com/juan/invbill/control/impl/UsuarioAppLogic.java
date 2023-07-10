@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.List;
 
 /**
  * @author Juan Felipe
@@ -72,37 +71,6 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
         }
 
         return entity;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<UsuarioApp> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                           Object[] variablesBetweenDates) throws EntityException {
-        List<UsuarioApp> list;
-        String where;
-        try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = this.usuarioAppDao.findByCriteria(where);
-        } catch (DaoException de) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<UsuarioApp> findByProperty(String propertyName, Object value) throws EntityException {
-        List<UsuarioApp> list;
-        try {
-            list = this.usuarioAppDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
     }
 
     private void checkFields(UsuarioApp entity) {

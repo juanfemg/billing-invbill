@@ -19,10 +19,6 @@ public interface IProductoLogic {
 
     Producto getProducto(Integer id) throws EntityException;
 
-    List<Producto> findByCriteria(Object[] variables, Object[] variablesBetween, Object[] variablesBetweenDates) throws EntityException;
-
-    List<Producto> findByProperty(String propertyName, Object value) throws EntityException;
-
     List<Producto> findByPropertySort(String propertyName, Object value, String sortColumnName,
                                       boolean sortAscending) throws EntityException;
 

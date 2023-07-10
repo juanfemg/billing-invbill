@@ -100,20 +100,6 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
         return list;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<DevolucionCabecera> findByProperty(String propertyName, Object value) throws EntityException {
-        List<DevolucionCabecera> list;
-        try {
-            list = this.devolucionCabeceraDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
     private void checkFields(DevolucionCabecera entity) {
         if (entity.getValorNeto() == null) {
             throw new EntityException.EmptyFieldException(Constant.FIELD_VALOR_NETO);

@@ -18,9 +18,4 @@ public interface ITipoUnidadMedidaLogic {
 
     TipoUnidadMedida getTipoUnidadMedida(Integer id) throws EntityException;
 
-    List<TipoUnidadMedida> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                          Object[] variablesBetweenDates) throws EntityException;
-
-    List<TipoUnidadMedida> findByProperty(String propertyName, Object value) throws EntityException;
-
 }

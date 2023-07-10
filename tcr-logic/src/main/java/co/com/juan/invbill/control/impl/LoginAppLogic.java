@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.List;
 
 /**
  * @author Juan Felipe
@@ -72,37 +71,6 @@ public class LoginAppLogic implements ILoginAppLogic {
         }
 
         return entity;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<LoginApp> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                         Object[] variablesBetweenDates) throws EntityException {
-        List<LoginApp> list;
-        String where;
-        try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = this.loginAppDao.findByCriteria(where);
-        } catch (DaoException de) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<LoginApp> findByProperty(String propertyName, Object value) throws EntityException {
-        List<LoginApp> list;
-        try {
-            list = this.loginAppDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
     }
 
     private void checkFields(LoginApp entity) {

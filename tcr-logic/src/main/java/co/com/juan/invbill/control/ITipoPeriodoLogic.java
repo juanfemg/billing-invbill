@@ -18,9 +18,4 @@ public interface ITipoPeriodoLogic {
 
     TipoPeriodo getTipoPeriodo(Integer id) throws EntityException;
 
-    List<TipoPeriodo> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                     Object[] variablesBetweenDates) throws EntityException;
-
-    List<TipoPeriodo> findByProperty(String propertyName, Object value) throws EntityException;
-
 }

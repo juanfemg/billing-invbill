@@ -102,20 +102,6 @@ public class FacturaCabeceraLogic implements IFacturaCabeceraLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<FacturaCabecera> findByProperty(String propertyName, Object value) throws EntityException {
-        List<FacturaCabecera> list;
-        try {
-            list = this.facturaCabeceraDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Object findMaxObjectByCriteria(String propertyName) throws EntityException {
         Object object;
         try {

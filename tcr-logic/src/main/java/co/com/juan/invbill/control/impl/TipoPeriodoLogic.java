@@ -83,37 +83,6 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
         return entity;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<TipoPeriodo> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                            Object[] variablesBetweenDates) throws EntityException {
-        List<TipoPeriodo> list;
-        String where;
-        try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = this.tipoPeriodoDao.findByCriteria(where);
-        } catch (DaoException de) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<TipoPeriodo> findByProperty(String propertyName, Object value) throws EntityException {
-        List<TipoPeriodo> list;
-        try {
-            list = this.tipoPeriodoDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
     private void checkFields(TipoPeriodo entity) {
         if (entity.getPeriodo() == null) {
             throw new EntityException.EmptyFieldException(Constant.FIELD_PERIODO);

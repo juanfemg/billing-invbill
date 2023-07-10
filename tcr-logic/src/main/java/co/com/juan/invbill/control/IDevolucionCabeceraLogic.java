@@ -21,6 +21,4 @@ public interface IDevolucionCabeceraLogic {
     List<DevolucionCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
                                             Object[] variablesBetweenDates) throws EntityException;
 
-    List<DevolucionCabecera> findByProperty(String propertyName, Object value) throws EntityException;
-
 }

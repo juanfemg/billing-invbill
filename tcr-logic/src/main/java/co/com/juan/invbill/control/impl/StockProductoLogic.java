@@ -71,37 +71,6 @@ public class StockProductoLogic implements IStockProductoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<StockProducto> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                              Object[] variablesBetweenDates) throws EntityException {
-        List<StockProducto> list;
-        String where;
-        try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = this.stockProductoDao.findByCriteria(where);
-        } catch (DaoException de) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<StockProducto> findByProperty(String propertyName, Object value) throws EntityException {
-        List<StockProducto> list;
-        try {
-            list = this.stockProductoDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public StockProducto findObjectByProperty(String propertyName, Object value) throws EntityException {
         StockProducto entity;
         try {

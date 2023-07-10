@@ -15,11 +15,6 @@ public interface IFacturaDetalleLogic {
 
     void updateFacturaDetalle(FacturaDetalle entity) throws EntityException;
 
-    List<FacturaDetalle> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                        Object[] variablesBetweenDates) throws EntityException;
-
-    List<FacturaDetalle> findByProperty(String propertyName, Object value) throws EntityException;
-
     List<FacturaDetalle> getFacturaDetalleDevolucionByIdFactura(Integer idFactura) throws EntityException;
 
 }

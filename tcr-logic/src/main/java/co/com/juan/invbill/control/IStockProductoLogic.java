@@ -16,11 +16,6 @@ public interface IStockProductoLogic {
 
     void updateStockProducto(StockProducto entity) throws EntityException;
 
-    List<StockProducto> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                       Object[] variablesBetweenDates) throws EntityException;
-
-    List<StockProducto> findByProperty(String propertyName, Object value) throws EntityException;
-
     StockProducto findObjectByProperty(String propertyName, Object value) throws EntityException;
 
     Object findMaxObjectByCriteria(String propertyName) throws EntityException;

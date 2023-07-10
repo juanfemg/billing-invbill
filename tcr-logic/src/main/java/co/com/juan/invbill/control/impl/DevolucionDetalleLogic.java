@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.List;
 
 /**
  * @author Juan Felipe
@@ -68,37 +67,6 @@ public class DevolucionDetalleLogic implements IDevolucionDetalleLogic {
         }
 
         return entity;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<DevolucionDetalle> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                                  Object[] variablesBetweenDates)  throws EntityException{
-        List<DevolucionDetalle> list;
-        String where;
-        try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = this.devolucionDetalleDao.findByCriteria(where);
-        } catch (DaoException de) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<DevolucionDetalle> findByProperty(String propertyName, Object value) throws EntityException {
-        List<DevolucionDetalle> list;
-        try {
-            list = this.devolucionDetalleDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
     }
 
     private void checkFields(DevolucionDetalle entity) {

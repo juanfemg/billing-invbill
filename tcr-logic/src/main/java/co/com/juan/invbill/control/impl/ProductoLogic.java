@@ -86,37 +86,6 @@ public class ProductoLogic implements IProductoLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Producto> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                         Object[] variablesBetweenDates) throws EntityException {
-        List<Producto> list;
-        String where;
-        try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
-            list = this.productoDao.findByCriteria(where);
-        } catch (DaoException de) {
-            log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Producto> findByProperty(String propertyName, Object value) throws EntityException {
-        List<Producto> list;
-        try {
-            list = this.productoDao.findByProperty(propertyName, value);
-        } catch (DaoException de) {
-            log.error("find {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
-            throw new EntityException.FindingException(Constant.ENTITY_NAME);
-        }
-
-        return list;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<Producto> findByPropertySort(String propertyName, Object value, String sortColumnName,
                                              boolean sortAscending) throws EntityException {
         List<Producto> list;
