@@ -41,7 +41,7 @@ import co.com.juan.invbill.model.LoginApp;
 import co.com.juan.invbill.model.ProveedorApp;
 import co.com.juan.invbill.model.UsuarioApp;
 import co.com.juan.invbill.report.IReportController;
-import co.com.juan.invbill.util.Encrypt;
+import co.com.juan.invbill.util.security.Encryption;
 import co.com.juan.invbill.util.Properties;
 
 /**
@@ -310,9 +310,9 @@ public class DashBoardView implements Serializable {
 
 	public void actionActualizarPassword() {
 		try {
-			passwordOld = new Encrypt().encrypt(passwordOld);
+			passwordOld = new Encryption().encrypt(passwordOld);
 			if (passwordOld.equals(usuarioApp.getPassword())) {
-				usuarioApp.setPassword(new Encrypt().encrypt(passwordNew));
+				usuarioApp.setPassword(new Encryption().encrypt(passwordNew));
 				businessDelegate.update(usuarioApp);
 				showDialogCambiarPassword = false;
 				log.info("=== Actualizacion de usuario: Usuario actualizado. Id={}, descripcion={} === ",

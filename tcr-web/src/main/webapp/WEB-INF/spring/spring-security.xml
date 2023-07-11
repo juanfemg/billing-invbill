@@ -6,16 +6,17 @@
 
 	<http security="none" pattern="/login.xhtml" />
 
-	<http auto-config="true" access-denied-page="/login.xhtml"
+	<http auto-config="true"
 		access-decision-manager-ref="accessDecisionManager">
 
-		<intercept-url pattern="/ADMINISTRACION/**" access="ROLE_USER" />
-		<intercept-url pattern="/CONFIGURACION/**" access="ROLE_USER" />
-		<intercept-url pattern="/INVENTARIO/**" access="ROLE_USER" />
-		<intercept-url pattern="/VENTAS/**" access="ROLE_USER" />
-		<intercept-url pattern="/COMPRAS/**" access="ROLE_USER" />
-		<intercept-url pattern="/REPORTES/**" access="ROLE_USER" />
-		<intercept-url pattern="/dashboard.xhtml" access="ROLE_USER" />
+		<access-denied-handler error-page="/login.xhtml"/>
+		<intercept-url pattern="/ADMINISTRACION/**" access="ADMINISTRADOR" />
+		<intercept-url pattern="/CONFIGURACION/**" access="ADMINISTRADOR" />
+		<intercept-url pattern="/INVENTARIO/**" access="ADMINISTRADOR" />
+		<intercept-url pattern="/VENTAS/**" access="ADMINISTRADOR" />
+		<intercept-url pattern="/COMPRAS/**" access="ADMINISTRADOR" />
+		<intercept-url pattern="/REPORTES/**" access="ADMINISTRADOR" />
+		<intercept-url pattern="/dashboard.xhtml" access="ADMINISTRADOR" />
 
 		<form-login login-page="/login.xhtml" default-target-url="/dashboard.xhtml"
 			always-use-default-target="false" authentication-failure-url="/login.xhtml?authfailed=true" />
@@ -38,6 +39,6 @@
 	</beans:bean>
 
 	<authentication-manager alias="authenticationManager">
-		<authentication-provider ref="AppAuthenticationProvider" />
+		<authentication-provider ref="appAuthenticationProvider" />
 	</authentication-manager>
 </beans:beans>

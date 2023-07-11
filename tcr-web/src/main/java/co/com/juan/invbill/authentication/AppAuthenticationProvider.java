@@ -1,12 +1,12 @@
 package co.com.juan.invbill.authentication;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.enums.StatusEnum;
+import co.com.juan.invbill.model.UsuarioApp;
+import co.com.juan.invbill.util.security.Encryption;
+import co.com.juan.invbill.util.security.IEncryption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,86 +16,62 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
-import co.com.juan.invbill.enums.StatusEnum;
-import co.com.juan.invbill.model.UsuarioApp;
-import co.com.juan.invbill.util.Encrypt;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Juan Felipe
- * 
  */
-@Scope("singleton")
-@Component("AppAuthenticationProvider")
+@Singleton
+@Component
 public class AppAuthenticationProvider implements AuthenticationProvider {
 
-	private static final Logger log = LoggerFactory.getLogger(AppAuthenticationProvider.class);
+    private static final Logger log = LoggerFactory.getLogger(AppAuthenticationProvider.class);
+    private final IBusinessDelegate businessDelegator;
+    private final IEncryption encryption;
 
-	@Autowired
-	private IBusinessDelegate businessDelegator;
+    @Inject
+    public AppAuthenticationProvider(IBusinessDelegate businessDelegator, Encryption encryption) {
+        this.businessDelegator = businessDelegator;
+        this.encryption = encryption;
+    }
 
-	private UsuarioApp usuarioApp;
+    @Override
+    public Authentication authenticate(Authentication authentication) {
+        String name = authentication.getName();
+        String credentials = (String) authentication.getCredentials();
+        try {
+            UserDetails principal = this.getUser(name, credentials);
+            Authentication auth = new UsernamePasswordAuthenticationToken(principal, credentials, principal.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            return auth;
+        } catch (Exception e) {
+            log.error("the encapsulation of user information failed. An error has occurred.", e);
+        }
 
-	@Override
-	public Authentication authenticate(Authentication authentication) {
-		String name = authentication.getName();
-		String credentials = authentication.getCredentials().toString();
-		final List<GrantedAuthority> grantedAuths = new ArrayList<>();
-		grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
+        return null;
+    }
 
-		try {
-			final UserDetails principal = getUser(name, credentials);
-			final Authentication auth = new UsernamePasswordAuthenticationToken(principal, credentials, grantedAuths);
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+    }
 
-			SecurityContextHolder.getContext().setAuthentication(auth);
+    private UserDetails getUser(String userName, String password) {
+        boolean enabled = false;
+        List<GrantedAuthority> grantedAuths = null;
+        UsuarioApp usuarioApp = this.businessDelegator.findUsuarioByID(userName);
 
-			return auth;
-		} catch (Exception e) {
-			log.error("the encapsulation of user information failed. An error has occurred.", e);
-		}
+        if (usuarioApp != null && usuarioApp.getRolApp() != null) {
+            if ((usuarioApp.getEstado() == StatusEnum.A) && (password.equals(this.encryption.decrypt(usuarioApp.getPassword())))) {
+                enabled = true;
+                grantedAuths = Collections.singletonList(new SimpleGrantedAuthority(usuarioApp.getRolApp().getRol()));
+            }
+        }
 
-		return null;
-	}
-
-	@Override
-	public boolean supports(Class<?> authentication) {
-		return authentication.equals(UsernamePasswordAuthenticationToken.class);
-	}
-
-	private UserDetails getUser(String userName, String password) {
-		boolean enabled = false;
-
-		usuarioApp = businessDelegator.findUsuarioByID(userName);
-
-		if (usuarioApp != null) {
-			if (usuarioApp.getEstado() == StatusEnum.A) {
-				enabled = true;
-			} else {
-				enabled = false;
-			}
-
-			if (password.equals(new Encrypt().decrypt(usuarioApp.getPassword()))) {
-				enabled = true;
-			} else {
-				enabled = false;
-			}
-		}
-
-		return new AppUserDetails(usuarioApp, userName, password, enabled);
-	}
-
-	/**
-	 * @return the usuarioApp
-	 */
-	public UsuarioApp getUsuarioApp() {
-		return usuarioApp;
-	}
-
-	/**
-	 * @param usuarioApp the usuarioApp to set
-	 */
-	public void setUsuarioApp(UsuarioApp usuarioApp) {
-		this.usuarioApp = usuarioApp;
-	}
+        return new AppUserDetails(userName, password, enabled, grantedAuths);
+    }
 
 }

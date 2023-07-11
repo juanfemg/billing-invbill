@@ -57,7 +57,7 @@ import co.com.juan.invbill.model.StockProducto;
 import co.com.juan.invbill.model.TipoPeriodo;
 import co.com.juan.invbill.model.TipoUnidadMedida;
 import co.com.juan.invbill.model.UsuarioApp;
-import co.com.juan.invbill.util.Encrypt;
+import co.com.juan.invbill.util.security.Encryption;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
@@ -143,7 +143,7 @@ public class BusinessDelegate implements IBusinessDelegate {
 		}
 
 		if (entity.getPassword() != null) {
-			entity.setPassword(new Encrypt().encrypt(entity.getPassword()));
+			entity.setPassword(new Encryption().encrypt(entity.getPassword()));
 		}
 
 		if (entity.getRolApp() == null) {
