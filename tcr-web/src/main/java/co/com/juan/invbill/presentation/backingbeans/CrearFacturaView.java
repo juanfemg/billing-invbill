@@ -17,6 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,17 @@ public class CrearFacturaView implements Serializable {
 
 	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
+
+	public IProductoDelegate getProductoDelegate() {
+		return productoDelegate;
+	}
+
+	public void setProductoDelegate(IProductoDelegate productoDelegate) {
+		this.productoDelegate = productoDelegate;
+	}
+
+	@ManagedProperty(value = "#{productoDelegate}")
+	private transient IProductoDelegate productoDelegate;
 
 	@ManagedProperty(value = "#{ReportController}")
 	private transient IReportController reportController;
@@ -118,7 +130,7 @@ public class CrearFacturaView implements Serializable {
 
 	public void initCategoriasProducto() {
 		try {
-			categoria = businessDelegate.getCategoriasProductoSortByCategoria();
+			categoria = this.productoDelegate.getCategoriasProductoSortByCategoria();
 
 			for (CategoriaProducto categoriaProductoTemp : categoria) {
 				if (categoriaProductoTemp.getEstado().equals(StatusEnum.A))
@@ -141,7 +153,7 @@ public class CrearFacturaView implements Serializable {
 
 	public void initProductos() {
 		try {
-			producto = businessDelegate.getProductosByCategoriaProductoSortByProducto(categoriaProducto);
+			producto = this.productoDelegate.getProductosByCategoriaProductoSortByProducto(categoriaProducto);
 
 			productos.clear();
 
@@ -165,7 +177,7 @@ public class CrearFacturaView implements Serializable {
 
 	public void initStockProducto() {
 		try {
-			stockProducto = businessDelegate.getStockProductoByProducto(facturaModDetalle.getProducto());
+			stockProducto = this.productoDelegate.getStockProductoByProducto(facturaModDetalle.getProducto());
 
 		} catch (Exception e) {
 			addErrorMessage(e.getMessage());
@@ -228,7 +240,7 @@ public class CrearFacturaView implements Serializable {
 
 		if (!showDialogConfirmacionActualizacion) {
 			try {
-				stockProducto = businessDelegate.getStockProductoByProducto(facturaModDetalle.getProducto());
+				stockProducto = this.productoDelegate.getStockProductoByProducto(facturaModDetalle.getProducto());
 
 				if (stockProducto.getStock() < cantidad) {
 					String[] parameters = { facturaModDetalle.getProducto().getProducto(),
@@ -432,7 +444,7 @@ public class CrearFacturaView implements Serializable {
 
 	public void getStockProducto(FacturaDetalle facturaDetalleTemp) {
 		try {
-			stockProducto = businessDelegate.getStockProductoByProducto(facturaDetalleTemp.getProducto());
+			stockProducto = this.productoDelegate.getStockProductoByProducto(facturaDetalleTemp.getProducto());
 
 			updateStockProducto(facturaDetalleTemp);
 		} catch (Exception e) {
@@ -445,7 +457,7 @@ public class CrearFacturaView implements Serializable {
 	public void updateStockProducto(FacturaDetalle facturaDetalleTemp) {
 		try {
 			stockProducto.setStock(stockProducto.getStock() - facturaDetalleTemp.getCantidad());
-			businessDelegate.update(stockProducto);
+			this.productoDelegate.update(stockProducto);
 			log.info("=== Actualizacion de stock de producto : Stock de producto actualizado "
 					+ stockProducto.getIdStockProducto() + " exitosamente ===");
 		} catch (Exception e) {

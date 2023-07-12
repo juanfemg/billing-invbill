@@ -72,30 +72,30 @@ public class FacturaDetalleLogic implements IFacturaDetalleLogic {
 
     private void checkFields(FacturaDetalle entity) {
         if (entity.getCantidad() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_CANTIDAD);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_CANTIDAD);
         }
 
         if ((entity.getCantidad() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getCantidad().toString(), 11, 0))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_CANTIDAD);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_CANTIDAD);
         }
 
         if (entity.getPrecioVenta() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_PRECIO_VENTA);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_PRECIO_VENTA);
         }
 
         if ((entity.getPrecioVenta() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getPrecioVenta().toString(), 22, 2))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_PRECIO_VENTA);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_PRECIO_VENTA);
         }
 
         if (entity.getValorIva() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_VALOR_IVA);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_VALOR_IVA);
         }
 
         if ((entity.getValorIva() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getValorIva().toString(), 22, 2))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_VALOR_IVA);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_VALOR_IVA);
         }
     }
 

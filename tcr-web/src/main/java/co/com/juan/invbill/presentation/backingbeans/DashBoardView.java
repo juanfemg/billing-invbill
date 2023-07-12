@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IReporteDelegate;
 import co.com.juan.invbill.model.ReporteCompraDiaria;
 import co.com.juan.invbill.model.ReporteCompraMensual;
 import co.com.juan.invbill.model.ReporteDevolucionDiaria;
@@ -65,6 +66,9 @@ public class DashBoardView implements Serializable {
 
 	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
+
+	@ManagedProperty(value = "#{reporteDelegate}")
+	private transient IReporteDelegate reporteDelegate;
 
 	@ManagedProperty(value = "#{ReportController}")
 	private transient IReportController reportController;
@@ -148,7 +152,7 @@ public class DashBoardView implements Serializable {
 
 	public void initReporteVentaDiaria() {
 		try {
-			reporteVentaDiaria = businessDelegate.getReporteVentaDiaria();
+			reporteVentaDiaria = this.reporteDelegate.getReporteVentaDiaria();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_REPORTE_VENTA_DIARIA"));
 			log.error(
@@ -159,7 +163,7 @@ public class DashBoardView implements Serializable {
 
 	public void initReporteDevolucionDiaria() {
 		try {
-			reporteDevolucionDiaria = businessDelegate.getReporteDevolucionDiaria();
+			reporteDevolucionDiaria = this.reporteDelegate.getReporteDevolucionDiaria();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_REPORTE_DEVOLUCION_DIARIA"));
 			log.error(
@@ -170,7 +174,7 @@ public class DashBoardView implements Serializable {
 
 	public void initReporteCompraDiaria() {
 		try {
-			reporteCompraDiaria = businessDelegate.getReporteCompraDiaria();
+			reporteCompraDiaria = this.reporteDelegate.getReporteCompraDiaria();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_REPORTE_COMPRA_DIARIA"));
 			log.error(
@@ -181,7 +185,7 @@ public class DashBoardView implements Serializable {
 
 	public void initReporteVentaMensual() {
 		try {
-			reporteVentaMensuales = businessDelegate.getReporteVentaMensual();
+			reporteVentaMensuales = this.reporteDelegate.getReporteVentaMensual();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_REPORTE_VENTA_MENSUAL"));
 			log.error(
@@ -192,7 +196,7 @@ public class DashBoardView implements Serializable {
 
 	public void initReporteDevolucionMensual() {
 		try {
-			reporteDevolucionMensuales = businessDelegate.getReporteDevolucionMensual();
+			reporteDevolucionMensuales = this.reporteDelegate.getReporteDevolucionMensual();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_REPORTE_DEVOLUCION_MENSUAL"));
 			log.error(
@@ -203,7 +207,7 @@ public class DashBoardView implements Serializable {
 
 	public void initReporteCompraMensual() {
 		try {
-			reporteCompraMensuales = businessDelegate.getReporteCompraMensual();
+			reporteCompraMensuales = this.reporteDelegate.getReporteCompraMensual();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_REPORTE_COMPRA_MENSUAL"));
 			log.error(
@@ -772,4 +776,11 @@ public class DashBoardView implements Serializable {
 		this.formatoReporteFiltro = formatoReporteFiltro;
 	}
 
+	public IReporteDelegate getReporteDelegate() {
+		return reporteDelegate;
+	}
+
+	public void setReporteDelegate(IReporteDelegate reporteDelegate) {
+		this.reporteDelegate = reporteDelegate;
+	}
 }

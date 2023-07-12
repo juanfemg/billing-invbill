@@ -59,21 +59,21 @@ public class AppConfigLogic implements IAppConfigLogic {
 
     private void checkFields(AppConfig entity) {
         if (entity.getIdAppConfig() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_ID_ENTITY);
         }
 
         if ((entity.getIdAppConfig() != null)
                 && !(Utilities.checkWordAndCheckWithLength(entity.getIdAppConfig(), 50))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ID_ENTITY);
         }
 
         if (entity.getDescripcion() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_DESCRIPCION);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_DESCRIPCION);
         }
 
         if ((entity.getDescripcion() != null)
                 && !(Utilities.checkWordAndCheckWithLength(entity.getDescripcion(), 200))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_DESCRIPCION);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_DESCRIPCION);
         }
     }
 

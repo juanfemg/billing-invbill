@@ -64,6 +64,7 @@ public class AppAuthenticationProvider implements AuthenticationProvider {
         List<GrantedAuthority> grantedAuths = null;
         UsuarioApp usuarioApp = this.businessDelegator.findUsuarioByID(userName);
 
+        usuarioApp.getRolApp().getUsuarioApps();
         if (usuarioApp != null && usuarioApp.getRolApp() != null) {
             if ((usuarioApp.getEstado() == StatusEnum.A) && (password.equals(this.encryption.decrypt(usuarioApp.getPassword())))) {
                 enabled = true;

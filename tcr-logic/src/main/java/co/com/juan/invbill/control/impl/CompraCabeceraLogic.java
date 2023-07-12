@@ -103,39 +103,39 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
 
     private void checkFields(CompraCabecera entity) {
         if (entity.getValorNeto() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_VALOR_NETO);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_VALOR_NETO);
         }
 
         if ((entity.getValorNeto() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getValorNeto().toString(), 22, 2))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_VALOR_NETO);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_VALOR_NETO);
         }
 
         if (entity.getValorIva() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_VALOR_IVA);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_VALOR_IVA);
         }
 
         if ((entity.getValorIva() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getValorIva().toString(), 22, 2))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_VALOR_IVA);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_VALOR_IVA);
         }
 
         if (entity.getValorTotal() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_VALOR_TOTAL);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_VALOR_TOTAL);
         }
 
         if ((entity.getValorTotal() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getValorTotal().toString(), 11, 0))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_VALOR_TOTAL);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_VALOR_TOTAL);
         }
 
         if (entity.getUsuarioCreacion() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_USUARIO_CREACION);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_USUARIO_CREACION);
         }
 
         if ((entity.getUsuarioCreacion() != null)
                 && !(Utilities.checkWordAndCheckWithLength(entity.getUsuarioCreacion(), 20))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_USUARIO_CREACION);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_USUARIO_CREACION);
         }
     }
 

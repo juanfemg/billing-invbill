@@ -10,6 +10,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 
+import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +34,17 @@ public class CrearCategoriaView implements Serializable {
 	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
+	public IProductoDelegate getProductoDelegate() {
+		return productoDelegate;
+	}
+
+	public void setProductoDelegate(IProductoDelegate productoDelegate) {
+		this.productoDelegate = productoDelegate;
+	}
+
+	@ManagedProperty(value = "#{productoDelegate}")
+	private transient IProductoDelegate productoDelegate;
+
 	private CategoriaProducto categoriaProducto;
 	private transient Properties properties = new Properties(FILE_MESSAGES);
 
@@ -47,7 +59,7 @@ public class CrearCategoriaView implements Serializable {
 
 	public void actionGuardar() {
 		try {
-			businessDelegate.save(categoriaProducto);
+			this.productoDelegate.save(categoriaProducto);
 			log.info("=== Creacion de categoria : Categoria creada "
 					+ categoriaProducto.getIdCategoria() + " exitosamente ===");
 			addInfoMessage(properties

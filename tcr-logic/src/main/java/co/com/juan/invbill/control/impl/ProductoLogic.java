@@ -1,10 +1,13 @@
 package co.com.juan.invbill.control.impl;
 
 import co.com.juan.invbill.control.IProductoLogic;
+import co.com.juan.invbill.control.IStockProductoLogic;
 import co.com.juan.invbill.dao.IProductoDao;
 import co.com.juan.invbill.dataaccess.api.DaoException;
+import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.Producto;
+import co.com.juan.invbill.model.StockProducto;
 import co.com.juan.invbill.util.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +29,12 @@ public class ProductoLogic implements IProductoLogic {
 
     private static final Logger log = LoggerFactory.getLogger(ProductoLogic.class);
     private final IProductoDao productoDao;
+    private final IStockProductoLogic stockProductoLogic;
 
     @Inject
-    public ProductoLogic(IProductoDao productoDao) {
+    public ProductoLogic(IProductoDao productoDao, IStockProductoLogic stockProductoLogic) {
         this.productoDao = productoDao;
+        this.stockProductoLogic = stockProductoLogic;
     }
 
     @Override
@@ -52,6 +57,8 @@ public class ProductoLogic implements IProductoLogic {
         try {
             this.checkFields(entity);
             this.productoDao.save(entity);
+            StockProducto stockProducto = this.buildStockProducto(entity);
+            this.stockProductoLogic.saveStockProducto(stockProducto);
         } catch (DaoException de) {
             log.error("save {} failed. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());
             throw new EntityException.SavingException(Constant.ENTITY_NAME);
@@ -115,38 +122,44 @@ public class ProductoLogic implements IProductoLogic {
 
     private void checkFields(Producto entity) {
         if (entity.getProducto() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_DES_PRODUCTO);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_DES_PRODUCTO);
         }
 
         if ((entity.getProducto() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getProducto(), 50))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_DES_PRODUCTO);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_DES_PRODUCTO);
         }
 
         if (entity.getEstado() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
+            entity.setEstado(StatusEnum.A);
         }
 
         if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ESTADO);
         }
 
         if (entity.getCategoriaProducto() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_CATEGORIA);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_CATEGORIA);
         }
 
         if ((entity.getCategoriaProducto() != null)
                 && !(Utilities.checkWordAndCheckWithLength(entity.getCategoriaProducto().getCategoria(), 50))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_CATEGORIA);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_CATEGORIA);
         }
 
         if (entity.getTipoUnidadMedida() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_TIPO_UNIDAD_MEDIDA);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_TIPO_UNIDAD_MEDIDA);
         }
 
         if ((entity.getTipoUnidadMedida() != null)
                 && !(Utilities.checkWordAndCheckWithLength(entity.getTipoUnidadMedida().getUnidad(), 45))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_TIPO_UNIDAD_MEDIDA);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_TIPO_UNIDAD_MEDIDA);
         }
+    }
+
+    private StockProducto buildStockProducto(Producto producto) {
+        return StockProducto.builder()
+                .producto(producto)
+                .build();
     }
 
     private static class Constant {

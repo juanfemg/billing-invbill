@@ -12,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,17 @@ public class ConsultarCategoriaView implements Serializable {
 
 	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
+
+	public IProductoDelegate getProductoDelegate() {
+		return productoDelegate;
+	}
+
+	public void setProductoDelegate(IProductoDelegate productoDelegate) {
+		this.productoDelegate = productoDelegate;
+	}
+
+	@ManagedProperty(value = "#{productoDelegate}")
+	private transient IProductoDelegate productoDelegate;
 
 	private CategoriaProducto categoriaModProducto;
 	private List<SelectItem> estadosApp;
@@ -64,7 +76,7 @@ public class ConsultarCategoriaView implements Serializable {
 
 	public void initCategoriasProducto() {
 		try {
-			categoriasProducto = businessDelegate.getCategoriasProductoSortByCategoria();
+			categoriasProducto = this.productoDelegate.getCategoriasProductoSortByCategoria();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_CATEGORIAS"));
 			log.error("=== Consulta de Categorias: Fallo la consulta de las categorias", e);
@@ -77,7 +89,7 @@ public class ConsultarCategoriaView implements Serializable {
 
 	public void actionModificar() {
 		try {
-			businessDelegate.update(categoriaModProducto);
+			this.productoDelegate.update(categoriaModProducto);
 			showDialogModificarCategoria = false;
 			log.info("=== Actualizacion de categoria: Categoria actualizada. Id={}, descripcion={} ===",
 					categoriaModProducto.getIdCategoria(), categoriaModProducto.getCategoria());

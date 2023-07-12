@@ -3,9 +3,12 @@ package co.com.juan.invbill.control.impl;
 import co.com.juan.invbill.control.IUsuarioAppLogic;
 import co.com.juan.invbill.dao.IUsuarioAppDao;
 import co.com.juan.invbill.dataaccess.api.DaoException;
+import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.exceptions.EntityException;
+import co.com.juan.invbill.model.RolApp;
 import co.com.juan.invbill.model.UsuarioApp;
 import co.com.juan.invbill.util.Utilities;
+import co.com.juan.invbill.util.security.IEncryption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -24,10 +27,12 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 
     private static final Logger log = LoggerFactory.getLogger(UsuarioAppLogic.class);
     private final IUsuarioAppDao usuarioAppDao;
+    private final IEncryption encryption;
 
     @Inject
-    public UsuarioAppLogic(IUsuarioAppDao usuarioAppDao) {
+    public UsuarioAppLogic(IUsuarioAppDao usuarioAppDao, IEncryption encryption) {
         this.usuarioAppDao = usuarioAppDao;
+        this.encryption = encryption;
     }
 
     @Override
@@ -75,45 +80,56 @@ public class UsuarioAppLogic implements IUsuarioAppLogic {
 
     private void checkFields(UsuarioApp entity) {
         if (entity.getIdUsuarioApp() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_ID_ENTITY);
         }
 
         if ((entity.getIdUsuarioApp() != null)
                 && !(Utilities.checkWordAndCheckWithLength(entity.getIdUsuarioApp(), 20))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ID_ENTITY);
         }
 
         if (entity.getNombre() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_NOMBRE);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_NOMBRE);
         }
 
         if ((entity.getNombre() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getNombre(), 50))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_NOMBRE);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_NOMBRE);
         }
 
         if (entity.getPassword() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_PASSW);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_PASSW);
+        } else {
+            entity.setPassword(this.encryption.encrypt(entity.getPassword()));
         }
 
         if ((entity.getPassword() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getPassword(), 45))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_PASSW);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_PASSW);
         }
 
         if (entity.getEstado() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
+            entity.setEstado(StatusEnum.A);
         }
 
         if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ESTADO);
         }
 
         if (entity.getRolApp() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_ROL);
+            RolApp rolApp = this.buildRolApp();
+            entity.setRolApp(rolApp);
         }
 
         if ((entity.getRolApp() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getRolApp().getRol(), 45))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ROL);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ROL);
         }
+    }
+
+    private RolApp buildRolApp() {
+        return RolApp.builder()
+                .idRolApp(1)
+                .rol("ADMINISTRADOR")
+                .estado(StatusEnum.A)
+                .build();
     }
 
     private static class Constant {

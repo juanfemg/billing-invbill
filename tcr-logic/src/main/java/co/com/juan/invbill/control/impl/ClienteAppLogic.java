@@ -3,6 +3,7 @@ package co.com.juan.invbill.control.impl;
 import co.com.juan.invbill.control.IClienteAppLogic;
 import co.com.juan.invbill.dao.IClienteAppDao;
 import co.com.juan.invbill.dataaccess.api.DaoException;
+import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.ClienteApp;
 import co.com.juan.invbill.util.Utilities;
@@ -92,36 +93,36 @@ public class ClienteAppLogic implements IClienteAppLogic {
 
     private void checkFields(ClienteApp entity) {
         if (entity.getIdClienteApp() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_ID_ENTITY);
         }
 
         if ((entity.getIdClienteApp() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getIdClienteApp().toString(), 11, 0))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ID_ENTITY);
         }
 
         if (entity.getRazonSocial() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_RAZON_SOCIAL);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_RAZON_SOCIAL);
         }
 
         if ((entity.getRazonSocial() != null)
                 && !(Utilities.checkWordAndCheckWithLength(entity.getRazonSocial(), 200))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_RAZON_SOCIAL);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_RAZON_SOCIAL);
         }
 
         if (entity.getEstado() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
+            entity.setEstado(StatusEnum.A);
         }
 
         if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ESTADO);
         }
     }
 
     private void checkSecondaryFields(ClienteApp entity) {
         if ((entity.getCodVerificacion() != null) && !(Utilities
                 .checkNumberAndCheckWithPrecisionAndScale(entity.getCodVerificacion().toString(), 1, 0))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_COD_VERIFICACION);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_COD_VERIFICACION);
         }
     }
 

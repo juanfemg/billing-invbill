@@ -1,5 +1,6 @@
 package co.com.juan.invbill.delegate.businessdelegate;
 
+import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.*;
 
 import java.util.List;
@@ -9,148 +10,106 @@ import java.util.List;
  */
 public interface IBusinessDelegate {
 
-    void save(LoginApp entity);
+    void save(LoginApp entity) throws EntityException;
 
-    LoginApp findLoginByID(String id);
+    LoginApp findLoginByID(String id) throws EntityException;
 
-    void update(LoginApp entity);
+    void update(LoginApp entity) throws EntityException;
 
-    void save(UsuarioApp entity);
+    void save(UsuarioApp entity) throws EntityException;
 
-    UsuarioApp findUsuarioByID(String id);
+    UsuarioApp findUsuarioByID(String id) throws EntityException;
 
-    void update(UsuarioApp entity);
+    void update(UsuarioApp entity) throws EntityException;
 
-    void save(CategoriaProducto entity);
+    void save(FacturaCabecera entity) throws EntityException;
 
-    CategoriaProducto findCategoriaByID(Integer id);
+    FacturaCabecera findFacturaCabeceraByID(Integer id) throws EntityException;
 
-    void update(CategoriaProducto entity);
+    void update(FacturaCabecera entity) throws EntityException;
 
-    List<CategoriaProducto> getCategoriasProductoSortByCategoria();
+    List<FacturaCabecera> getFacturaCabeceras() throws EntityException;
 
-    void save(Producto entity);
+    List<FacturaCabecera> getFacturaCabecerasByCriteria(FacturaCabecera entity) throws EntityException;
 
-    Producto findProductoByID(Integer id);
+    Object getMaximaFacturaCabeceraByPropertyName(String propertyName) throws EntityException;
 
-    void update(Producto entity);
+    Object getMinimaFacturaCabeceraByPropertyName(String propertyName) throws EntityException;
 
-    List<Producto> getProductos();
+    void save(FacturaDetalle entity) throws EntityException;
 
-    void save(StockProducto entity);
+    void update(FacturaDetalle entity) throws EntityException;
 
-    void update(StockProducto entity);
+    void save(ProveedorApp entity) throws EntityException;
 
-    List<StockProducto> getStockProductos();
+    ProveedorApp findProveedorByID(Integer id) throws EntityException;
 
-    StockProducto getStockProductoByProducto(Producto producto);
+    void update(ProveedorApp entity) throws EntityException;
 
-    Object getMaximoStockProductoByPropertyName(String propertyName);
+    List<ProveedorApp> getProveedores() throws EntityException;
 
-    List<Producto> getProductosByCategoriaProductoSortByProducto(CategoriaProducto categoriaProducto);
+    void save(CompraCabecera entity) throws EntityException;
 
-    List<Producto> getProductosByCategoriasProducto(List<CategoriaProducto> categoriasProducto);
+    CompraCabecera findCompraCabeceraByID(CompraCabeceraId id) throws EntityException;
 
-    void save(FacturaCabecera entity);
+    void update(CompraCabecera entity) throws EntityException;
 
-    FacturaCabecera findFacturaCabeceraByID(Integer id);
+    List<CompraCabecera> getCompraCabeceras() throws EntityException;
 
-    void update(FacturaCabecera entity);
+    List<CompraCabecera> getCompraCabeceras(CompraCabeceraId id) throws EntityException;
 
-    List<FacturaCabecera> getFacturaCabeceras();
+    void save(CompraDetalle entity) throws EntityException;
 
-    List<FacturaCabecera> getFacturaCabecerasByCriteria(FacturaCabecera entity);
+    void update(CompraDetalle entity) throws EntityException;
 
-    Object getMaximaFacturaCabeceraByPropertyName(String propertyName);
+    void save(DevolucionCabecera entity) throws EntityException;
 
-    Object getMinimaFacturaCabeceraByPropertyName(String propertyName);
+    DevolucionCabecera findDevolucionCabeceraByID(Integer id) throws EntityException;
 
-    void save(FacturaDetalle entity);
+    void update(DevolucionCabecera entity) throws EntityException;
 
-    void update(FacturaDetalle entity);
+    List<DevolucionCabecera> getDevolucionCabeceras() throws EntityException;
 
-    void save(ProveedorApp entity);
+    List<DevolucionCabecera> getDevolucionCabecerasByCriteria(DevolucionCabecera entity) throws EntityException;
 
-    ProveedorApp findProveedorByID(Integer id);
+    void save(DevolucionDetalle entity) throws EntityException;
 
-    void update(ProveedorApp entity);
+    DevolucionDetalle findDevolucionDetalleByID(Integer idFactura, Integer idProducto) throws EntityException;
 
-    List<ProveedorApp> getProveedores();
+    void update(DevolucionDetalle entity) throws EntityException;
 
-    void save(CompraCabecera entity);
+    void update(AppConfig entity) throws EntityException;
 
-    CompraCabecera findCompraCabeceraByID(CompraCabeceraId id);
+    List<AppConfig> getAppConfigs() throws EntityException;
 
-    void update(CompraCabecera entity);
+    List<AppMenu> getAppMenus() throws EntityException;
 
-    List<CompraCabecera> getCompraCabeceras();
+    List<CompraDetalle> findCompraDetalleByProducto(Producto producto) throws EntityException;
 
-    List<CompraCabecera> getCompraCabeceras(CompraCabeceraId id);
+    List<FacturaDetalle> getFacturaDetalleDevolucionByIdFactura(Integer idFactura) throws EntityException;
 
-    void save(CompraDetalle entity);
+    void save(TipoUnidadMedida entity) throws EntityException;
 
-    void update(CompraDetalle entity);
+    TipoUnidadMedida findTipoUnidadMedidaByID(Integer id) throws EntityException;
 
-    ReporteVentaDiaria getReporteVentaDiaria();
+    void update(TipoUnidadMedida entity) throws EntityException;
 
-    ReporteDevolucionDiaria getReporteDevolucionDiaria();
+    List<TipoUnidadMedida> getTiposUnidadMedida() throws EntityException;
 
-    ReporteCompraDiaria getReporteCompraDiaria();
+    void save(TipoPeriodo entity) throws EntityException;
 
-    void save(DevolucionCabecera entity);
+    TipoPeriodo findTipoPeriodoByID(Integer id) throws EntityException;
 
-    DevolucionCabecera findDevolucionCabeceraByID(Integer id);
+    void update(TipoPeriodo entity) throws EntityException;
 
-    void update(DevolucionCabecera entity);
+    List<TipoPeriodo> getTiposPeriodo() throws EntityException;
 
-    List<DevolucionCabecera> getDevolucionCabeceras();
+    void save(ClienteApp entity) throws EntityException;
 
-    List<DevolucionCabecera> getDevolucionCabecerasByCriteria(DevolucionCabecera entity);
+    ClienteApp findClienteByID(Integer id) throws EntityException;
 
-    void save(DevolucionDetalle entity);
+    void update(ClienteApp entity) throws EntityException;
 
-    DevolucionDetalle findDevolucionDetalleByID(Integer idFactura, Integer idProducto);
-
-    void update(DevolucionDetalle entity);
-
-    void update(AppConfig entity);
-
-    List<AppConfig> getAppConfigs();
-
-    List<ReporteVentaMensual> getReporteVentaMensual();
-
-    List<ReporteDevolucionMensual> getReporteDevolucionMensual();
-
-    List<ReporteCompraMensual> getReporteCompraMensual();
-
-    List<AppMenu> getAppMenus();
-
-    List<CompraDetalle> findCompraDetalleByProducto(Producto producto);
-
-    List<FacturaDetalle> getFacturaDetalleDevolucionByIdFactura(Integer idFactura);
-
-    void save(TipoUnidadMedida entity);
-
-    TipoUnidadMedida findTipoUnidadMedidaByID(Integer id);
-
-    void update(TipoUnidadMedida entity);
-
-    List<TipoUnidadMedida> getTiposUnidadMedida();
-
-    void save(TipoPeriodo entity);
-
-    TipoPeriodo findTipoPeriodoByID(Integer id);
-
-    void update(TipoPeriodo entity);
-
-    List<TipoPeriodo> getTiposPeriodo();
-
-    void save(ClienteApp entity);
-
-    ClienteApp findClienteByID(Integer id);
-
-    void update(ClienteApp entity);
-
-    List<ClienteApp> getClientes();
+    List<ClienteApp> getClientes() throws EntityException;
 
 }

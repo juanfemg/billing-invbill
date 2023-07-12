@@ -3,6 +3,7 @@ package co.com.juan.invbill.control.impl;
 import co.com.juan.invbill.control.IProveedorAppLogic;
 import co.com.juan.invbill.dao.IProveedorAppDao;
 import co.com.juan.invbill.dataaccess.api.DaoException;
+import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.ProveedorApp;
 import co.com.juan.invbill.util.Utilities;
@@ -92,59 +93,59 @@ public class ProveedorAppLogic implements IProveedorAppLogic {
 
     private void checkFields(ProveedorApp entity) {
         if (entity.getIdProveedorApp() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_ID_ENTITY);
         }
 
         if ((entity.getIdProveedorApp() != null) && !(Utilities
                 .checkNumberAndCheckWithPrecisionAndScale(entity.getIdProveedorApp().toString(), 11, 0))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ID_ENTITY);
         }
 
         if (entity.getCodVerificacion() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_COD_VERIFICACION);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_COD_VERIFICACION);
         }
 
         if ((entity.getCodVerificacion() != null) && !(Utilities
                 .checkNumberAndCheckWithPrecisionAndScale(entity.getCodVerificacion().toString(), 1, 0))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_COD_VERIFICACION);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_COD_VERIFICACION);
         }
 
         if (entity.getRazonSocial() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_RAZON_SOCIAL);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_RAZON_SOCIAL);
         }
 
         if ((entity.getRazonSocial() != null)
                 && !(Utilities.checkWordAndCheckWithLength(entity.getRazonSocial(), 200))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_RAZON_SOCIAL);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_RAZON_SOCIAL);
         }
 
         if (entity.getEstado() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
+            entity.setEstado(StatusEnum.A);
         }
 
         if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ESTADO);
         }
     }
 
     private void checkSecondaryFields(ProveedorApp entity) {
         if ((entity.getDireccion() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getDireccion(), 200))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_DIRECCION);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_DIRECCION);
         }
 
         if ((entity.getTelefono() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getTelefono().toString(), 7, 0))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_TELEFONO);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_TELEFONO);
         }
 
         if ((entity.getTelefonoExt() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getTelefonoExt().toString(), 6, 0))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_TELEFONO_EXT);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_TELEFONO_EXT);
         }
 
         if ((entity.getCelular() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getCelular().toString(), 11, 0))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_CELULAR);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_CELULAR);
         }
     }
 

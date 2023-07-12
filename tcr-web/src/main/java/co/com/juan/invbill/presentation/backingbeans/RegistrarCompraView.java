@@ -13,6 +13,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,17 @@ public class RegistrarCompraView implements Serializable {
 
 	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
+
+	public IProductoDelegate getProductoDelegate() {
+		return productoDelegate;
+	}
+
+	public void setProductoDelegate(IProductoDelegate productoDelegate) {
+		this.productoDelegate = productoDelegate;
+	}
+
+	@ManagedProperty(value = "#{productoDelegate}")
+	private transient IProductoDelegate productoDelegate;
 
 	private transient HttpSession session;
 	private List<CategoriaProducto> categoria;
@@ -122,7 +134,7 @@ public class RegistrarCompraView implements Serializable {
 
 	public void initCategoriasProducto() {
 		try {
-			categoria = businessDelegate.getCategoriasProductoSortByCategoria();
+			categoria = this.productoDelegate.getCategoriasProductoSortByCategoria();
 
 			categorias.clear();
 
@@ -147,7 +159,7 @@ public class RegistrarCompraView implements Serializable {
 
 	public void initProductos() {
 		try {
-			producto = businessDelegate.getProductosByCategoriaProductoSortByProducto(categoriaProducto);
+			producto = this.productoDelegate.getProductosByCategoriaProductoSortByProducto(categoriaProducto);
 
 			productos.clear();
 
@@ -373,7 +385,7 @@ public class RegistrarCompraView implements Serializable {
 
 	public void getStockProducto(CompraDetalle compraDetalleTemp) {
 		try {
-			stockProducto = businessDelegate.getStockProductoByProducto(compraDetalleTemp.getProducto());
+			stockProducto = this.productoDelegate.getStockProductoByProducto(compraDetalleTemp.getProducto());
 
 			updateStockProducto(compraDetalleTemp);
 		} catch (Exception e) {
@@ -394,7 +406,7 @@ public class RegistrarCompraView implements Serializable {
 			precioCompra = compraDetalleTemp.getPrecioCompra() + compraDetalleTemp.getValorIva();
 
 			stockProducto.setPrecioCompra(precioCompra.intValue());
-			businessDelegate.update(stockProducto);
+			this.productoDelegate.update(stockProducto);
 			log.info("=== Actualizacion de stock de producto: Stock de producto actualizado. IdProducto={}, valor={} ",
 					stockProducto.getProducto().getIdProducto(), stockProducto.getStock());
 		} catch (Exception e) {

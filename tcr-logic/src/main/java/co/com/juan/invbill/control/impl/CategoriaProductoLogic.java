@@ -3,6 +3,7 @@ package co.com.juan.invbill.control.impl;
 import co.com.juan.invbill.control.ICategoriaProductoLogic;
 import co.com.juan.invbill.dao.ICategoriaProductoDao;
 import co.com.juan.invbill.dataaccess.api.DaoException;
+import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.CategoriaProducto;
 import co.com.juan.invbill.util.Utilities;
@@ -85,19 +86,19 @@ public class CategoriaProductoLogic implements ICategoriaProductoLogic {
 
     private void checkFields(CategoriaProducto entity) {
         if (entity.getCategoria() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_CATEGORIA);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_CATEGORIA);
         }
 
         if ((entity.getCategoria() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getCategoria(), 50))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_CATEGORIA);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_CATEGORIA);
         }
 
         if (entity.getEstado() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
+            entity.setEstado(StatusEnum.A);
         }
 
         if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ESTADO);
         }
     }
 

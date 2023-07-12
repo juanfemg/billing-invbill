@@ -99,12 +99,12 @@ public class StockProductoLogic implements IStockProductoLogic {
 
     private void checkFields(StockProducto entity) {
         if (entity.getProducto() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_PRODUCTO);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_PRODUCTO);
         }
 
         if ((entity.getProducto() != null)
                 && !(Utilities.checkWordAndCheckWithLength(entity.getProducto().getProducto(), 50))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_PRODUCTO);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_PRODUCTO);
         }
     }
 

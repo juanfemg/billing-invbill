@@ -75,20 +75,20 @@ public class LoginAppLogic implements ILoginAppLogic {
 
     private void checkFields(LoginApp entity) {
         if (entity.getIdLoginApp() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_ID_ENTITY);
         }
 
         if ((entity.getIdLoginApp() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getIdLoginApp(), 20))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ID_ENTITY);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ID_ENTITY);
         }
 
         if ((entity.getUltimoLogin() != null) && !(Utilities
                 .isDate(Utilities.formatDateWithoutTimeInAStringForBetweenWhere(entity.getUltimoLogin())))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ULTIMO_LOGIN);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ULTIMO_LOGIN);
         }
 
         if ((entity.getIdSession() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getIdSession(), 100))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ULTIMO_LOGIN);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ULTIMO_LOGIN);
         }
     }
 

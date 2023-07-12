@@ -17,6 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.imageio.ImageIO;
 
+import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
@@ -50,6 +51,17 @@ public class ReporteProductosView implements Serializable {
 
 	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
+
+	public IProductoDelegate getProductoDelegate() {
+		return productoDelegate;
+	}
+
+	public void setProductoDelegate(IProductoDelegate productoDelegate) {
+		this.productoDelegate = productoDelegate;
+	}
+
+	@ManagedProperty(value = "#{productoDelegate}")
+	private transient IProductoDelegate productoDelegate;
 
 	@ManagedProperty(value = "#{ReportController}")
 	private transient IReportController reportController;
@@ -109,7 +121,7 @@ public class ReporteProductosView implements Serializable {
 
 	public void initCategoriasProducto() {
 		try {
-			categoria = businessDelegate.getCategoriasProductoSortByCategoria();
+			categoria = this.productoDelegate.getCategoriasProductoSortByCategoria();
 
 			for (CategoriaProducto categoriaProductoTemp : categoria) {
 				categorias.add(new SelectItem(categoriaProductoTemp, categoriaProductoTemp.getCategoria()));
@@ -156,7 +168,7 @@ public class ReporteProductosView implements Serializable {
 			if (categoriaFiltro.isEmpty()) {
 				producto.clear();
 			} else {
-				producto = businessDelegate.getProductosByCategoriasProducto(categoriaFiltro);
+				producto = this.productoDelegate.getProductosByCategoriasProducto(categoriaFiltro);
 			}
 
 			productos.clear();
@@ -172,7 +184,7 @@ public class ReporteProductosView implements Serializable {
 
 	public void initMaxPrecioCompra() {
 		try {
-			stockProductoMaxPrecioCompra = (Integer) businessDelegate
+			stockProductoMaxPrecioCompra = (Integer) this.productoDelegate
 					.getMaximoStockProductoByPropertyName(PROPERTY_NAME_PRECIO_COMPRA);
 
 			rangoPrecioCompra.put("MAX", stockProductoMaxPrecioCompra);
@@ -186,7 +198,7 @@ public class ReporteProductosView implements Serializable {
 
 	public void initMaxPrecioVenta() {
 		try {
-			stockProductoMaxPrecioVenta = (Integer) businessDelegate
+			stockProductoMaxPrecioVenta = (Integer) this.productoDelegate
 					.getMaximoStockProductoByPropertyName(PROPERTY_NAME_PRECIO_VENTA);
 
 			rangoPrecioVenta.put("MAX", stockProductoMaxPrecioVenta);
@@ -200,7 +212,7 @@ public class ReporteProductosView implements Serializable {
 
 	public void initMaxStock() {
 		try {
-			stockProductoMaxStock = (Integer) businessDelegate
+			stockProductoMaxStock = (Integer) this.productoDelegate
 					.getMaximoStockProductoByPropertyName(PROPERTY_NAME_STOCK);
 
 			rangoStock.put("MAX", stockProductoMaxStock);
@@ -488,9 +500,6 @@ public class ReporteProductosView implements Serializable {
 		return tiposUnidadMedida;
 	}
 
-	/**
-	 * @param tiposUnidadMedida the tiposUnidadMedida to set
-	 */
 	public void setTiposUnidadMedida(List<SelectItem> tiposUnidadesMedida) {
 		this.tiposUnidadMedida = tiposUnidadesMedida;
 	}

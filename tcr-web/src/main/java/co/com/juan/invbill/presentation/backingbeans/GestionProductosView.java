@@ -12,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +39,17 @@ public class GestionProductosView implements Serializable {
 	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
+	public IProductoDelegate getProductoDelegate() {
+		return productoDelegate;
+	}
+
+	public void setProductoDelegate(IProductoDelegate productoDelegate) {
+		this.productoDelegate = productoDelegate;
+	}
+
+	@ManagedProperty(value = "#{productoDelegate}")
+	private transient IProductoDelegate productoDelegate;
+
 	private StockProducto stockProductoMod;
 	private List<StockProducto> stockProductos;
 	private List<CompraDetalle> compraDetalles;
@@ -62,7 +74,7 @@ public class GestionProductosView implements Serializable {
 
 	public void initStockProductos() {
 		try {
-			stockProductos = businessDelegate.getStockProductos();
+			stockProductos = this.productoDelegate.getStockProductos();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_STOCK_PRODUCTOS"));
 			log.error("=== Consulta de Stock Productos: Fallo la consulta del stock de los productos", e);
@@ -91,7 +103,7 @@ public class GestionProductosView implements Serializable {
 
 	public void actionModificar() {
 		try {
-			businessDelegate.update(stockProductoMod);
+			this.productoDelegate.update(stockProductoMod);
 			showDialogModificarStockProducto = false;
 			log.info("=== Actualizacion de stock producto: Stock Producto actualizado. Id={}, precioVenta={} ",
 					stockProductoMod.getIdStockProducto(), stockProductoMod.getPrecioVenta());

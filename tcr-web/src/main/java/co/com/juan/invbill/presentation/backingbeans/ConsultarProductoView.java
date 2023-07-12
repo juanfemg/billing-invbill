@@ -12,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,17 @@ public class ConsultarProductoView implements Serializable {
 
 	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
+
+	public IProductoDelegate getProductoDelegate() {
+		return productoDelegate;
+	}
+
+	public void setProductoDelegate(IProductoDelegate productoDelegate) {
+		this.productoDelegate = productoDelegate;
+	}
+
+	@ManagedProperty(value = "#{productoDelegate}")
+	private transient IProductoDelegate productoDelegate;
 
 	private Producto productoMod;
 	private List<SelectItem> estadosApp;
@@ -74,7 +86,7 @@ public class ConsultarProductoView implements Serializable {
 
 	public void initProductos() {
 		try {
-			productos = businessDelegate.getProductos();
+			productos = this.productoDelegate.getProductos();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_PRODUCTOS"));
 			log.error("=== Consulta de Productos: Fallo la consulta de los productos", e);
@@ -83,7 +95,7 @@ public class ConsultarProductoView implements Serializable {
 
 	public void initCategoriasProducto() {
 		try {
-			categoriasProducto = businessDelegate.getCategoriasProductoSortByCategoria();
+			categoriasProducto = this.productoDelegate.getCategoriasProductoSortByCategoria();
 
 			for (CategoriaProducto categoriaProductoTemp : categoriasProducto) {
 				if (categoriaProductoTemp.getEstado().equals(StatusEnum.A)) {
@@ -129,7 +141,7 @@ public class ConsultarProductoView implements Serializable {
 
 	public void actionModificar() {
 		try {
-			businessDelegate.update(productoMod);
+			this.productoDelegate.update(productoMod);
 
 			showDialogModificarProducto = false;
 			log.info("=== Actualizacion de producto: Producto actualizado. Id={}, descripcion={} === ",

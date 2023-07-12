@@ -12,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +40,17 @@ public class RegistrarDevolucionView implements Serializable {
 
 	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
+
+	public IProductoDelegate getProductoDelegate() {
+		return productoDelegate;
+	}
+
+	public void setProductoDelegate(IProductoDelegate productoDelegate) {
+		this.productoDelegate = productoDelegate;
+	}
+
+	@ManagedProperty(value = "#{productoDelegate}")
+	private transient IProductoDelegate productoDelegate;
 
 	private FacturaCabecera facturaCabecera;
 	private DevolucionCabecera devolucionCabecera;
@@ -315,7 +327,7 @@ public class RegistrarDevolucionView implements Serializable {
 
 	public void getStockProducto(DevolucionDetalle devolucionDetalle) {
 		try {
-			stockProducto = businessDelegate.getStockProductoByProducto(devolucionDetalle.getProducto());
+			stockProducto = this.productoDelegate.getStockProductoByProducto(devolucionDetalle.getProducto());
 
 			updateStockProducto(devolucionDetalle);
 		} catch (Exception e) {
@@ -331,7 +343,7 @@ public class RegistrarDevolucionView implements Serializable {
 		try {
 			stockProducto.setStock(stockProducto.getStock() + devolucionDetalle.getCantidad());
 
-			businessDelegate.update(stockProducto);
+			this.productoDelegate.update(stockProducto);
 			log.info("=== Actualizacion de stock de producto: Stock de producto actualizado. IdProducto={}, valor={} ",
 					stockProducto.getProducto().getIdProducto(), stockProducto.getStock());
 		} catch (Exception e) {

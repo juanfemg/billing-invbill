@@ -3,6 +3,7 @@ package co.com.juan.invbill.control.impl;
 import co.com.juan.invbill.control.ITipoUnidadMedidaLogic;
 import co.com.juan.invbill.dao.ITipoUnidadMedidaDao;
 import co.com.juan.invbill.dataaccess.api.DaoException;
+import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.TipoUnidadMedida;
 import co.com.juan.invbill.util.Utilities;
@@ -85,27 +86,27 @@ public class TipoUnidadMedidaLogic implements ITipoUnidadMedidaLogic {
 
     private void checkFields(TipoUnidadMedida entity) {
         if (entity.getTipoUnidad() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_TIPO_UNIDAD);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_TIPO_UNIDAD);
         }
 
         if ((entity.getTipoUnidad() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getTipoUnidad(), 45))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_TIPO_UNIDAD);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_TIPO_UNIDAD);
         }
 
         if (entity.getUnidad() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_UNIDAD);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_UNIDAD);
         }
 
         if ((entity.getUnidad() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getUnidad(), 45))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_UNIDAD);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_UNIDAD);
         }
 
         if (entity.getEstado() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
+            entity.setEstado(StatusEnum.A);
         }
 
         if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ESTADO);
         }
     }
 

@@ -3,6 +3,7 @@ package co.com.juan.invbill.control.impl;
 import co.com.juan.invbill.control.ITipoPeriodoLogic;
 import co.com.juan.invbill.dao.ITipoPeriodoDao;
 import co.com.juan.invbill.dataaccess.api.DaoException;
+import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.exceptions.EntityException;
 import co.com.juan.invbill.model.TipoPeriodo;
 import co.com.juan.invbill.util.Utilities;
@@ -85,28 +86,28 @@ public class TipoPeriodoLogic implements ITipoPeriodoLogic {
 
     private void checkFields(TipoPeriodo entity) {
         if (entity.getPeriodo() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_PERIODO);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_PERIODO);
         }
 
         if ((entity.getPeriodo() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getPeriodo(), 45))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_PERIODO);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_PERIODO);
         }
 
         if (entity.getNumeroMeses() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_NUMERO_MESES);
+            throw new EntityException.EmptyFieldException(Constant.ENTITY_NAME, Constant.FIELD_NUMERO_MESES);
         }
 
         if ((entity.getNumeroMeses() != null)
                 && !(Utilities.checkNumberAndCheckWithPrecisionAndScale(entity.getNumeroMeses().toString(), 11, 0))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_NUMERO_MESES);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_NUMERO_MESES);
         }
 
         if (entity.getEstado() == null) {
-            throw new EntityException.EmptyFieldException(Constant.FIELD_ESTADO);
+            entity.setEstado(StatusEnum.A);
         }
 
         if ((entity.getEstado() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getEstado().name(), 1))) {
-            throw new EntityException.NotValidFormatException(Constant.FIELD_ESTADO);
+            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ESTADO);
         }
     }
 

@@ -12,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,17 @@ public class CrearProductoView implements Serializable {
 	@ManagedProperty(value = "#{businessDelegate}")
 	private transient IBusinessDelegate businessDelegate;
 
+	public IProductoDelegate getProductoDelegate() {
+		return productoDelegate;
+	}
+
+	public void setProductoDelegate(IProductoDelegate productoDelegate) {
+		this.productoDelegate = productoDelegate;
+	}
+
+	@ManagedProperty(value = "#{productoDelegate}")
+	private transient IProductoDelegate productoDelegate;
+
 	private Producto producto;
 	private List<CategoriaProducto> categoriasProducto;
 	private List<SelectItem> categorias;
@@ -61,7 +73,7 @@ public class CrearProductoView implements Serializable {
 
 	public void initCategoriasProducto() {
 		try {
-			categoriasProducto = businessDelegate.getCategoriasProductoSortByCategoria();
+			categoriasProducto = this.productoDelegate.getCategoriasProductoSortByCategoria();
 
 			for (CategoriaProducto categoriaProductoTemp : categoriasProducto) {
 				if (categoriaProductoTemp.getEstado().equals(StatusEnum.A)) {
@@ -101,7 +113,7 @@ public class CrearProductoView implements Serializable {
 
 	public void actionGuardar() {
 		try {
-			businessDelegate.save(producto);
+			this.productoDelegate.save(producto);
 			log.info("=== Creacion de producto: Producto creado {}", producto.getIdProducto());
 			addInfoMessage(properties.getParameterByKey("MSG_PRODUCTO_CREADO"));
 			producto = new Producto();

@@ -7,6 +7,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
+import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,17 @@ public class CategoriaProductoConverter implements Converter {
 	@ManagedProperty(value = "#{businessDelegate}")
 	private IBusinessDelegate businessDelegate;
 
+	public IProductoDelegate getProductoDelegate() {
+		return productoDelegate;
+	}
+
+	public void setProductoDelegate(IProductoDelegate productoDelegate) {
+		this.productoDelegate = productoDelegate;
+	}
+
+	@ManagedProperty(value = "#{productoDelegate}")
+	private transient IProductoDelegate productoDelegate;
+
 	private CategoriaProducto categoriaProducto;
 
 	/**
@@ -42,7 +54,7 @@ public class CategoriaProductoConverter implements Converter {
 			return "";
 
 		try {
-			categoriaProducto = businessDelegate.findCategoriaByID(Integer.parseInt(value));
+			categoriaProducto = this.productoDelegate.findCategoriaByID(Integer.parseInt(value));
 
 		} catch (Exception e) {
 			log.error(
