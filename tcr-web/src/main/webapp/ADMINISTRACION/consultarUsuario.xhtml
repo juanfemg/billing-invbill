@@ -30,7 +30,7 @@
 										value="#{consultarUsuario.usuarioApp.idUsuarioApp}"
 										required="true"
 										requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
-										converter="toUpperCaseConverter" />
+										converter="#{toUpperCaseConverter}" />
 
 								</h:panelGrid>
 
@@ -69,7 +69,7 @@
 										value="#{consultarUsuario.usuarioModApp.nombre}"
 										required="true"
 										requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
-										converter="toUpperCaseConverter" />
+										converter="#{toUpperCaseConverter}" />
 
 									<h:outputLabel for="estadoModUsuario"
 										value="#{msg.MSG_VALUE_ESTADO}" />

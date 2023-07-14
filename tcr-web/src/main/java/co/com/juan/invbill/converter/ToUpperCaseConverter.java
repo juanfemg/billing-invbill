@@ -1,26 +1,27 @@
 package co.com.juan.invbill.converter;
 
+import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
+import javax.inject.Named;
 
 /**
  * @author Juan Felipe
- * 
  */
-@FacesConverter("toUpperCaseConverter")
+@Named
+@RequestScoped
 public class ToUpperCaseConverter implements Converter {
 
-	@Override
-	public Object getAsObject(FacesContext ctx, UIComponent component,
-			String value) {
-		return (value != null) ? value.toUpperCase() : null;
-	}
+    @Override
+    public Object getAsObject(FacesContext ctx, UIComponent component,
+                              String value) {
+        return (value != null) ? value.toUpperCase() : null;
+    }
 
-	@Override
-	public String getAsString(FacesContext fc, UIComponent uic, Object o) {
-		return (o != null) ? o.toString() : "";
-	}
+    @Override
+    public String getAsString(FacesContext fc, UIComponent uic, Object o) {
+        return (o != null) ? o.toString() : "";
+    }
 
 }

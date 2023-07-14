@@ -112,13 +112,13 @@
 									value="#{consultarProveedor.proveedorModApp.razonSocial}"
 									required="true"
 									requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
-									converter="toUpperCaseConverter" />
+									converter="#{toUpperCaseConverter}" />
 
 								<h:outputLabel for="direccionModProveedor"
 									value="#{msg.MSG_DATATABLE_COLUMN_DIRECCION}" />
 								<p:inputText id="direccionModProveedor"
 									value="#{consultarProveedor.proveedorModApp.direccion}"
-									converter="toUpperCaseConverter" />
+									converter="#{toUpperCaseConverter}" />
 
 								<h:outputLabel for="telefonoModProveedor"
 									value="#{msg.MSG_DATATABLE_COLUMN_TELEFONO}" />

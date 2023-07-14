@@ -29,14 +29,14 @@
 										value="#{crearUsuario.usuarioApp.idUsuarioApp}"
 										required="true"
 										requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
-										converter="toUpperCaseConverter" />
+										converter="#{toUpperCaseConverter}" />
 
 									<h:outputLabel for="nombreUsuario"
 										value="#{msg.MSG_VALUE_NOMBRE}" />
 									<p:inputText id="nombreUsuario"
 										value="#{crearUsuario.usuarioApp.nombre}" required="true"
 										requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
-										converter="toUpperCaseConverter" />
+										converter="#{toUpperCaseConverter}" />
 
 									<h:outputLabel for="passwordUsuario"
 										value="#{msg.MSG_VALUE_CONTRASENA}" />

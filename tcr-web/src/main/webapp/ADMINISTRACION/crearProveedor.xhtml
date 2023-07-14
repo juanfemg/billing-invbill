@@ -49,13 +49,13 @@
 										value="#{crearProveedor.proveedorApp.razonSocial}"
 										required="true"
 										requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}"
-										converter="toUpperCaseConverter" />
+										converter="#{toUpperCaseConverter}" />
 
 									<h:outputLabel for="direccionProveedor"
 										value="#{msg.MSG_VALUE_DIRECCION_PROVEEDOR}" />
 									<p:inputText id="direccionProveedor"
 										value="#{crearProveedor.proveedorApp.direccion}"
-										converter="toUpperCaseConverter" />
+										converter="#{toUpperCaseConverter}" />
 
 									<h:outputLabel for="telefonoProveedor"
 										value="#{msg.MSG_VALUE_TELEFONO_PROVEEDOR}" />

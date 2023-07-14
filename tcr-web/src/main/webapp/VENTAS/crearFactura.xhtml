@@ -487,7 +487,7 @@
 													value="#{msg.MSG_PANELGRID_FACTURA_TERCERO_RAZON_SOCIAL}" />
 												<p:inputText id="razonSocialTercero"
 													value="#{crearFactura.clienteAppRegistro.razonSocial}"
-													converter="toUpperCaseConverter" required="true"
+													converter="#{toUpperCaseConverter}" required="true"
 													requiredMessage="#{msgGlobal.MSG_REQUIRED_INPUT}" />
 
 											</h:panelGrid>
