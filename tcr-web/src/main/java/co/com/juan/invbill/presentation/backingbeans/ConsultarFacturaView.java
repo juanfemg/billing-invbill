@@ -14,10 +14,11 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.IFacturaDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.FacturaCabecera;
 import co.com.juan.invbill.report.IReportController;
@@ -37,7 +38,18 @@ public class ConsultarFacturaView implements Serializable {
 	private static final Logger log = LoggerFactory.getLogger(ConsultarFacturaView.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
+
+	public IFacturaDelegate getFacturaDelegate() {
+		return facturaDelegate;
+	}
+
+	public void setFacturaDelegate(IFacturaDelegate facturaDelegate) {
+		this.facturaDelegate = facturaDelegate;
+	}
+
+	@ManagedProperty(value = "#{facturaDelegate}")
+	private transient IFacturaDelegate facturaDelegate;
 
 	@ManagedProperty(value = "#{ReportController}")
 	private transient IReportController reportController;
@@ -67,16 +79,16 @@ public class ConsultarFacturaView implements Serializable {
 
 	public void initFacturas() {
 		try {
-			facturaCabeceras = businessDelegate.getFacturaCabeceras();
+			facturaCabeceras = this.facturaDelegate.getFacturaCabeceras();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_FACTURAS"));
 			log.error("=== Consulta de facturas: Fallo la consulta de las facturas", e);
 		}
 	}
 
-	public void initFacturasCriteria(FacturaCabecera entity) {
+	public void initFacturasByIdAndOrFechaCreacion(FacturaCabecera entity) {
 		try {
-			facturaCabeceras = businessDelegate.getFacturaCabecerasByCriteria(entity);
+			facturaCabeceras = this.facturaDelegate.getFacturaCabecerasByIdAndOrFechaCreacion(entity);
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_FACTURAS"));
 			log.error("=== Consulta de facturas: Fallo la consulta de las facturas", e);
@@ -87,7 +99,7 @@ public class ConsultarFacturaView implements Serializable {
 		FacturaCabecera facturaCabeceraTemp;
 
 		try {
-			facturaCabeceraTemp = businessDelegate.findFacturaCabeceraByID(facturaCabecera.getIdFactura());
+			facturaCabeceraTemp = this.facturaDelegate.findFacturaCabeceraByID(facturaCabecera.getIdFactura());
 
 			if (!facturaCabeceras.isEmpty())
 				facturaCabeceras.clear();
@@ -110,7 +122,7 @@ public class ConsultarFacturaView implements Serializable {
 		} else if (facturaCabecera.getFechaCreacion() == null) {
 			initFactura();
 		} else {
-			initFacturasCriteria(facturaCabecera);
+			initFacturasByIdAndOrFechaCreacion(facturaCabecera);
 		}
 	}
 
@@ -173,14 +185,14 @@ public class ConsultarFacturaView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

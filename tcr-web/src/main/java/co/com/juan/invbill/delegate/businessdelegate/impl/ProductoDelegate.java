@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import java.util.List;
 
+/**
+ * @author Juan Felipe
+ */
 @Component
 public class ProductoDelegate implements IProductoDelegate {
 

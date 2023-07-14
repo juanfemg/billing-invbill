@@ -1,5 +1,6 @@
 package co.com.juan.invbill.control;
 
+import java.util.Date;
 import java.util.List;
 
 import co.com.juan.invbill.exceptions.EntityException;
@@ -18,7 +19,6 @@ public interface IDevolucionCabeceraLogic {
 
     List<DevolucionCabecera> getDataDevolucionCabecera() throws EntityException;
 
-    List<DevolucionCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                            Object[] variablesBetweenDates) throws EntityException;
+    List<DevolucionCabecera> findByIdAndOrFechaCreacion(Integer idFactura, Date fechaCreacion) throws EntityException;
 
 }

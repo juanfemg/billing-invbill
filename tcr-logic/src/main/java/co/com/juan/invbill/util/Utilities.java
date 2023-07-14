@@ -6,10 +6,12 @@ import org.slf4j.LoggerFactory;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.regex.Matcher;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -18,21 +20,22 @@ import java.util.regex.Pattern;
 public class Utilities {
 
     private static final Logger log = LoggerFactory.getLogger(Utilities.class);
-    private static final String REGEX_IS_NUMERIC = "[^0-9',.\\s]";
-    private static final String PATTERN_IS_DATE = "yyyy-MM-dd";
+    private static final String PATTERN_DATE = "yyyy-MM-dd";
+    private static final String PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
+    private static final String PATTERN_DECIMAL = "##.################";
+    private static final String REGEX_NUMERIC = "-?\\d+(\\.\\d+)?";
 
     private Utilities() {
         super();
     }
 
     public static boolean isNumeric(String word) {
-        Pattern pattern = Pattern.compile(REGEX_IS_NUMERIC);
-        Matcher matcher = pattern.matcher(word);
-        return matcher.matches();
+        Pattern pattern = Pattern.compile(REGEX_NUMERIC);
+        return pattern.matcher(word).matches();
     }
 
     public static boolean isDate(String dateString) {
-        SimpleDateFormat sdf = new SimpleDateFormat(PATTERN_IS_DATE);
+        SimpleDateFormat sdf = new SimpleDateFormat(PATTERN_DATE);
         sdf.setLenient(false);
         try {
             sdf.parse(dateString);
@@ -48,7 +51,7 @@ public class Utilities {
         if (fieldValue != null && precision != null && scale != null) {
             try {
                 if (fieldValue.contains("E") && scale != 0) {
-                    DecimalFormat df = new DecimalFormat("##.################");
+                    DecimalFormat df = new DecimalFormat(PATTERN_DECIMAL);
                     fieldValue = df.format(Double.valueOf(fieldValue));
                     if (fieldValue.length() > 0 && !fieldValue.contains(".")) {
                         fieldValue = fieldValue + ".0";
@@ -82,11 +85,9 @@ public class Utilities {
         return word.length() <= length;
     }
 
-    public static String formatDateWithoutTimeInAStringForBetweenWhere(Date date) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return format.format(calendar.getTime());
+    public static String formatDateWithoutTimeInAStringForBetweenWhere(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(PATTERN_DATE_TIME);
+        return dateTime.format(formatter);
     }
 
     public static String constructCriteria(Object[] variables, Object[] variablesBetween,
@@ -108,7 +109,6 @@ public class Utilities {
         return tempWhere.length() == 0 ? null : "(" + tempWhere + ")";
     }
 
-    // TODO
     public static String buildCriteriaCondition(Object[] variables, String tempWhere, int type) {
         boolean flagVariable = false;
         for (int i = 0; i < variables.length; i = i + type) {
@@ -120,23 +120,27 @@ public class Utilities {
             }
             if (flagVariable) {
                 String variable = (String) variables[i];
-                Object object1 = variables[i + 1];
-                Object object2 = variables[i + 2];
-                String comparator1 = (String) variables[i + 3];
-                String comparator2 = (String) variables[i + 4];
+                Object object2;
+                String comparator1, comparator2;
                 switch (type) {
                     case 3:
-                        Date date1 = (Date) variables[i + 1];
-                        Date date2 = (Date) variables[i + 2];
+                        LocalDateTime date1 = (LocalDateTime) variables[i + 1];
+                        LocalDateTime date2 = (LocalDateTime) variables[i + 2];
                         String value = formatDateWithoutTimeInAStringForBetweenWhere(date1);
                         String value2 = formatDateWithoutTimeInAStringForBetweenWhere(date2);
                         tempWhere = setVariablesBetweenDatesCriteriaCondition(tempWhere, variable, value, value2);
                         break;
                     case 4:
                         Boolean booVariable = (Boolean) variables[i + 1];
+                        object2 = variables[i + 2];
+                        comparator1 = (String) variables[i + 3];
                         tempWhere = setVariablesCriteriaCondition(tempWhere, variable, booVariable, object2, comparator1);
                         break;
                     case 5:
+                        Object object1 = variables[i + 1];
+                        object2 = variables[i + 2];
+                        comparator1 = (String) variables[i + 3];
+                        comparator2 = (String) variables[i + 4];
                         tempWhere = setVariablesBetweenCriteriaCondition(tempWhere, variable, object1, object2, comparator1,
                                 comparator2);
                         break;
@@ -176,6 +180,32 @@ public class Utilities {
                                                                    String value2) {
         return (tempWhere.length() == 0) ? ("(model." + variable + " between '" + value + "' and '" + value2 + "')")
                 : (tempWhere + " AND (model." + variable + " between '" + value + "' and '" + value2 + "')");
+    }
+
+    public static List<Object> constructVariablesCriteriaCondition(String variable, Object value) {
+        return (value != null && !value.toString().isEmpty()) ? Arrays.asList(variable, true, value, "=") : Collections.emptyList();
+    }
+
+    public static List<Object> constructVariablesBetweenDatesCriteriaCondition(String variable, Object value) {
+        if (value != null) {
+            LocalDate localDate = convertToLocalDate((Date) value);
+            LocalDateTime startOfDay = LocalDateTime.of(localDate, LocalTime.MIDNIGHT);
+            LocalDateTime endOfDay = localDate.atTime(LocalTime.MAX);
+            return Arrays.asList(variable, startOfDay, endOfDay);
+        }
+        return Collections.emptyList();
+    }
+
+    public static LocalDate convertToLocalDate(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
+    public static LocalDateTime convertToLocalDateTime(Date dateToConvert) {
+        return Instant.ofEpochMilli(dateToConvert.getTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 
 }

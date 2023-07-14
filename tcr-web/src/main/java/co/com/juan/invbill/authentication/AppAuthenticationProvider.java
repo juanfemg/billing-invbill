@@ -1,6 +1,6 @@
 package co.com.juan.invbill.authentication;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IUsuarioDelegate;
 import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.model.UsuarioApp;
 import co.com.juan.invbill.util.security.Encryption;
@@ -29,12 +29,12 @@ import java.util.List;
 public class AppAuthenticationProvider implements AuthenticationProvider {
 
     private static final Logger log = LoggerFactory.getLogger(AppAuthenticationProvider.class);
-    private final IBusinessDelegate businessDelegator;
+    private final IUsuarioDelegate usuarioDelegator;
     private final IEncryption encryption;
 
     @Inject
-    public AppAuthenticationProvider(IBusinessDelegate businessDelegator, Encryption encryption) {
-        this.businessDelegator = businessDelegator;
+    public AppAuthenticationProvider(IUsuarioDelegate usuarioDelegator, Encryption encryption) {
+        this.usuarioDelegator = usuarioDelegator;
         this.encryption = encryption;
     }
 
@@ -62,9 +62,8 @@ public class AppAuthenticationProvider implements AuthenticationProvider {
     private UserDetails getUser(String userName, String password) {
         boolean enabled = false;
         List<GrantedAuthority> grantedAuths = null;
-        UsuarioApp usuarioApp = this.businessDelegator.findUsuarioByID(userName);
+        UsuarioApp usuarioApp = this.usuarioDelegator.findUsuarioByID(userName);
 
-        usuarioApp.getRolApp().getUsuarioApps();
         if (usuarioApp != null && usuarioApp.getRolApp() != null) {
             if ((usuarioApp.getEstado() == StatusEnum.A) && (password.equals(this.encryption.decrypt(usuarioApp.getPassword())))) {
                 enabled = true;

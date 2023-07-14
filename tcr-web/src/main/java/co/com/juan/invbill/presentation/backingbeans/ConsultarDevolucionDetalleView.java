@@ -10,7 +10,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.DevolucionCabecera;
 import co.com.juan.invbill.model.FacturaCabecera;
@@ -26,7 +26,7 @@ public class ConsultarDevolucionDetalleView implements Serializable {
 	private static final long serialVersionUID = -6989714907754566718L;
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
 
 	private DevolucionCabecera devolucionCabecera;
 	private FacturaCabecera facturaCabecera;
@@ -69,14 +69,14 @@ public class ConsultarDevolucionDetalleView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

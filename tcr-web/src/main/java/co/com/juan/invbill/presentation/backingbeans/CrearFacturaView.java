@@ -17,12 +17,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.IFacturaDelegate;
 import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.model.CategoriaProducto;
 import co.com.juan.invbill.model.ClienteApp;
@@ -49,7 +50,18 @@ public class CrearFacturaView implements Serializable {
 	private static final String ID_DIALOG_MESSAGES = "menMod";
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
+
+	public IFacturaDelegate getFacturaDelegate() {
+		return facturaDelegate;
+	}
+
+	public void setFacturaDelegate(IFacturaDelegate facturaDelegate) {
+		this.facturaDelegate = facturaDelegate;
+	}
+
+	@ManagedProperty(value = "#{facturaDelegate}")
+	private transient IFacturaDelegate facturaDelegate;
 
 	public IProductoDelegate getProductoDelegate() {
 		return productoDelegate;
@@ -391,7 +403,7 @@ public class CrearFacturaView implements Serializable {
 					}
 				}
 
-				businessDelegate.save(facturaCabecera);
+				this.facturaDelegate.save(facturaCabecera);
 				log.info("=== Creacion de factura Cabecera : Factura creada " + facturaCabecera.getIdFactura()
 						+ " exitosamente ===");
 
@@ -427,7 +439,7 @@ public class CrearFacturaView implements Serializable {
 				facturaDetalleId = new FacturaDetalleId(facturaCabecera.getIdFactura(),
 						facturaDetalleTemp.getProducto().getIdProducto());
 				facturaDetalleTemp.setId(facturaDetalleId);
-				businessDelegate.save(facturaDetalleTemp);
+				this.facturaDelegate.save(facturaDetalleTemp);
 				log.info("=== Creacion de factura Detalle : Factura creada " + "Factura: "
 						+ facturaDetalleTemp.getFacturaCabecera().getIdFactura() + " Producto: "
 						+ facturaDetalleTemp.getProducto().getIdProducto() + " exitosamente ===");
@@ -520,14 +532,14 @@ public class CrearFacturaView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

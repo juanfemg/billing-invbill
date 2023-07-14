@@ -12,10 +12,11 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import co.com.juan.invbill.delegate.businessdelegate.IUsuarioDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.model.UsuarioApp;
 import co.com.juan.invbill.util.Properties;
@@ -33,7 +34,18 @@ public class ConsultarUsuarioView implements Serializable {
 	private static final Logger log = LoggerFactory.getLogger(ConsultarUsuarioView.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
+
+	@ManagedProperty(value = "#{usuarioDelegate}")
+	private transient IUsuarioDelegate usuarioDelegate;
+
+	public IUsuarioDelegate getUsuarioDelegate() {
+		return usuarioDelegate;
+	}
+
+	public void setUsuarioDelegate(IUsuarioDelegate usuarioDelegate) {
+		this.usuarioDelegate = usuarioDelegate;
+	}
 
 	private UsuarioApp usuarioApp;
 	private UsuarioApp usuarioModApp;
@@ -63,7 +75,7 @@ public class ConsultarUsuarioView implements Serializable {
 
 	public void actionConsultar() {
 		try {
-			usuarioModApp = businessDelegate.findUsuarioByID(usuarioApp.getIdUsuarioApp());
+			usuarioModApp = this.usuarioDelegate.findUsuarioByID(usuarioApp.getIdUsuarioApp());
 
 			if (usuarioModApp != null)
 				showPanelModificarUsuario = true;
@@ -80,7 +92,7 @@ public class ConsultarUsuarioView implements Serializable {
 
 	public void actionModificar() {
 		try {
-			businessDelegate.update(usuarioModApp);
+			this.usuarioDelegate.update(usuarioModApp);
 			showPanelModificarUsuario = false;
 			log.info("=== Actualizacion de usuario: Usuario actualizado. Id={}, descripcion={} === ",
 					usuarioModApp.getIdUsuarioApp(), usuarioModApp.getNombre());
@@ -115,14 +127,14 @@ public class ConsultarUsuarioView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

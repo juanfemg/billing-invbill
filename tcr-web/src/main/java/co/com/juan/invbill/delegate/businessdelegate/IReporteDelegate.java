@@ -21,4 +21,5 @@ public interface IReporteDelegate {
     List<ReporteDevolucionMensual> getReporteDevolucionMensual() throws EntityException;
 
     List<ReporteCompraMensual> getReporteCompraMensual() throws EntityException;
+
 }

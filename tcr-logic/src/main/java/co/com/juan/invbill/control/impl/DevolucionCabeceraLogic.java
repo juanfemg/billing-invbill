@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -85,12 +86,12 @@ public class DevolucionCabeceraLogic implements IDevolucionCabeceraLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DevolucionCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                                   Object[] variablesBetweenDates) throws EntityException {
+    public List<DevolucionCabecera> findByIdAndOrFechaCreacion(Integer idFactura, Date fechaCreacion) throws EntityException {
         List<DevolucionCabecera> list;
-        String where;
         try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
+            List<Object> variables = Utilities.constructVariablesCriteriaCondition("idFactura", idFactura);
+            List<Object> variablesBetweenDates = Utilities.constructVariablesBetweenDatesCriteriaCondition("fechaCreacion", fechaCreacion);
+            String where = Utilities.constructCriteria(variables.toArray(), null, variablesBetweenDates.toArray());
             list = this.devolucionCabeceraDao.findByCriteria(where);
         } catch (DaoException de) {
             log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());

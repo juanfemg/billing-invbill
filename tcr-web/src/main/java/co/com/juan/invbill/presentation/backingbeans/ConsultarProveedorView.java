@@ -12,10 +12,11 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import co.com.juan.invbill.delegate.businessdelegate.IProveedorDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.model.ProveedorApp;
 import co.com.juan.invbill.util.Properties;
@@ -34,7 +35,18 @@ public class ConsultarProveedorView implements Serializable {
 	private static final String ID_DIALOG_MESSAGES = "menMod";
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
+
+	@ManagedProperty(value = "#{proveedorDelegate}")
+	private IProveedorDelegate proveedorDelegate;
+
+	public IProveedorDelegate getProveedorDelegate() {
+		return proveedorDelegate;
+	}
+
+	public void setProveedorDelegate(IProveedorDelegate proveedorDelegate) {
+		this.proveedorDelegate = proveedorDelegate;
+	}
 
 	private ProveedorApp proveedorModApp;
 	private List<SelectItem> estadosApp;
@@ -64,7 +76,7 @@ public class ConsultarProveedorView implements Serializable {
 
 	public void initProveedores() {
 		try {
-			proveedoresApp = businessDelegate.getProveedores();
+			proveedoresApp = this.proveedorDelegate.getProveedores();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_PROVEEDORES"));
 			log.error("=== Consulta de Proveedores: Fallo la consulta de los proveedores", e);
@@ -77,7 +89,7 @@ public class ConsultarProveedorView implements Serializable {
 
 	public void actionModificar() {
 		try {
-			businessDelegate.update(proveedorModApp);
+			this.proveedorDelegate.update(proveedorModApp);
 			showDialogModificarProveedor = false;
 			log.info("=== Actualizacion de proveedor: Proveedor actualizado. Id={}, descripcion={} ===",
 					proveedorModApp.getIdProveedorApp(), proveedorModApp.getRazonSocial());
@@ -117,14 +129,14 @@ public class ConsultarProveedorView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

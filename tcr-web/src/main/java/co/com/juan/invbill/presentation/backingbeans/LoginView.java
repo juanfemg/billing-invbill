@@ -12,6 +12,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.IConfigDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IUsuarioDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import co.com.juan.invbill.authentication.AppUserDetails;
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.AppConfig;
 import co.com.juan.invbill.model.LoginApp;
@@ -45,7 +47,29 @@ public class LoginView implements Serializable {
 	private transient AuthenticationManager authenticationManager;
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
+
+	@ManagedProperty(value = "#{usuarioDelegate}")
+	private IUsuarioDelegate usuarioDelegate;
+
+	@ManagedProperty(value = "#{configDelegate}")
+	private IConfigDelegate configDelegate;
+
+	public IConfigDelegate getConfigDelegate() {
+		return configDelegate;
+	}
+
+	public void setConfigDelegate(IConfigDelegate configDelegate) {
+		this.configDelegate = configDelegate;
+	}
+
+	public IUsuarioDelegate getUsuarioDelegate() {
+		return usuarioDelegate;
+	}
+
+	public void setUsuarioDelegate(IUsuarioDelegate usuarioDelegate) {
+		this.usuarioDelegate = usuarioDelegate;
+	}
 
 	private LoginApp loginApp;
 	private String userId;
@@ -79,7 +103,7 @@ public class LoginView implements Serializable {
 						session.setAttribute(SessionEnum.SPRING_SECURITY_CONTEXT.name(), securityContext);
 						String idSession = RequestContextHolder.currentRequestAttributes().getSessionId();
 
-						loginApp = businessDelegate.findLoginByID(result.getName());
+						loginApp = this.usuarioDelegate.findLoginByID(result.getName());
 
 						if (loginApp == null) {
 							loginApp = new LoginApp(result.getName(), new Date(System.currentTimeMillis()), idSession);
@@ -114,7 +138,7 @@ public class LoginView implements Serializable {
 
 	public void saveLogin(LoginApp loginApp) {
 		try {
-			businessDelegate.save(loginApp);
+			this.usuarioDelegate.save(loginApp);
 		} catch (Exception e) {
 			log.error("=== Login de usuario: Fallo el registro del login {}. Se ha producido un error: {}",
 					loginApp.getIdLoginApp(), e.getMessage());
@@ -124,7 +148,7 @@ public class LoginView implements Serializable {
 
 	public void updateLogin(LoginApp loginApp) {
 		try {
-			businessDelegate.update(loginApp);
+			this.usuarioDelegate.update(loginApp);
 		} catch (Exception e) {
 			log.error("=== Login de usuario: Fallo la actualizacion del login {}. Se ha producido un error: {}",
 					loginApp.getIdLoginApp(), e.getMessage());
@@ -134,7 +158,7 @@ public class LoginView implements Serializable {
 
 	public void initParametrosConfiguracion() {
 		try {
-			appConfigs = businessDelegate.getAppConfigs();
+			appConfigs = this.configDelegate.getAppConfigs();
 
 			if (!appConfigs.isEmpty()) {
 				for (AppConfig appConfig : appConfigs) {
@@ -170,14 +194,14 @@ public class LoginView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

@@ -12,10 +12,11 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.IFacturaDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.DevolucionCabecera;
 import co.com.juan.invbill.util.Properties;
@@ -33,7 +34,18 @@ public class ConsultarDevolucionView implements Serializable {
 	private static final Logger log = LoggerFactory.getLogger(ConsultarDevolucionView.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
+
+	public IFacturaDelegate getFacturaDelegate() {
+		return facturaDelegate;
+	}
+
+	public void setFacturaDelegate(IFacturaDelegate facturaDelegate) {
+		this.facturaDelegate = facturaDelegate;
+	}
+
+	@ManagedProperty(value = "#{facturaDelegate}")
+	private transient IFacturaDelegate facturaDelegate;
 
 	private List<DevolucionCabecera> devolucionCabeceras;
 	private DevolucionCabecera devolucionCabecera;
@@ -60,7 +72,7 @@ public class ConsultarDevolucionView implements Serializable {
 
 	public void initDevoluciones() {
 		try {
-			devolucionCabeceras = businessDelegate.getDevolucionCabeceras();
+			devolucionCabeceras = this.facturaDelegate.getDevolucionCabeceras();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_DEVOLUCIONES"));
 			log.error("=== Consulta de devoluciones: Fallo la consulta de las devoluciones", e);
@@ -69,7 +81,7 @@ public class ConsultarDevolucionView implements Serializable {
 
 	public void initDevolucionCriteria(DevolucionCabecera entity) {
 		try {
-			devolucionCabeceras = businessDelegate.getDevolucionCabecerasByCriteria(entity);
+			devolucionCabeceras = this.facturaDelegate.getDevolucionCabecerasByIdAndOrFechaCreacion(entity);
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_DEVOLUCIONES"));
 			log.error("=== Consulta de devoluciones: Fallo la consulta de las devoluciones", e);
@@ -80,7 +92,7 @@ public class ConsultarDevolucionView implements Serializable {
 		DevolucionCabecera devolucionCabeceraTemp;
 
 		try {
-			devolucionCabeceraTemp = businessDelegate.findDevolucionCabeceraByID(devolucionCabecera.getIdFactura());
+			devolucionCabeceraTemp = this.facturaDelegate.findDevolucionCabeceraByID(devolucionCabecera.getIdFactura());
 
 			if (!devolucionCabeceras.isEmpty())
 				devolucionCabeceras.clear();
@@ -137,14 +149,14 @@ public class ConsultarDevolucionView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

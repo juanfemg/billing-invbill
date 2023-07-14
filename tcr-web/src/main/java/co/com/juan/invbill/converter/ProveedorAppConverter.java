@@ -7,10 +7,11 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
+import co.com.juan.invbill.delegate.businessdelegate.IProveedorDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.model.ProveedorApp;
 
 /**
@@ -24,7 +25,18 @@ public class ProveedorAppConverter implements Converter {
 	private static final Logger log = LoggerFactory.getLogger(ProveedorAppConverter.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private IBusinessDelegate businessDelegate;
+	private IClienteDelegate businessDelegate;
+
+	@ManagedProperty(value = "#{proveedorDelegate}")
+	private IProveedorDelegate proveedorDelegate;
+
+	public IProveedorDelegate getProveedorDelegate() {
+		return proveedorDelegate;
+	}
+
+	public void setProveedorDelegate(IProveedorDelegate proveedorDelegate) {
+		this.proveedorDelegate = proveedorDelegate;
+	}
 
 	private ProveedorApp proveedorApp;
 
@@ -42,7 +54,7 @@ public class ProveedorAppConverter implements Converter {
 			return "";
 
 		try {
-			proveedorApp = businessDelegate.findProveedorByID(Integer.parseInt(value));
+			proveedorApp = this.proveedorDelegate.findProveedorByID(Integer.parseInt(value));
 
 		} catch (Exception e) {
 			log.error(
@@ -87,14 +99,14 @@ public class ProveedorAppConverter implements Converter {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

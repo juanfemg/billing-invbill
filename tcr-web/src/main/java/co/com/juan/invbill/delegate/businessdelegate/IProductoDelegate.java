@@ -7,6 +7,9 @@ import co.com.juan.invbill.model.StockProducto;
 
 import java.util.List;
 
+/**
+ * @author Juan Felipe
+ */
 public interface IProductoDelegate {
 
     void save(Producto entity) throws EntityException;

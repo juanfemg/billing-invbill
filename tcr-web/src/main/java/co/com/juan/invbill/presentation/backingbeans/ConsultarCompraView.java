@@ -12,10 +12,11 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.ICompraDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.CompraCabecera;
 import co.com.juan.invbill.model.CompraCabeceraId;
@@ -34,7 +35,18 @@ public class ConsultarCompraView implements Serializable {
 	private static final Logger log = LoggerFactory.getLogger(ConsultarCompraView.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
+
+	@ManagedProperty(value = "#{compraDelegate}")
+	private ICompraDelegate compraDelegate;
+
+	public ICompraDelegate getCompraDelegate() {
+		return compraDelegate;
+	}
+
+	public void setCompraDelegate(ICompraDelegate compraDelegate) {
+		this.compraDelegate = compraDelegate;
+	}
 
 	private List<CompraCabecera> compraCabeceras;
 	private CompraCabecera compraCabecera;
@@ -63,7 +75,7 @@ public class ConsultarCompraView implements Serializable {
 
 	public void initCompras() {
 		try {
-			compraCabeceras = businessDelegate.getCompraCabeceras();
+			compraCabeceras = this.compraDelegate.getCompraCabecerasByIdFacturaAndOrIdProveedor();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_COMPRAS"));
 			log.error("=== Consulta de compras: Fallo la consulta de las compras", e);
@@ -74,7 +86,7 @@ public class ConsultarCompraView implements Serializable {
 		CompraCabecera compraCabeceraTemp;
 
 		try {
-			compraCabeceraTemp = businessDelegate.findCompraCabeceraByID(compraCabeceraId);
+			compraCabeceraTemp = this.compraDelegate.findCompraCabeceraByID(compraCabeceraId);
 
 			if (!compraCabeceras.isEmpty())
 				compraCabeceras.clear();
@@ -96,7 +108,7 @@ public class ConsultarCompraView implements Serializable {
 
 	public void initComprasByID() {
 		try {
-			compraCabeceras = businessDelegate.getCompraCabeceras(compraCabeceraId);
+			compraCabeceras = this.compraDelegate.getCompraCabecerasByIdFacturaAndOrIdProveedor(compraCabeceraId);
 
 			log.info("=== Consulta de compras: Factura consultada {}. Proveedor consultado {} ===",
 					compraCabeceraId.getIdFacturaCompra(), compraCabeceraId.getIdProveedorApp());
@@ -154,14 +166,14 @@ public class ConsultarCompraView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

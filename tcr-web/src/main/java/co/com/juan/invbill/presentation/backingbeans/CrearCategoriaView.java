@@ -14,7 +14,7 @@ import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.model.CategoriaProducto;
 import co.com.juan.invbill.util.Properties;
 
@@ -32,7 +32,7 @@ public class CrearCategoriaView implements Serializable {
 			.getLogger(CrearCategoriaView.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
 
 	public IProductoDelegate getProductoDelegate() {
 		return productoDelegate;
@@ -99,7 +99,7 @@ public class CrearCategoriaView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
@@ -107,7 +107,7 @@ public class CrearCategoriaView implements Serializable {
 	 * @param businessDelegate
 	 *            the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

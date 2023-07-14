@@ -12,11 +12,12 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import co.com.juan.invbill.delegate.businessdelegate.IConfigDelegate;
 import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.model.CategoriaProducto;
 import co.com.juan.invbill.model.Producto;
@@ -37,7 +38,7 @@ public class ConsultarProductoView implements Serializable {
 	private static final String ID_DIALOG_MESSAGES = "menMod";
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
 
 	public IProductoDelegate getProductoDelegate() {
 		return productoDelegate;
@@ -49,6 +50,17 @@ public class ConsultarProductoView implements Serializable {
 
 	@ManagedProperty(value = "#{productoDelegate}")
 	private transient IProductoDelegate productoDelegate;
+
+	@ManagedProperty(value = "#{configDelegate}")
+	private transient IConfigDelegate configDelegate;
+
+	public IConfigDelegate getConfigDelegate() {
+		return configDelegate;
+	}
+
+	public void setConfigDelegate(IConfigDelegate configDelegate) {
+		this.configDelegate = configDelegate;
+	}
 
 	private Producto productoMod;
 	private List<SelectItem> estadosApp;
@@ -115,7 +127,7 @@ public class ConsultarProductoView implements Serializable {
 
 	public void initTiposUnidadMedida() {
 		try {
-			tiposUnidadMedida = businessDelegate.getTiposUnidadMedida();
+			tiposUnidadMedida = this.configDelegate.getTiposUnidadMedida();
 
 			for (TipoUnidadMedida tipoUnidadMedidaTemp : tiposUnidadMedida) {
 				if (tipoUnidadMedidaTemp.getEstado().equals(StatusEnum.A)) {
@@ -182,14 +194,14 @@ public class ConsultarProductoView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

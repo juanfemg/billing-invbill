@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author Juan Felipe
@@ -86,12 +87,12 @@ public class CompraCabeceraLogic implements ICompraCabeceraLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CompraCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                               Object[] variablesBetweenDates) throws EntityException {
+    public List<CompraCabecera> findByIdFacturaAndOrIdProveedor(String idFacturaCompra, Integer idProveedorApp) throws EntityException {
         List<CompraCabecera> list;
-        String where;
         try {
-            where = Utilities.constructCriteria(variables, variablesBetween, variablesBetweenDates);
+            List<Object> firstVariables = Utilities.constructVariablesCriteriaCondition("id.idFacturaCompra", idFacturaCompra);
+            List<Object> secondVariables = Utilities.constructVariablesCriteriaCondition("id.idProveedorApp", idProveedorApp);
+            String where = Utilities.constructCriteria(Stream.concat(firstVariables.stream(), secondVariables.stream()).toArray(), null, null);
             list = this.compraCabeceraDao.findByCriteria(where);
         } catch (DaoException de) {
             log.error("get {} failed by criteria. An error has occurred: {}", Constant.ENTITY_NAME, de.getMessage());

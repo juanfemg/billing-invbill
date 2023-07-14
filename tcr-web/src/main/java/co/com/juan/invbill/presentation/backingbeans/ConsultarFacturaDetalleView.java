@@ -11,10 +11,11 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.IFacturaDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.DevolucionCabecera;
 import co.com.juan.invbill.model.FacturaCabecera;
@@ -35,7 +36,18 @@ public class ConsultarFacturaDetalleView implements Serializable {
 	private static final Logger log = LoggerFactory.getLogger(ConsultarFacturaDetalleView.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
+
+	public IFacturaDelegate getFacturaDelegate() {
+		return facturaDelegate;
+	}
+
+	public void setFacturaDelegate(IFacturaDelegate facturaDelegate) {
+		this.facturaDelegate = facturaDelegate;
+	}
+
+	@ManagedProperty(value = "#{facturaDelegate}")
+	private transient IFacturaDelegate facturaDelegate;
 
 	private FacturaCabecera facturaCabecera;
 	private List<FacturaDetalle> facturaDetalles;
@@ -53,7 +65,7 @@ public class ConsultarFacturaDetalleView implements Serializable {
 
 		try {
 			if (facturaCabecera != null) {
-				devolucionCabecera = businessDelegate.findDevolucionCabeceraByID(facturaCabecera.getIdFactura());
+				devolucionCabecera = this.facturaDelegate.findDevolucionCabeceraByID(facturaCabecera.getIdFactura());
 			}
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKeyAndName("MSG_ERROR_CONSULTA_DEVOLUCION",
@@ -89,14 +101,14 @@ public class ConsultarFacturaDetalleView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

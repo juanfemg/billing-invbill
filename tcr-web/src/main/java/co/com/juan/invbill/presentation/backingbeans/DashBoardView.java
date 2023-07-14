@@ -18,6 +18,8 @@ import javax.faces.model.SelectItem;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.IProveedorDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IUsuarioDelegate;
 import co.com.juan.invbill.enums.MonthlyReportEnum;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -28,7 +30,7 @@ import org.primefaces.model.chart.ChartSeries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.delegate.businessdelegate.IReporteDelegate;
 import co.com.juan.invbill.model.ReporteCompraDiaria;
 import co.com.juan.invbill.model.ReporteCompraMensual;
@@ -65,13 +67,35 @@ public class DashBoardView implements Serializable {
 	private static final String REPORTE_CONSULTA_FACTURA = "consultaFactura";
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
 
 	@ManagedProperty(value = "#{reporteDelegate}")
 	private transient IReporteDelegate reporteDelegate;
 
 	@ManagedProperty(value = "#{ReportController}")
 	private transient IReportController reportController;
+
+	@ManagedProperty(value = "#{proveedorDelegate}")
+	private IProveedorDelegate proveedorDelegate;
+
+	@ManagedProperty(value = "#{usuarioDelegate}")
+	private IUsuarioDelegate usuarioDelegate;
+
+	public IUsuarioDelegate getUsuarioDelegate() {
+		return usuarioDelegate;
+	}
+
+	public void setUsuarioDelegate(IUsuarioDelegate usuarioDelegate) {
+		this.usuarioDelegate = usuarioDelegate;
+	}
+
+	public IProveedorDelegate getProveedorDelegate() {
+		return proveedorDelegate;
+	}
+
+	public void setProveedorDelegate(IProveedorDelegate proveedorDelegate) {
+		this.proveedorDelegate = proveedorDelegate;
+	}
 
 	private UsuarioApp usuarioApp;
 	private LoginApp loginApp;
@@ -141,7 +165,7 @@ public class DashBoardView implements Serializable {
 
 	public void initUsuario(HttpSession session) {
 		try {
-			usuarioApp = businessDelegate.findUsuarioByID(session.getAttribute(SessionEnum.LOGIN.name()).toString());
+			usuarioApp = this.usuarioDelegate.findUsuarioByID(session.getAttribute(SessionEnum.LOGIN.name()).toString());
 			loginApp.setUltimoLogin((Date) session.getAttribute(SessionEnum.LAST_LOGIN.name()));
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_USUARIO"));
@@ -224,7 +248,7 @@ public class DashBoardView implements Serializable {
 
 	public void initProveedores() {
 		try {
-			proveedoresApp = businessDelegate.getProveedores();
+			proveedoresApp = this.proveedorDelegate.getProveedores();
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_PROVEEDORES"));
 			log.error("=== Consulta de Proveedores: Fallo la consulta de los proveedores", e);
@@ -317,7 +341,7 @@ public class DashBoardView implements Serializable {
 			passwordOld = new Encryption().encrypt(passwordOld);
 			if (passwordOld.equals(usuarioApp.getPassword())) {
 				usuarioApp.setPassword(new Encryption().encrypt(passwordNew));
-				businessDelegate.update(usuarioApp);
+				this.usuarioDelegate.update(usuarioApp);
 				showDialogCambiarPassword = false;
 				log.info("=== Actualizacion de usuario: Usuario actualizado. Id={}, descripcion={} === ",
 						usuarioApp.getIdUsuarioApp(), usuarioApp.getNombre());
@@ -391,14 +415,14 @@ public class DashBoardView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

@@ -19,12 +19,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.imageio.ImageIO;
 
+import co.com.juan.invbill.delegate.businessdelegate.IConfigDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IFacturaDelegate;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.model.TipoPeriodo;
 import co.com.juan.invbill.report.IReportController;
 import co.com.juan.invbill.util.Properties;
@@ -48,7 +50,29 @@ public class ReporteVentasView implements Serializable {
 	private static final Logger log = LoggerFactory.getLogger(ReporteVentasView.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
+
+	@ManagedProperty(value = "#{configDelegate}")
+	private IConfigDelegate configDelegate;
+
+	public IConfigDelegate getConfigDelegate() {
+		return configDelegate;
+	}
+
+	public void setConfigDelegate(IConfigDelegate configDelegate) {
+		this.configDelegate = configDelegate;
+	}
+
+	public IFacturaDelegate getFacturaDelegate() {
+		return facturaDelegate;
+	}
+
+	public void setFacturaDelegate(IFacturaDelegate facturaDelegate) {
+		this.facturaDelegate = facturaDelegate;
+	}
+
+	@ManagedProperty(value = "#{facturaDelegate}")
+	private transient IFacturaDelegate facturaDelegate;
 
 	@ManagedProperty(value = "#{ReportController}")
 	private transient IReportController reportController;
@@ -106,7 +130,7 @@ public class ReporteVentasView implements Serializable {
 
 	public void initTiposPeriodo() {
 		try {
-			tipoPeriodo = businessDelegate.getTiposPeriodo();
+			tipoPeriodo = this.configDelegate.getTiposPeriodo();
 
 			for (TipoPeriodo tipoPeriodoTemp : tipoPeriodo) {
 				tiposPeriodo.add(new SelectItem(tipoPeriodoTemp, tipoPeriodoTemp.getPeriodo()));
@@ -121,7 +145,7 @@ public class ReporteVentasView implements Serializable {
 
 	public void initAnios() {
 		try {
-			facturaCaberaMaxFechaCreacion = (Date) businessDelegate
+			facturaCaberaMaxFechaCreacion = (Date) this.facturaDelegate
 					.getMaximaFacturaCabeceraByPropertyName(PROPERTY_NAME_FECHA_CREACION);
 
 		} catch (Exception e) {
@@ -132,7 +156,7 @@ public class ReporteVentasView implements Serializable {
 		}
 
 		try {
-			facturaCaberaMinFechaCreacion = (Date) businessDelegate
+			facturaCaberaMinFechaCreacion = (Date) this.facturaDelegate
 					.getMinimaFacturaCabeceraByPropertyName(PROPERTY_NAME_FECHA_CREACION);
 
 		} catch (Exception e) {
@@ -327,14 +351,14 @@ public class ReporteVentasView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

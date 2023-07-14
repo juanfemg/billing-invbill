@@ -19,7 +19,6 @@ public interface ICompraCabeceraLogic {
 
     List<CompraCabecera> getDataCompraCabecera() throws EntityException;
 
-    List<CompraCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                        Object[] variablesBetweenDates) throws EntityException;
+    List<CompraCabecera> findByIdFacturaAndOrIdProveedor(String idFacturaCompra, Integer idProveedorApp) throws EntityException;
 
 }

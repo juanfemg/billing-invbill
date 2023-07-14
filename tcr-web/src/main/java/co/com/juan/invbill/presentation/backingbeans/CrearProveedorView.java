@@ -12,10 +12,11 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import co.com.juan.invbill.delegate.businessdelegate.IProveedorDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.model.ProveedorApp;
 import co.com.juan.invbill.util.Properties;
 
@@ -32,7 +33,18 @@ public class CrearProveedorView implements Serializable {
 	private static final Logger log = LoggerFactory.getLogger(CrearProveedorView.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
+
+	@ManagedProperty(value = "#{proveedorDelegate}")
+	private IProveedorDelegate proveedorDelegate;
+
+	public IProveedorDelegate getProveedorDelegate() {
+		return proveedorDelegate;
+	}
+
+	public void setProveedorDelegate(IProveedorDelegate proveedorDelegate) {
+		this.proveedorDelegate = proveedorDelegate;
+	}
 
 	private ProveedorApp proveedorApp;
 	private transient Properties properties = new Properties(FILE_MESSAGES);
@@ -48,7 +60,7 @@ public class CrearProveedorView implements Serializable {
 
 	public void actionGuardar() {
 		try {
-			businessDelegate.save(proveedorApp);
+			this.proveedorDelegate.save(proveedorApp);
 			log.info("=== Creacion de proveedor: Proveedor creado {}", proveedorApp.getIdProveedorApp());
 			addInfoMessage(properties.getParameterByKey("MSG_PROVEEDOR_CREADO"));
 			proveedorApp = new ProveedorApp();
@@ -81,14 +93,14 @@ public class CrearProveedorView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

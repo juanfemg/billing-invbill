@@ -7,10 +7,11 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
+import co.com.juan.invbill.delegate.businessdelegate.IConfigDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.model.TipoUnidadMedida;
 
 /**
@@ -24,7 +25,18 @@ public class TipoUnidadMedidaConverter implements Converter {
 	private static final Logger log = LoggerFactory.getLogger(TipoUnidadMedidaConverter.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private IBusinessDelegate businessDelegate;
+	private IClienteDelegate businessDelegate;
+
+	@ManagedProperty(value = "#{configDelegate}")
+	private IConfigDelegate configDelegate;
+
+	public IConfigDelegate getConfigDelegate() {
+		return configDelegate;
+	}
+
+	public void setConfigDelegate(IConfigDelegate configDelegate) {
+		this.configDelegate = configDelegate;
+	}
 
 	private TipoUnidadMedida tipoUnidadMedida;
 
@@ -42,7 +54,7 @@ public class TipoUnidadMedidaConverter implements Converter {
 			return "";
 
 		try {
-			tipoUnidadMedida = businessDelegate.findTipoUnidadMedidaByID(Integer.parseInt(value));
+			tipoUnidadMedida = this.configDelegate.findTipoUnidadMedidaByID(Integer.parseInt(value));
 
 		} catch (Exception e) {
 			log.error(
@@ -87,14 +99,14 @@ public class TipoUnidadMedidaConverter implements Converter {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

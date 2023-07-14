@@ -11,7 +11,7 @@ import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.model.Producto;
 
 /**
@@ -25,7 +25,7 @@ public class ProductoConverter implements Converter {
 	private static final Logger log = LoggerFactory.getLogger(ProductoConverter.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private IBusinessDelegate businessDelegate;
+	private IClienteDelegate businessDelegate;
 
 	public IProductoDelegate getProductoDelegate() {
 		return productoDelegate;
@@ -84,14 +84,14 @@ public class ProductoConverter implements Converter {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

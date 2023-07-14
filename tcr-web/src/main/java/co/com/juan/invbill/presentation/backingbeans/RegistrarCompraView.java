@@ -13,11 +13,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.ICompraDelegate;
 import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IProveedorDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.AppConfig;
@@ -49,7 +51,7 @@ public class RegistrarCompraView implements Serializable {
 	private static final String ID_DIALOG_MESSAGES_PRODUCTO = "menProductos";
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
 
 	public IProductoDelegate getProductoDelegate() {
 		return productoDelegate;
@@ -61,6 +63,28 @@ public class RegistrarCompraView implements Serializable {
 
 	@ManagedProperty(value = "#{productoDelegate}")
 	private transient IProductoDelegate productoDelegate;
+
+	@ManagedProperty(value = "#{proveedorDelegate}")
+	private IProveedorDelegate proveedorDelegate;
+
+	@ManagedProperty(value = "#{compraDelegate}")
+	private ICompraDelegate compraDelegate;
+
+	public ICompraDelegate getCompraDelegate() {
+		return compraDelegate;
+	}
+
+	public void setCompraDelegate(ICompraDelegate compraDelegate) {
+		this.compraDelegate = compraDelegate;
+	}
+
+	public IProveedorDelegate getProveedorDelegate() {
+		return proveedorDelegate;
+	}
+
+	public void setProveedorDelegate(IProveedorDelegate proveedorDelegate) {
+		this.proveedorDelegate = proveedorDelegate;
+	}
 
 	private transient HttpSession session;
 	private List<CategoriaProducto> categoria;
@@ -182,7 +206,7 @@ public class RegistrarCompraView implements Serializable {
 	}
 
 	public List<ProveedorApp> completeProveedorApp(String proveedorApp) {
-		List<ProveedorApp> allProveedoresApp = businessDelegate.getProveedores();
+		List<ProveedorApp> allProveedoresApp = this.proveedorDelegate.getProveedores();
 		List<ProveedorApp> filteredProveedoresApp = new ArrayList<ProveedorApp>();
 
 		for (ProveedorApp proveedorAppTemp : allProveedoresApp) {
@@ -222,7 +246,7 @@ public class RegistrarCompraView implements Serializable {
 	public void findCompraCabeceraByID() {
 		CompraCabecera compraCabeceraTemp = null;
 		try {
-			compraCabeceraTemp = businessDelegate.findCompraCabeceraByID(compraCabeceraId);
+			compraCabeceraTemp = this.compraDelegate.findCompraCabeceraByID(compraCabeceraId);
 
 			if (compraCabeceraTemp != null) {
 				String[] parameters = { proveedorApp.getRazonSocial() };
@@ -339,7 +363,7 @@ public class RegistrarCompraView implements Serializable {
 
 	public void actionGuardar() {
 		try {
-			businessDelegate.save(compraCabecera);
+			this.compraDelegate.save(compraCabecera);
 			log.info("=== Creacion de compra Cabecera: Compra creada. IdProveedor={}, idFactura={} ",
 					compraCabecera.getId().getIdProveedorApp(), compraCabecera.getId().getIdFacturaCompra());
 
@@ -367,7 +391,7 @@ public class RegistrarCompraView implements Serializable {
 				compraDetalleTemp.setCompraCabecera(compraCabecera);
 				compraDetalleTemp.setId(compraDetalleId);
 
-				businessDelegate.save(compraDetalleTemp);
+				this.compraDelegate.save(compraDetalleTemp);
 				log.info("=== Creacion de compra Detalle: Compra creada. IdProveedor={}, idFactura={}, idProducto={} ",
 						compraDetalleTemp.getId().getIdProveedorApp(), compraDetalleTemp.getId().getIdFacturaCompra(),
 						compraDetalleTemp.getId().getIdProducto());
@@ -450,14 +474,14 @@ public class RegistrarCompraView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

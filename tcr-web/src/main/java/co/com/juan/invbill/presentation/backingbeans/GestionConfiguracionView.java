@@ -15,10 +15,11 @@ import javax.faces.model.SelectItem;
 import javax.print.PrintService;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.IConfigDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.model.AppConfig;
 import co.com.juan.invbill.enums.ParameterEnum;
 import co.com.juan.invbill.util.Properties;
@@ -36,7 +37,18 @@ public class GestionConfiguracionView implements Serializable {
 	private static final Logger log = LoggerFactory.getLogger(GestionConfiguracionView.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
+
+	@ManagedProperty(value = "#{configDelegate}")
+	private transient IConfigDelegate configDelegate;
+
+	public IConfigDelegate getConfigDelegate() {
+		return configDelegate;
+	}
+
+	public void setConfigDelegate(IConfigDelegate configDelegate) {
+		this.configDelegate = configDelegate;
+	}
 
 	private transient PrintService[] printServices;
 	private transient HttpSession session;
@@ -83,7 +95,7 @@ public class GestionConfiguracionView implements Serializable {
 
 	public void actionGuardarConfigImpresora() {
 		try {
-			businessDelegate.update(impresora);
+			this.configDelegate.update(impresora);
 
 			log.info("=== Actualizacion de configuracion de impresora: Parametro actualizado. Id={}, valor={} === ",
 					impresora.getIdAppConfig(), impresora.getValor());
@@ -101,7 +113,7 @@ public class GestionConfiguracionView implements Serializable {
 
 	public void actionGuardarConfigIva() {
 		try {
-			businessDelegate.update(iva);
+			this.configDelegate.update(iva);
 
 			log.info("=== Actualizacion de configuracion de iva: Parametro actualizado. Id={}, valor={} === ",
 					iva.getIdAppConfig(), iva.getValor());
@@ -119,7 +131,7 @@ public class GestionConfiguracionView implements Serializable {
 
 	public void actionGuardarConfigTopeStock() {
 		try {
-			businessDelegate.update(topeStock);
+			this.configDelegate.update(topeStock);
 
 			log.info("=== Actualizacion de configuracion de tope de stock: Parametro actualizado. Id={}, valor={} === ",
 					topeStock.getIdAppConfig(), topeStock.getValor());
@@ -157,14 +169,14 @@ public class GestionConfiguracionView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

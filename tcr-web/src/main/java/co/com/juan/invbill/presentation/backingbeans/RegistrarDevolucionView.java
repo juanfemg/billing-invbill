@@ -12,11 +12,12 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import co.com.juan.invbill.delegate.businessdelegate.IFacturaDelegate;
 import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.DevolucionCabecera;
 import co.com.juan.invbill.model.DevolucionDetalle;
@@ -39,7 +40,18 @@ public class RegistrarDevolucionView implements Serializable {
 	private static final Logger log = LoggerFactory.getLogger(RegistrarDevolucionView.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
+
+	public IFacturaDelegate getFacturaDelegate() {
+		return facturaDelegate;
+	}
+
+	public void setFacturaDelegate(IFacturaDelegate facturaDelegate) {
+		this.facturaDelegate = facturaDelegate;
+	}
+
+	@ManagedProperty(value = "#{facturaDelegate}")
+	private transient IFacturaDelegate facturaDelegate;
 
 	public IProductoDelegate getProductoDelegate() {
 		return productoDelegate;
@@ -102,7 +114,7 @@ public class RegistrarDevolucionView implements Serializable {
 
 	public void actionConsultar() {
 		try {
-			facturaDetalles = businessDelegate.getFacturaDetalleDevolucionByIdFactura(facturaCabecera.getIdFactura());
+			facturaDetalles = this.facturaDelegate.getFacturaDetalleDevolucionByIdFactura(facturaCabecera.getIdFactura());
 
 			if (!facturaDetalles.isEmpty()) {
 				findDevolucionCabeceraByID();
@@ -125,7 +137,7 @@ public class RegistrarDevolucionView implements Serializable {
 
 	public void findDevolucionCabeceraByID() {
 		try {
-			devolucionCabecera = businessDelegate.findDevolucionCabeceraByID(facturaCabecera.getIdFactura());
+			devolucionCabecera = this.facturaDelegate.findDevolucionCabeceraByID(facturaCabecera.getIdFactura());
 
 			log.info("=== Consulta de devolucion : Devolucion consultada asociada a la factura {}",
 					facturaCabecera.getIdFactura());
@@ -188,7 +200,7 @@ public class RegistrarDevolucionView implements Serializable {
 
 	public void actualizarDetalleFactura() {
 		try {
-			facturaDetalles = businessDelegate.getFacturaDetalleDevolucionByIdFactura(facturaCabecera.getIdFactura());
+			facturaDetalles = this.facturaDelegate.getFacturaDetalleDevolucionByIdFactura(facturaCabecera.getIdFactura());
 
 			log.info("=== Consulta de factura: Factura consultada {}", facturaCabecera.getIdFactura());
 		} catch (Exception e) {
@@ -257,11 +269,11 @@ public class RegistrarDevolucionView implements Serializable {
 					: devolucionCabeceraResumen.getValorTotal());
 
 			if (existDevolucionFactura) {
-				businessDelegate.update(devolucionCabecera);
+				this.facturaDelegate.update(devolucionCabecera);
 				log.info("=== Actualizacion de devolucion Cabecera: Devolucion actualizada asociada a la factura {} ",
 						devolucionCabecera.getIdFactura());
 			} else {
-				businessDelegate.save(devolucionCabecera);
+				this.facturaDelegate.save(devolucionCabecera);
 				log.info("=== Creacion de devolucion Cabecera: Devolucion creada asociada a la factura {} ",
 						devolucionCabecera.getIdFactura());
 			}
@@ -284,14 +296,14 @@ public class RegistrarDevolucionView implements Serializable {
 	public void saveDevolucionDetalle() {
 		for (FacturaDetalle facturaDetalleTemp : facturaDevDetalles) {
 			try {
-				devolucionDetalleRegistrada = businessDelegate.findDevolucionDetalleByID(
+				devolucionDetalleRegistrada = this.facturaDelegate.findDevolucionDetalleByID(
 						facturaDetalleTemp.getFacturaCabecera().getIdFactura(),
 						facturaDetalleTemp.getProducto().getIdProducto());
 
 				if (devolucionDetalleRegistrada != null) {
 					devolucionDetalleRegistrada
 							.setCantidad(devolucionDetalleRegistrada.getCantidad() + facturaDetalleTemp.getCantidad());
-					businessDelegate.update(devolucionDetalleRegistrada);
+					this.facturaDelegate.update(devolucionDetalleRegistrada);
 					log.info(
 							"=== Actualizacion de devolucion Detalle : Devolucion actualizada. IdFactura={}, idProducto={} ",
 							facturaDetalleTemp.getFacturaCabecera().getIdFactura(),
@@ -308,7 +320,7 @@ public class RegistrarDevolucionView implements Serializable {
 					devolucionDetalleId = new DevolucionDetalleId(devolucionCabecera.getIdFactura(),
 							devolucionDetalle.getProducto().getIdProducto());
 					devolucionDetalle.setId(devolucionDetalleId);
-					businessDelegate.save(devolucionDetalle);
+					this.facturaDelegate.save(devolucionDetalle);
 					log.info("=== Creacion de devolucion Detalle : Devolucion creada. IdFactura={}, idProducto={} ",
 							facturaDetalleTemp.getFacturaCabecera().getIdFactura(),
 							facturaDetalleTemp.getProducto().getIdProducto());
@@ -377,14 +389,14 @@ public class RegistrarDevolucionView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

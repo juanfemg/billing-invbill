@@ -1,5 +1,6 @@
 package co.com.juan.invbill.control;
 
+import java.util.Date;
 import java.util.List;
 
 import co.com.juan.invbill.exceptions.EntityException;
@@ -18,8 +19,7 @@ public interface IFacturaCabeceraLogic {
 
     List<FacturaCabecera> getDataFacturaCabecera() throws EntityException;
 
-    List<FacturaCabecera> findByCriteria(Object[] variables, Object[] variablesBetween,
-                                         Object[] variablesBetweenDates) throws EntityException;
+    List<FacturaCabecera> findByIdAndOrFechaCreacion(Integer idFactura, Date fechaCreacion) throws EntityException;
 
     Object findMaxObjectByCriteria(String propertyName) throws EntityException;
 

@@ -62,4 +62,5 @@ public class ReporteDelegate implements IReporteDelegate {
     public List<ReporteCompraMensual> getReporteCompraMensual() throws EntityException {
         return this.reporteCompraMensualLogic.getReporteCompraMensual(new Date());
     }
+
 }

@@ -9,10 +9,11 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import co.com.juan.invbill.delegate.businessdelegate.IUsuarioDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.model.UsuarioApp;
 import co.com.juan.invbill.util.Properties;
 
@@ -29,7 +30,18 @@ public class CrearUsuarioView implements Serializable {
 	private static final Logger log = LoggerFactory.getLogger(CrearUsuarioView.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IBusinessDelegate businessDelegate;
+	private transient IClienteDelegate businessDelegate;
+
+	@ManagedProperty(value = "#{usuarioDelegate}")
+	private IUsuarioDelegate usuarioDelegate;
+
+	public IUsuarioDelegate getUsuarioDelegate() {
+		return usuarioDelegate;
+	}
+
+	public void setUsuarioDelegate(IUsuarioDelegate usuarioDelegate) {
+		this.usuarioDelegate = usuarioDelegate;
+	}
 
 	private UsuarioApp usuarioApp;
 	private transient Properties properties = new Properties(FILE_MESSAGES);
@@ -45,7 +57,7 @@ public class CrearUsuarioView implements Serializable {
 
 	public void actionGuardar() {
 		try {
-			businessDelegate.save(usuarioApp);
+			this.usuarioDelegate.save(usuarioApp);
 			log.info("=== Creacion de usuario: Usuario creado {}", usuarioApp.getIdUsuarioApp());
 			addInfoMessage(properties.getParameterByKey("MSG_USUARIO_CREADO"));
 			usuarioApp = new UsuarioApp();
@@ -78,14 +90,14 @@ public class CrearUsuarioView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

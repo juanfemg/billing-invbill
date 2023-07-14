@@ -10,7 +10,7 @@ import javax.faces.convert.Converter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IBusinessDelegate;
+import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.model.ClienteApp;
 
 /**
@@ -24,7 +24,7 @@ public class ClienteAppConverter implements Converter {
 	private static final Logger log = LoggerFactory.getLogger(ClienteAppConverter.class);
 
 	@ManagedProperty(value = "#{businessDelegate}")
-	private IBusinessDelegate businessDelegate;
+	private IClienteDelegate businessDelegate;
 
 	private ClienteApp clienteApp;
 
@@ -87,14 +87,14 @@ public class ClienteAppConverter implements Converter {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IBusinessDelegate getBusinessDelegate() {
+	public IClienteDelegate getBusinessDelegate() {
 		return businessDelegate;
 	}
 
 	/**
 	 * @param businessDelegate the businessDelegate to set
 	 */
-	public void setBusinessDelegate(IBusinessDelegate businessDelegate) {
+	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
 		this.businessDelegate = businessDelegate;
 	}
 

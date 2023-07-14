@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.LocalDateTime;
 
 /**
  * @author Juan Felipe
@@ -82,9 +83,12 @@ public class LoginAppLogic implements ILoginAppLogic {
             throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ID_ENTITY);
         }
 
-        if ((entity.getUltimoLogin() != null) && !(Utilities
-                .isDate(Utilities.formatDateWithoutTimeInAStringForBetweenWhere(entity.getUltimoLogin())))) {
-            throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ULTIMO_LOGIN);
+        if (entity.getUltimoLogin() != null) {
+            LocalDateTime date = Utilities.convertToLocalDateTime(entity.getUltimoLogin());
+            if (!(Utilities
+                    .isDate(Utilities.formatDateWithoutTimeInAStringForBetweenWhere(date)))) {
+                throw new EntityException.NotValidFormatException(Constant.ENTITY_NAME, Constant.FIELD_ULTIMO_LOGIN);
+            }
         }
 
         if ((entity.getIdSession() != null) && !(Utilities.checkWordAndCheckWithLength(entity.getIdSession(), 100))) {
