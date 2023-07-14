@@ -42,11 +42,6 @@ public class FacturaDelegate implements IFacturaDelegate {
     }
 
     @Override
-    public void update(FacturaCabecera entity) throws EntityException {
-        this.facturaCabeceraLogic.updateFacturaCabecera(entity);
-    }
-
-    @Override
     public List<FacturaCabecera> getFacturaCabeceras() throws EntityException {
         return this.facturaCabeceraLogic.getDataFacturaCabecera();
     }
@@ -69,11 +64,6 @@ public class FacturaDelegate implements IFacturaDelegate {
     @Override
     public void save(FacturaDetalle entity) throws EntityException {
         this.facturaDetalleLogic.saveFacturaDetalle(entity);
-    }
-
-    @Override
-    public void update(FacturaDetalle entity) throws EntityException {
-        this.facturaDetalleLogic.updateFacturaDetalle(entity);
     }
 
     @Override

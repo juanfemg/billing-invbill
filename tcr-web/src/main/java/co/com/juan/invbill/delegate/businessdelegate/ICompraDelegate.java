@@ -17,15 +17,11 @@ public interface ICompraDelegate {
 
     CompraCabecera findCompraCabeceraByID(CompraCabeceraId id) throws EntityException;
 
-    void update(CompraCabecera entity) throws EntityException;
-
     List<CompraCabecera> getCompraCabecerasByIdFacturaAndOrIdProveedor() throws EntityException;
 
     List<CompraCabecera> getCompraCabecerasByIdFacturaAndOrIdProveedor(CompraCabeceraId id) throws EntityException;
 
     void save(CompraDetalle entity) throws EntityException;
-
-    void update(CompraDetalle entity) throws EntityException;
 
     List<CompraDetalle> findCompraDetalleByProducto(Producto producto) throws EntityException;
 

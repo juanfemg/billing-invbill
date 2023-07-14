@@ -39,11 +39,6 @@ public class CompraDelegate implements ICompraDelegate {
     }
 
     @Override
-    public void update(CompraCabecera entity) throws EntityException {
-        this.compraCabeceraLogic.updateCompraCabecera(entity);
-    }
-
-    @Override
     public List<CompraCabecera> getCompraCabecerasByIdFacturaAndOrIdProveedor() throws EntityException {
         return this.compraCabeceraLogic.getDataCompraCabecera();
     }
@@ -56,11 +51,6 @@ public class CompraDelegate implements ICompraDelegate {
     @Override
     public void save(CompraDetalle entity) throws EntityException {
         this.compraDetalleLogic.saveCompraDetalle(entity);
-    }
-
-    @Override
-    public void update(CompraDetalle entity) throws EntityException {
-        this.compraDetalleLogic.updateCompraDetalle(entity);
     }
 
     @Override

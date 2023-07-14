@@ -17,8 +17,6 @@ public interface IFacturaDelegate {
 
     FacturaCabecera findFacturaCabeceraByID(Integer id) throws EntityException;
 
-    void update(FacturaCabecera entity) throws EntityException;
-
     List<FacturaCabecera> getFacturaCabeceras() throws EntityException;
 
     List<FacturaCabecera> getFacturaCabecerasByIdAndOrFechaCreacion(FacturaCabecera entity) throws EntityException;
@@ -28,8 +26,6 @@ public interface IFacturaDelegate {
     Object getMinimaFacturaCabeceraByPropertyName(String propertyName) throws EntityException;
 
     void save(FacturaDetalle entity) throws EntityException;
-
-    void update(FacturaDetalle entity) throws EntityException;
 
     List<FacturaDetalle> getFacturaDetalleDevolucionByIdFactura(Integer idFactura) throws EntityException;
 
