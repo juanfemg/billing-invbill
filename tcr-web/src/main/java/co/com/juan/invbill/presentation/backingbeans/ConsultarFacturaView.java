@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.FacturaCabecera;
-import co.com.juan.invbill.report.IReportController;
+import co.com.juan.invbill.report.IReportService;
 import co.com.juan.invbill.util.Properties;
 
 /**
@@ -37,8 +37,8 @@ public class ConsultarFacturaView implements Serializable {
 	private static final long serialVersionUID = 4670229557589957806L;
 	private static final Logger log = LoggerFactory.getLogger(ConsultarFacturaView.class);
 
-	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IClienteDelegate businessDelegate;
+	@ManagedProperty(value = "#{clienteDelegate}")
+	private transient IClienteDelegate clienteDelegate;
 
 	public IFacturaDelegate getFacturaDelegate() {
 		return facturaDelegate;
@@ -51,8 +51,8 @@ public class ConsultarFacturaView implements Serializable {
 	@ManagedProperty(value = "#{facturaDelegate}")
 	private transient IFacturaDelegate facturaDelegate;
 
-	@ManagedProperty(value = "#{ReportController}")
-	private transient IReportController reportController;
+	@ManagedProperty(value = "#{reportService}")
+	private transient IReportService reportService;
 
 	private List<FacturaCabecera> facturaCabeceras;
 	private FacturaCabecera facturaCabecera;
@@ -136,7 +136,7 @@ public class ConsultarFacturaView implements Serializable {
 
 	public void actionImprimir() {
 		try {
-			if (reportController.getDefaultPrinter()) {
+			if (this.reportService.lookUpDefaultPrinter() != null) {
 				printReporte();
 			} else {
 				addWarnMessage(properties.getParameterByKey("MSG_IMPRESORA_NO_CONFIGURADA"));
@@ -154,7 +154,7 @@ public class ConsultarFacturaView implements Serializable {
 			Map<String, Object> parameters = new HashMap<>();
 			parameters.put("NUMERO_FACTURA_VENTA", facturaCabecera.getIdFactura());
 			parameters.put("FACTURA_ORIGINAL", Boolean.FALSE);
-			reportController.printReport(REPORTE_FACTURA_VENTA, parameters);
+			this.reportService.printReport(REPORTE_FACTURA_VENTA, parameters);
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_IMPRESION"));
 			log.error(
@@ -185,15 +185,15 @@ public class ConsultarFacturaView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IClienteDelegate getBusinessDelegate() {
-		return businessDelegate;
+	public IClienteDelegate getClienteDelegate() {
+		return clienteDelegate;
 	}
 
 	/**
-	 * @param businessDelegate the businessDelegate to set
+	 * 
 	 */
-	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
-		this.businessDelegate = businessDelegate;
+	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
+		this.clienteDelegate = clienteDelegate;
 	}
 
 	/**
@@ -227,15 +227,15 @@ public class ConsultarFacturaView implements Serializable {
 	/**
 	 * @return the reportController
 	 */
-	public IReportController getReportController() {
-		return reportController;
+	public IReportService getReportService() {
+		return reportService;
 	}
 
 	/**
-	 * @param reportController the reportController to set
+	 * 
 	 */
-	public void setReportController(IReportController reportController) {
-		this.reportController = reportController;
+	public void setReportService(IReportService reportService) {
+		this.reportService = reportService;
 	}
 
 }

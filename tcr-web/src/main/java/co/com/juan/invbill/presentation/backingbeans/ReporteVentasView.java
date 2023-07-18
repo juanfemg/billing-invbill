@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
 import co.com.juan.invbill.model.TipoPeriodo;
-import co.com.juan.invbill.report.IReportController;
+import co.com.juan.invbill.report.IReportService;
 import co.com.juan.invbill.util.Properties;
 
 /**
@@ -49,8 +49,8 @@ public class ReporteVentasView implements Serializable {
 	private static final Integer NUMERO_MESES_ANIO = new Integer(12);
 	private static final Logger log = LoggerFactory.getLogger(ReporteVentasView.class);
 
-	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IClienteDelegate businessDelegate;
+	@ManagedProperty(value = "#{clienteDelegate}")
+	private transient IClienteDelegate clienteDelegate;
 
 	@ManagedProperty(value = "#{configDelegate}")
 	private IConfigDelegate configDelegate;
@@ -74,8 +74,8 @@ public class ReporteVentasView implements Serializable {
 	@ManagedProperty(value = "#{facturaDelegate}")
 	private transient IFacturaDelegate facturaDelegate;
 
-	@ManagedProperty(value = "#{ReportController}")
-	private transient IReportController reportController;
+	@ManagedProperty(value = "#{reportService}")
+	private transient IReportService reportService;
 
 	private List<TipoPeriodo> tipoPeriodo;
 	private TipoPeriodo tipoPeriodoFiltro;
@@ -282,7 +282,7 @@ public class ReporteVentasView implements Serializable {
 			subReports = new ArrayList<>();
 			subReports.add(SUB_REPORTE_VENTAS_ANUAL);
 
-			stream = reportController.getReportWithSubReportsPdf(REPORTE_VENTAS, parameters, subReports);
+			stream = this.reportService.getReportPdfWithSubReports(REPORTE_VENTAS, parameters, subReports);
 
 			if (stream != null) {
 				content = new DefaultStreamedContent(stream, STREAM_CONTENT_TYPE, REPORTE_VENTAS.concat(SUFFIX_PDF));
@@ -351,29 +351,29 @@ public class ReporteVentasView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IClienteDelegate getBusinessDelegate() {
-		return businessDelegate;
+	public IClienteDelegate getClienteDelegate() {
+		return clienteDelegate;
 	}
 
 	/**
-	 * @param businessDelegate the businessDelegate to set
+	 * 
 	 */
-	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
-		this.businessDelegate = businessDelegate;
+	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
+		this.clienteDelegate = clienteDelegate;
 	}
 
 	/**
 	 * @return the reportController
 	 */
-	public IReportController getReportController() {
-		return reportController;
+	public IReportService getReportService() {
+		return reportService;
 	}
 
 	/**
-	 * @param reportController the reportController to set
+	 * 
 	 */
-	public void setReportController(IReportController reportController) {
-		this.reportController = reportController;
+	public void setReportService(IReportService reportService) {
+		this.reportService = reportService;
 	}
 
 	/**

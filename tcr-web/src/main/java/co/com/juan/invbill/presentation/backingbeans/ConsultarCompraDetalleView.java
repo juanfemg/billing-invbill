@@ -24,8 +24,8 @@ public class ConsultarCompraDetalleView implements Serializable {
 
 	private static final long serialVersionUID = -6989714907754566718L;
 
-	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IClienteDelegate businessDelegate;
+	@ManagedProperty(value = "#{clienteDelegate}")
+	private transient IClienteDelegate clienteDelegate;
 
 	private CompraCabecera compraCabecera;
 
@@ -58,15 +58,15 @@ public class ConsultarCompraDetalleView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IClienteDelegate getBusinessDelegate() {
-		return businessDelegate;
+	public IClienteDelegate getClienteDelegate() {
+		return clienteDelegate;
 	}
 
 	/**
-	 * @param businessDelegate the businessDelegate to set
+	 * 
 	 */
-	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
-		this.businessDelegate = businessDelegate;
+	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
+		this.clienteDelegate = clienteDelegate;
 	}
 
 	/**

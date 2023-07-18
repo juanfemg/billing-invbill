@@ -39,8 +39,8 @@ public class RegistrarDevolucionView implements Serializable {
 	private static final long serialVersionUID = 1475142644023643893L;
 	private static final Logger log = LoggerFactory.getLogger(RegistrarDevolucionView.class);
 
-	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IClienteDelegate businessDelegate;
+	@ManagedProperty(value = "#{clienteDelegate}")
+	private transient IClienteDelegate clienteDelegate;
 
 	public IFacturaDelegate getFacturaDelegate() {
 		return facturaDelegate;
@@ -389,15 +389,15 @@ public class RegistrarDevolucionView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IClienteDelegate getBusinessDelegate() {
-		return businessDelegate;
+	public IClienteDelegate getClienteDelegate() {
+		return clienteDelegate;
 	}
 
 	/**
-	 * @param businessDelegate the businessDelegate to set
+	 * 
 	 */
-	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
-		this.businessDelegate = businessDelegate;
+	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
+		this.clienteDelegate = clienteDelegate;
 	}
 
 	/**

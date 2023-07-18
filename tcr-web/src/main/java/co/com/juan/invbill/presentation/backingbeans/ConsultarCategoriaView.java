@@ -34,8 +34,8 @@ public class ConsultarCategoriaView implements Serializable {
 	private static final Logger log = LoggerFactory.getLogger(ConsultarCategoriaView.class);
 	private static final String ID_DIALOG_MESSAGES = "menMod";
 
-	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IClienteDelegate businessDelegate;
+	@ManagedProperty(value = "#{clienteDelegate}")
+	private transient IClienteDelegate clienteDelegate;
 
 	public IProductoDelegate getProductoDelegate() {
 		return productoDelegate;
@@ -129,15 +129,15 @@ public class ConsultarCategoriaView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IClienteDelegate getBusinessDelegate() {
-		return businessDelegate;
+	public IClienteDelegate getClienteDelegate() {
+		return clienteDelegate;
 	}
 
 	/**
-	 * @param businessDelegate the businessDelegate to set
+	 * 
 	 */
-	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
-		this.businessDelegate = businessDelegate;
+	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
+		this.clienteDelegate = clienteDelegate;
 	}
 
 	/**

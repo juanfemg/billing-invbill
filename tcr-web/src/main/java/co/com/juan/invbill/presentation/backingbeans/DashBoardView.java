@@ -43,7 +43,7 @@ import co.com.juan.invbill.enums.SessionEnum;
 import co.com.juan.invbill.model.LoginApp;
 import co.com.juan.invbill.model.ProveedorApp;
 import co.com.juan.invbill.model.UsuarioApp;
-import co.com.juan.invbill.report.IReportController;
+import co.com.juan.invbill.report.IReportService;
 import co.com.juan.invbill.util.security.Encryption;
 import co.com.juan.invbill.util.Properties;
 
@@ -66,14 +66,14 @@ public class DashBoardView implements Serializable {
 	private static final String LABEL_AXIS_Y_CHART = "Total";
 	private static final String REPORTE_CONSULTA_FACTURA = "consultaFactura";
 
-	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IClienteDelegate businessDelegate;
+	@ManagedProperty(value = "#{clienteDelegate}")
+	private transient IClienteDelegate clienteDelegate;
 
 	@ManagedProperty(value = "#{reporteDelegate}")
 	private transient IReporteDelegate reporteDelegate;
 
-	@ManagedProperty(value = "#{ReportController}")
-	private transient IReportController reportController;
+	@ManagedProperty(value = "#{reportService}")
+	private transient IReportService reportService;
 
 	@ManagedProperty(value = "#{proveedorDelegate}")
 	private IProveedorDelegate proveedorDelegate;
@@ -371,9 +371,9 @@ public class DashBoardView implements Serializable {
 			parameters.put("EXPORTER_FORMAT", formatoReporteFiltro.getFormat());
 
 			if (formatoReporteFiltro.equals(ReportFormatEnum.PDF)) {
-				stream = reportController.getReportPdf(REPORTE_CONSULTA_FACTURA, parameters);
+				stream = this.reportService.getReportPdf(REPORTE_CONSULTA_FACTURA, parameters);
 			} else if (formatoReporteFiltro.equals(ReportFormatEnum.EXCEL)) {
-				stream = reportController.getReportXls(REPORTE_CONSULTA_FACTURA, parameters);
+				stream = this.reportService.getReportXls(REPORTE_CONSULTA_FACTURA, parameters);
 			}
 
 			if (stream != null) {
@@ -415,15 +415,15 @@ public class DashBoardView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IClienteDelegate getBusinessDelegate() {
-		return businessDelegate;
+	public IClienteDelegate getClienteDelegate() {
+		return clienteDelegate;
 	}
 
 	/**
-	 * @param businessDelegate the businessDelegate to set
+	 * 
 	 */
-	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
-		this.businessDelegate = businessDelegate;
+	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
+		this.clienteDelegate = clienteDelegate;
 	}
 
 	/**
@@ -717,15 +717,15 @@ public class DashBoardView implements Serializable {
 	/**
 	 * @return the reportController
 	 */
-	public IReportController getReportController() {
-		return reportController;
+	public IReportService getReportService() {
+		return reportService;
 	}
 
 	/**
-	 * @param reportController the reportController to set
+	 * 
 	 */
-	public void setReportController(IReportController reportController) {
-		this.reportController = reportController;
+	public void setReportService(IReportService reportService) {
+		this.reportService = reportService;
 	}
 
 	/**

@@ -35,8 +35,8 @@ public class LeftMenuView implements Serializable {
 	private static final long serialVersionUID = -6336619798090876086L;
 	private static final Logger log = LoggerFactory.getLogger(LeftMenuView.class);
 
-	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IClienteDelegate businessDelegate;
+	@ManagedProperty(value = "#{clienteDelegate}")
+	private transient IClienteDelegate clienteDelegate;
 
 	@ManagedProperty(value = "#{configDelegate}")
 	private IConfigDelegate configDelegate;
@@ -174,15 +174,15 @@ public class LeftMenuView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IClienteDelegate getBusinessDelegate() {
-		return businessDelegate;
+	public IClienteDelegate getClienteDelegate() {
+		return clienteDelegate;
 	}
 
 	/**
-	 * @param businessDelegate the businessDelegate to set
+	 * 
 	 */
-	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
-		this.businessDelegate = businessDelegate;
+	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
+		this.clienteDelegate = clienteDelegate;
 	}
 
 	/**

@@ -32,7 +32,7 @@ import co.com.juan.invbill.model.FacturaDetalle;
 import co.com.juan.invbill.model.FacturaDetalleId;
 import co.com.juan.invbill.model.Producto;
 import co.com.juan.invbill.model.StockProducto;
-import co.com.juan.invbill.report.IReportController;
+import co.com.juan.invbill.report.IReportService;
 import co.com.juan.invbill.util.Properties;
 
 /**
@@ -49,8 +49,8 @@ public class CrearFacturaView implements Serializable {
 	private static final Logger log = LoggerFactory.getLogger(CrearFacturaView.class);
 	private static final String ID_DIALOG_MESSAGES = "menMod";
 
-	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IClienteDelegate businessDelegate;
+	@ManagedProperty(value = "#{clienteDelegate}")
+	private transient IClienteDelegate clienteDelegate;
 
 	public IFacturaDelegate getFacturaDelegate() {
 		return facturaDelegate;
@@ -74,8 +74,8 @@ public class CrearFacturaView implements Serializable {
 	@ManagedProperty(value = "#{productoDelegate}")
 	private transient IProductoDelegate productoDelegate;
 
-	@ManagedProperty(value = "#{ReportController}")
-	private transient IReportController reportController;
+	@ManagedProperty(value = "#{reportService}")
+	private transient IReportService reportService;
 
 	private FacturaCabecera facturaCabecera;
 	private List<FacturaDetalle> facturaDetalle;
@@ -200,7 +200,7 @@ public class CrearFacturaView implements Serializable {
 
 	public void initClientes() {
 		try {
-			cliente = businessDelegate.getClientes();
+			cliente = this.clienteDelegate.getClientes();
 
 			for (ClienteApp clienteAppTemp : cliente) {
 				if (clienteAppTemp.getEstado().equals(StatusEnum.I)) {
@@ -347,7 +347,7 @@ public class CrearFacturaView implements Serializable {
 			if (clienteAppRegistro != null) {
 				if (clienteAppRegistro.getIdClienteApp() != null && clienteAppRegistro.getRazonSocial() != null) {
 					try {
-						ClienteApp clienteAppTemp = businessDelegate
+						ClienteApp clienteAppTemp = this.clienteDelegate
 								.findClienteByID(clienteAppRegistro.getIdClienteApp());
 
 						if (clienteAppTemp != null) {
@@ -383,11 +383,11 @@ public class CrearFacturaView implements Serializable {
 				if (clienteApp.getIdClienteApp() != null) {
 					ClienteApp clienteAppTemp = new ClienteApp();
 					try {
-						clienteAppTemp = businessDelegate.findClienteByID(clienteApp.getIdClienteApp());
+						clienteAppTemp = this.clienteDelegate.findClienteByID(clienteApp.getIdClienteApp());
 
 						if (clienteAppTemp == null) {
 							try {
-								businessDelegate.save(clienteApp);
+								this.clienteDelegate.save(clienteApp);
 							} catch (Exception e) {
 								addErrorMessage(e.getMessage());
 								log.error("=== Creacion de Cliente : Fallo la creacion del cliente "
@@ -422,7 +422,7 @@ public class CrearFacturaView implements Serializable {
 
 	public void getDefaultPrinter() {
 		try {
-			if (reportController.getDefaultPrinter())
+			if (this.reportService.lookUpDefaultPrinter() != null)
 				showButtonImprimir = true;
 			else
 				addWarnMessage(properties.getParameterByKey("MSG_IMPRESORA_NO_CONFIGURADA"));
@@ -486,7 +486,7 @@ public class CrearFacturaView implements Serializable {
 			parameters.put("EFECTIVO", metodoPago);
 			parameters.put("CAMBIO", cambio);
 			parameters.put("FACTURA_ORIGINAL", Boolean.TRUE);
-			reportController.printReport(REPORTE_FACTURA_VENTA, parameters);
+			this.reportService.printReport(REPORTE_FACTURA_VENTA, parameters);
 		} catch (Exception e) {
 			addErrorMessage(properties.getParameterByKey("MSG_ERROR_IMPRESION"));
 			log.error("=== Impresion de factura : Fallo la impresion de la factura", e);
@@ -529,32 +529,27 @@ public class CrearFacturaView implements Serializable {
 		FacesContext.getCurrentInstance().addMessage(clientId, message);
 	}
 
-	/**
-	 * @return the businessDelegate
-	 */
-	public IClienteDelegate getBusinessDelegate() {
-		return businessDelegate;
+
+	public IClienteDelegate getClienteDelegate() {
+		return clienteDelegate;
 	}
 
-	/**
-	 * @param businessDelegate the businessDelegate to set
-	 */
-	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
-		this.businessDelegate = businessDelegate;
+	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
+		this.clienteDelegate = clienteDelegate;
 	}
 
 	/**
 	 * @return the reportController
 	 */
-	public IReportController getReportController() {
-		return reportController;
+	public IReportService getReportService() {
+		return reportService;
 	}
 
 	/**
-	 * @param reportController the reportController to set
+	 * 
 	 */
-	public void setReportController(IReportController reportController) {
-		this.reportController = reportController;
+	public void setReportService(IReportService reportService) {
+		this.reportService = reportService;
 	}
 
 	/**

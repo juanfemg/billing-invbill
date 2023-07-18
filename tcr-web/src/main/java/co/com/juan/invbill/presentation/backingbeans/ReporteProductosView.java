@@ -29,7 +29,7 @@ import co.com.juan.invbill.enums.StatusEnum;
 import co.com.juan.invbill.model.CategoriaProducto;
 import co.com.juan.invbill.model.Producto;
 import co.com.juan.invbill.model.TipoUnidadMedida;
-import co.com.juan.invbill.report.IReportController;
+import co.com.juan.invbill.report.IReportService;
 import co.com.juan.invbill.util.Properties;
 
 /**
@@ -50,8 +50,8 @@ public class ReporteProductosView implements Serializable {
 	private static final String PROPERTY_NAME_STOCK = "stock";
 	private static final Logger log = LoggerFactory.getLogger(CrearFacturaView.class);
 
-	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IClienteDelegate businessDelegate;
+	@ManagedProperty(value = "#{clienteDelegate}")
+	private transient IClienteDelegate clienteDelegate;
 
 	public IProductoDelegate getProductoDelegate() {
 		return productoDelegate;
@@ -75,8 +75,8 @@ public class ReporteProductosView implements Serializable {
 		this.configDelegate = configDelegate;
 	}
 
-	@ManagedProperty(value = "#{ReportController}")
-	private transient IReportController reportController;
+	@ManagedProperty(value = "#{reportService}")
+	private transient IReportService reportService;
 
 	private List<CategoriaProducto> categoria;
 	private List<CategoriaProducto> categoriaFiltro;
@@ -248,7 +248,7 @@ public class ReporteProductosView implements Serializable {
 			parameters.put("RANGO_PRECIO_COMPRA", filterNestedTypeMap(rangoPrecioCompra, stockProductoMaxPrecioCompra));
 			parameters.put("RANGO_PRECIO_VENTA", filterNestedTypeMap(rangoPrecioVenta, stockProductoMaxPrecioVenta));
 			parameters.put("RANGO_STOCK", filterNestedTypeMap(rangoStock, stockProductoMaxStock));
-			stream = reportController.getReportPdf(REPORTE_PRODUCTOS, parameters);
+			stream = this.reportService.getReportPdf(REPORTE_PRODUCTOS, parameters);
 
 			if (stream != null) {
 				content = new DefaultStreamedContent(stream, STREAM_CONTENT_TYPE, REPORTE_PRODUCTOS.concat(SUFFIX_PDF));
@@ -326,29 +326,29 @@ public class ReporteProductosView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IClienteDelegate getBusinessDelegate() {
-		return businessDelegate;
+	public IClienteDelegate getClienteDelegate() {
+		return clienteDelegate;
 	}
 
 	/**
-	 * @param businessDelegate the businessDelegate to set
+	 * 
 	 */
-	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
-		this.businessDelegate = businessDelegate;
+	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
+		this.clienteDelegate = clienteDelegate;
 	}
 
 	/**
 	 * @return the reportController
 	 */
-	public IReportController getReportController() {
-		return reportController;
+	public IReportService getReportService() {
+		return reportService;
 	}
 
 	/**
-	 * @param reportController the reportController to set
+	 * 
 	 */
-	public void setReportController(IReportController reportController) {
-		this.reportController = reportController;
+	public void setReportService(IReportService reportService) {
+		this.reportService = reportService;
 	}
 
 	/**

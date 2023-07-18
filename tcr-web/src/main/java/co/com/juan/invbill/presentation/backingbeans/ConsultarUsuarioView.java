@@ -33,8 +33,8 @@ public class ConsultarUsuarioView implements Serializable {
 	private static final long serialVersionUID = 4796917828185803978L;
 	private static final Logger log = LoggerFactory.getLogger(ConsultarUsuarioView.class);
 
-	@ManagedProperty(value = "#{businessDelegate}")
-	private transient IClienteDelegate businessDelegate;
+	@ManagedProperty(value = "#{clienteDelegate}")
+	private transient IClienteDelegate clienteDelegate;
 
 	@ManagedProperty(value = "#{usuarioDelegate}")
 	private transient IUsuarioDelegate usuarioDelegate;
@@ -127,15 +127,15 @@ public class ConsultarUsuarioView implements Serializable {
 	/**
 	 * @return the businessDelegate
 	 */
-	public IClienteDelegate getBusinessDelegate() {
-		return businessDelegate;
+	public IClienteDelegate getClienteDelegate() {
+		return clienteDelegate;
 	}
 
 	/**
-	 * @param businessDelegate the businessDelegate to set
+	 * 
 	 */
-	public void setBusinessDelegate(IClienteDelegate businessDelegate) {
-		this.businessDelegate = businessDelegate;
+	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
+		this.clienteDelegate = clienteDelegate;
 	}
 
 	/**
