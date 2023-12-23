@@ -2,6 +2,7 @@ package co.com.juan.invbill.filter;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 
@@ -11,11 +12,15 @@ import javax.servlet.annotation.WebFilter;
 @WebFilter("/*")
 public class CharacterEncodingFilter implements Filter {
 
-    private ServletContext context;
+    private final ServletContext context;
+
+    @Inject
+    public CharacterEncodingFilter(ServletContext context) {
+        this.context = context;
+    }
 
     @Override
     public void init(FilterConfig config) throws ServletException {
-        context = config.getServletContext();
         this.context.log("CharacterEncodingFilter initialized");
     }
 

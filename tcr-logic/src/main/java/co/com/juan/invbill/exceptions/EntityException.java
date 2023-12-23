@@ -7,9 +7,6 @@ public class EntityException extends RuntimeException {
 
     public static final String ENTITY_WITH_SAME_KEY = "There's another entity with same key";
 
-    public EntityException() {
-    }
-
     public EntityException(String exception) {
         super(exception);
     }

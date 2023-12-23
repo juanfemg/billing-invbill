@@ -5,7 +5,7 @@
 	<navigation-rule>
 		<from-view-id>/login.xhtml</from-view-id>
 		<navigation-case>
-			<from-outcome>exito</from-outcome>
+			<from-outcome>success</from-outcome>
 			<to-view-id>/dashboard.xhtml</to-view-id>
 			<redirect />
 		</navigation-case>

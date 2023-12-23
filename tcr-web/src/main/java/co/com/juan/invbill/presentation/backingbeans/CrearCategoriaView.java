@@ -1,144 +1,64 @@
 package co.com.juan.invbill.presentation.backingbeans;
 
-import java.io.Serializable;
-
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-
-
 import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
+import co.com.juan.invbill.exceptions.EntityException;
+import co.com.juan.invbill.model.CategoriaProducto;
+import co.com.juan.invbill.util.Bundle;
+import co.com.juan.invbill.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
-import co.com.juan.invbill.model.CategoriaProducto;
-import co.com.juan.invbill.util.Properties;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 
 /**
  * @author Juan Felipe
- * 
  */
-@ManagedBean(name = "crearCategoria")
+@Named("crearCategoria")
 @ViewScoped
-public class CrearCategoriaView implements Serializable {
+public class CrearCategoriaView extends Bundle implements Serializable {
 
-	private static final String FILE_MESSAGES = "bundles.msg_CreacionCategoria";
-	private static final long serialVersionUID = 6548574811248255082L;
-	private static final Logger log = LoggerFactory
-			.getLogger(CrearCategoriaView.class);
+    private static final String FILE_MESSAGES = "bundles.msg_CreacionCategoria";
+    private static final Logger log = LoggerFactory.getLogger(CrearCategoriaView.class);
+    private final IProductoDelegate productoDelegate;
+    private final Properties properties = new Properties(FILE_MESSAGES);
+    private CategoriaProducto categoriaProducto;
 
-	@ManagedProperty(value = "#{clienteDelegate}")
-	private transient IClienteDelegate clienteDelegate;
+    @Inject
+    public CrearCategoriaView(IProductoDelegate productoDelegate) {
+        this.productoDelegate = productoDelegate;
+    }
 
-	public IProductoDelegate getProductoDelegate() {
-		return productoDelegate;
-	}
+    @PostConstruct
+    public void init() {
+        categoriaProducto = new CategoriaProducto();
+    }
 
-	public void setProductoDelegate(IProductoDelegate productoDelegate) {
-		this.productoDelegate = productoDelegate;
-	}
+    public void actionGuardar() {
+        try {
+            this.productoDelegate.save(categoriaProducto);
+            addInfoMessage(this.properties.getParameterByKey(MSG_CATEGORIA_CREADA));
+            categoriaProducto = new CategoriaProducto();
+        } catch (EntityException e) {
+            addErrorMessage(this.properties.getParameterByKey(MSG_ERROR_CREACION_CATEGORIA));
+            log.error(ERROR_CREACION_CATEGORIA, categoriaProducto.getCategoria(), e.getMessage());
+        }
+    }
 
-	@ManagedProperty(value = "#{productoDelegate}")
-	private transient IProductoDelegate productoDelegate;
+    public void actionLimpiar() {
+        FacesContext.getCurrentInstance().getViewRoot().getViewMap().clear();
+    }
 
-	private CategoriaProducto categoriaProducto;
-	private transient Properties properties = new Properties(FILE_MESSAGES);
+    public CategoriaProducto getCategoriaProducto() {
+        return categoriaProducto;
+    }
 
-	public CrearCategoriaView() {
-		super();
-	}
-
-	@PostConstruct
-	public void init() {
-		categoriaProducto = new CategoriaProducto();
-	}
-
-	public void actionGuardar() {
-		try {
-			this.productoDelegate.save(categoriaProducto);
-			log.info("=== Creacion de categoria : Categoria creada "
-					+ categoriaProducto.getIdCategoria() + " exitosamente ===");
-			addInfoMessage(properties
-					.getParameterByKey("MSG_CATEGORIA_CREADA"));
-			categoriaProducto = new CategoriaProducto();
-		} catch (Exception e) {
-			addErrorMessage(e.getMessage());
-			log.error("=== Creacion de categoria : Fallo la creacion de la categoria "
-					+ categoriaProducto.getIdCategoria()
-					+ ". ERROR : "
-					+ e.getMessage());
-		}
-	}
-
-	public void actionLimpiar() {
-		FacesContext.getCurrentInstance().getViewRoot().getViewMap().clear();
-	}
-
-	public void addInfoMessage(String summary) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				summary, null);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
-
-	public void addWarnMessage(String summary) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN,
-				summary, null);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
-
-	public void addErrorMessage(String summary) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-				summary, null);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
-
-	/**
-	 * @return the businessDelegate
-	 */
-	public IClienteDelegate getClienteDelegate() {
-		return clienteDelegate;
-	}
-
-	/**
-	 * @param businessDelegate
-	 *            the businessDelegate to set
-	 */
-	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
-		this.clienteDelegate = clienteDelegate;
-	}
-
-	/**
-	 * @return the categoriaProducto
-	 */
-	public CategoriaProducto getCategoriaProducto() {
-		return categoriaProducto;
-	}
-
-	/**
-	 * @param categoriaProducto
-	 *            the categoriaProducto to set
-	 */
-	public void setCategoriaProducto(CategoriaProducto categoriaProducto) {
-		this.categoriaProducto = categoriaProducto;
-	}
-
-	/**
-	 * @return the properties
-	 */
-	public Properties getProperties() {
-		return properties;
-	}
-
-	/**
-	 * @param properties
-	 *            the properties to set
-	 */
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-	}
+    public void setCategoriaProducto(CategoriaProducto categoriaProducto) {
+        this.categoriaProducto = categoriaProducto;
+    }
 
 }

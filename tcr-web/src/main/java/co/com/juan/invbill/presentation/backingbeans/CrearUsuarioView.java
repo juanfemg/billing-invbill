@@ -1,131 +1,64 @@
 package co.com.juan.invbill.presentation.backingbeans;
 
-import java.io.Serializable;
-
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-
 import co.com.juan.invbill.delegate.businessdelegate.IUsuarioDelegate;
+import co.com.juan.invbill.exceptions.EntityException;
+import co.com.juan.invbill.model.UsuarioApp;
+import co.com.juan.invbill.util.Bundle;
+import co.com.juan.invbill.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
-import co.com.juan.invbill.model.UsuarioApp;
-import co.com.juan.invbill.util.Properties;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 
 /**
  * @author Juan Felipe
- * 
  */
-@ManagedBean(name = "crearUsuario")
+@Named("crearUsuario")
 @ViewScoped
-public class CrearUsuarioView implements Serializable {
+public class CrearUsuarioView extends Bundle implements Serializable {
 
-	private static final String FILE_MESSAGES = "bundles.msg_CreacionUsuario";
-	private static final long serialVersionUID = -1691288731051059695L;
-	private static final Logger log = LoggerFactory.getLogger(CrearUsuarioView.class);
+    private static final String FILE_MESSAGES = "bundles.msg_CreacionUsuario";
+    private static final Logger log = LoggerFactory.getLogger(CrearUsuarioView.class);
+    private final IUsuarioDelegate usuarioDelegate;
+    private final Properties properties = new Properties(FILE_MESSAGES);
+    private UsuarioApp usuarioApp;
 
-	@ManagedProperty(value = "#{clienteDelegate}")
-	private transient IClienteDelegate clienteDelegate;
+    @Inject
+    public CrearUsuarioView(IUsuarioDelegate usuarioDelegate) {
+        this.usuarioDelegate = usuarioDelegate;
+    }
 
-	@ManagedProperty(value = "#{usuarioDelegate}")
-	private IUsuarioDelegate usuarioDelegate;
+    @PostConstruct
+    public void init() {
+        usuarioApp = new UsuarioApp();
+    }
 
-	public IUsuarioDelegate getUsuarioDelegate() {
-		return usuarioDelegate;
-	}
+    public void actionGuardar() {
+        try {
+            this.usuarioDelegate.save(usuarioApp);
+            addInfoMessage(this.properties.getParameterByKey(MSG_USUARIO_CREADO));
+            usuarioApp = new UsuarioApp();
+        } catch (EntityException e) {
+            addErrorMessage(this.properties.getParameterByKey(MSG_ERROR_CREACION_USUARIO));
+            log.error(ERROR_CREACION_USUARIO, usuarioApp.getIdUsuarioApp(), e.getMessage());
+        }
+    }
 
-	public void setUsuarioDelegate(IUsuarioDelegate usuarioDelegate) {
-		this.usuarioDelegate = usuarioDelegate;
-	}
+    public void actionLimpiar() {
+        FacesContext.getCurrentInstance().getViewRoot().getViewMap().clear();
+    }
 
-	private UsuarioApp usuarioApp;
-	private transient Properties properties = new Properties(FILE_MESSAGES);
+    public UsuarioApp getUsuarioApp() {
+        return usuarioApp;
+    }
 
-	public CrearUsuarioView() {
-		super();
-	}
+    public void setUsuarioApp(UsuarioApp usuarioApp) {
+        this.usuarioApp = usuarioApp;
+    }
 
-	@PostConstruct
-	public void init() {
-		usuarioApp = new UsuarioApp();
-	}
-
-	public void actionGuardar() {
-		try {
-			this.usuarioDelegate.save(usuarioApp);
-			log.info("=== Creacion de usuario: Usuario creado {}", usuarioApp.getIdUsuarioApp());
-			addInfoMessage(properties.getParameterByKey("MSG_USUARIO_CREADO"));
-			usuarioApp = new UsuarioApp();
-		} catch (Exception e) {
-			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CREACION_USUARIO"));
-			log.error("=== Creacion de usuario: Fallo la creacion del usuario {}. Se ha producido un error: {}",
-					usuarioApp.getIdUsuarioApp(), e.getMessage());
-		}
-	}
-
-	public void actionLimpiar() {
-		FacesContext.getCurrentInstance().getViewRoot().getViewMap().clear();
-	}
-
-	public void addInfoMessage(String summary) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
-
-	public void addWarnMessage(String summary) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, summary, null);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
-
-	public void addErrorMessage(String summary) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, null);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
-
-	/**
-	 * @return the businessDelegate
-	 */
-	public IClienteDelegate getClienteDelegate() {
-		return clienteDelegate;
-	}
-
-	/**
-	 * 
-	 */
-	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
-		this.clienteDelegate = clienteDelegate;
-	}
-
-	/**
-	 * @return the usuarioApp
-	 */
-	public UsuarioApp getUsuarioApp() {
-		return usuarioApp;
-	}
-
-	/**
-	 * @param usuarioApp the usuarioApp to set
-	 */
-	public void setUsuarioApp(UsuarioApp usuarioApp) {
-		this.usuarioApp = usuarioApp;
-	}
-
-	/**
-	 * @return the properties
-	 */
-	public Properties getProperties() {
-		return properties;
-	}
-
-	/**
-	 * @param properties the properties to set
-	 */
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-	}
 }

@@ -11,6 +11,7 @@ import co.com.juan.invbill.model.StockProducto;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
 
 /**

@@ -1,211 +1,118 @@
 package co.com.juan.invbill.presentation.backingbeans;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-
 import co.com.juan.invbill.delegate.businessdelegate.IUsuarioDelegate;
+import co.com.juan.invbill.enums.StatusEnum;
+import co.com.juan.invbill.exceptions.EntityException;
+import co.com.juan.invbill.model.UsuarioApp;
+import co.com.juan.invbill.util.Bundle;
+import co.com.juan.invbill.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
-import co.com.juan.invbill.enums.StatusEnum;
-import co.com.juan.invbill.model.UsuarioApp;
-import co.com.juan.invbill.util.Properties;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.RequestScoped;
+import javax.faces.model.SelectItem;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Juan Felipe
- * 
  */
-@ManagedBean(name = "consultarUsuario")
-@ViewScoped
-public class ConsultarUsuarioView implements Serializable {
+@Named("consultarUsuario")
+@RequestScoped
+public class ConsultarUsuarioView extends Bundle implements Serializable {
 
-	private static final String FILE_MESSAGES = "bundles.msg_ModificacionUsuario";
-	private static final long serialVersionUID = 4796917828185803978L;
-	private static final Logger log = LoggerFactory.getLogger(ConsultarUsuarioView.class);
+    private static final String FILE_MESSAGES = "bundles.msg_ModificacionUsuario";
+    private static final Logger log = LoggerFactory.getLogger(ConsultarUsuarioView.class);
+    private final Properties properties = new Properties(FILE_MESSAGES);
+    private final IUsuarioDelegate usuarioDelegate;
+    private UsuarioApp usuarioApp;
+    private UsuarioApp usuarioModApp;
+    private List<SelectItem> estadosApp;
+    private boolean showPanelModificarUsuario;
 
-	@ManagedProperty(value = "#{clienteDelegate}")
-	private transient IClienteDelegate clienteDelegate;
+    @Inject
+    public ConsultarUsuarioView(IUsuarioDelegate usuarioDelegate) {
+        this.usuarioDelegate = usuarioDelegate;
+    }
 
-	@ManagedProperty(value = "#{usuarioDelegate}")
-	private transient IUsuarioDelegate usuarioDelegate;
+    @PostConstruct
+    public void init() {
+        usuarioApp = new UsuarioApp();
+        usuarioModApp = new UsuarioApp();
+        estadosApp = new ArrayList<>();
+        showPanelModificarUsuario = false;
+        this.initEstadosApp();
+    }
 
-	public IUsuarioDelegate getUsuarioDelegate() {
-		return usuarioDelegate;
-	}
+    private void initEstadosApp() {
+        Arrays.stream(StatusEnum.values())
+                .forEach(statusEnum -> estadosApp.add(new SelectItem(statusEnum, statusEnum.getStatus())));
+    }
 
-	public void setUsuarioDelegate(IUsuarioDelegate usuarioDelegate) {
-		this.usuarioDelegate = usuarioDelegate;
-	}
+    public void actionConsultar() {
+        try {
+            usuarioModApp = this.usuarioDelegate.findUsuarioByID(usuarioApp.getIdUsuarioApp());
 
-	private UsuarioApp usuarioApp;
-	private UsuarioApp usuarioModApp;
-	private List<SelectItem> estadosApp;
-	private boolean showPanelModificarUsuario;
-	private transient Properties properties = new Properties(FILE_MESSAGES);
+            if (usuarioModApp != null) {
+                showPanelModificarUsuario = true;
+            } else {
+                addWarnMessage(this.properties.getParameterByKey(MSG_DATA_NO_FOUND));
+            }
+        } catch (EntityException e) {
+            addErrorMessage(this.properties.getParameterByKey(MSG_ERROR_CONSULTA_USUARIO));
+            log.error(ERROR_CONSULTA_USUARIO, usuarioApp.getIdUsuarioApp(), e.getMessage());
+        }
+    }
 
-	public ConsultarUsuarioView() {
-		super();
-	}
+    public void actionModificar() {
+        try {
+            this.usuarioDelegate.update(usuarioModApp);
+            addInfoMessage(this.properties.getParameterByKey(MSG_USUARIO_ACTUALIZADO));
+            showPanelModificarUsuario = false;
+        } catch (EntityException e) {
+            addErrorMessage(this.properties.getParameterByKey(MSG_ERROR_ACTUALIZACION_USUARIO));
+            log.error(ERROR_ACTUALIZACION_USUARIO, usuarioModApp.getIdUsuarioApp(), e.getMessage());
+        }
+    }
 
-	@PostConstruct
-	public void init() {
-		usuarioApp = new UsuarioApp();
-		usuarioModApp = new UsuarioApp();
-		estadosApp = new ArrayList<>();
-		showPanelModificarUsuario = false;
-		initEstadosApp();
-	}
+    public void actionLimpiar() {
+        showPanelModificarUsuario = false;
+    }
 
-	public void initEstadosApp() {
-		StatusEnum[] estadosAppEnums = StatusEnum.values();
-		for (StatusEnum estadosAppEnumTemp : estadosAppEnums) {
-			estadosApp.add(new SelectItem(estadosAppEnumTemp, estadosAppEnumTemp.getStatus()));
-		}
-	}
+    public UsuarioApp getUsuarioApp() {
+        return usuarioApp;
+    }
 
-	public void actionConsultar() {
-		try {
-			usuarioModApp = this.usuarioDelegate.findUsuarioByID(usuarioApp.getIdUsuarioApp());
+    public void setUsuarioApp(UsuarioApp usuarioApp) {
+        this.usuarioApp = usuarioApp;
+    }
 
-			if (usuarioModApp != null)
-				showPanelModificarUsuario = true;
-			else
-				addWarnMessage(properties.getParameterByKey("MSG_DATA_NO_FOUND"));
+    public List<SelectItem> getEstadosApp() {
+        return estadosApp;
+    }
 
-			log.info("=== Consulta de usuario: Usuario consultado {} ===", usuarioApp.getIdUsuarioApp());
-		} catch (Exception e) {
-			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_USUARIO"));
-			log.error("=== Consulta de usuario: Fallo la consulta del usuario {}. Se ha producido un error: {}",
-					usuarioApp.getIdUsuarioApp(), e.getMessage());
-		}
-	}
+    public void setEstadosApp(List<SelectItem> estadosApp) {
+        this.estadosApp = estadosApp;
+    }
 
-	public void actionModificar() {
-		try {
-			this.usuarioDelegate.update(usuarioModApp);
-			showPanelModificarUsuario = false;
-			log.info("=== Actualizacion de usuario: Usuario actualizado. Id={}, descripcion={} === ",
-					usuarioModApp.getIdUsuarioApp(), usuarioModApp.getNombre());
-			addInfoMessage(properties.getParameterByKey("MSG_USUARIO_ACTUALIZADO"));
-		} catch (Exception e) {
-			addErrorMessage(properties.getParameterByKey("MSG_ERROR_ACTUALIZACION_USUARIO"));
-			log.error(
-					"=== Actualizacion de usuario: Fallo la actualizacion del usuario {}. Se ha producido un error: {}",
-					usuarioModApp.getIdUsuarioApp(), e.getMessage());
-		}
-	}
+    public UsuarioApp getUsuarioModApp() {
+        return usuarioModApp;
+    }
 
-	public void actionLimpiar() {
-		FacesContext.getCurrentInstance().getViewRoot().getViewMap().clear();
-	}
+    public void setUsuarioModApp(UsuarioApp usuarioModApp) {
+        this.usuarioModApp = usuarioModApp;
+    }
 
-	public void addInfoMessage(String summary) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
+    public boolean isShowPanelModificarUsuario() {
+        return showPanelModificarUsuario;
+    }
 
-	public void addWarnMessage(String summary) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, summary, null);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
-
-	public void addErrorMessage(String summary) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, null);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
-
-	/**
-	 * @return the businessDelegate
-	 */
-	public IClienteDelegate getClienteDelegate() {
-		return clienteDelegate;
-	}
-
-	/**
-	 * 
-	 */
-	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
-		this.clienteDelegate = clienteDelegate;
-	}
-
-	/**
-	 * @return the usuarioApp
-	 */
-	public UsuarioApp getUsuarioApp() {
-		return usuarioApp;
-	}
-
-	/**
-	 * @param usuarioApp the usuarioApp to set
-	 */
-	public void setUsuarioApp(UsuarioApp usuarioApp) {
-		this.usuarioApp = usuarioApp;
-	}
-
-	/**
-	 * @return the estadosApp
-	 */
-	public List<SelectItem> getEstadosApp() {
-		return estadosApp;
-	}
-
-	/**
-	 * @param estadosApp the estadosApp to set
-	 */
-	public void setEstadosApp(List<SelectItem> estadosApp) {
-		this.estadosApp = estadosApp;
-	}
-
-	/**
-	 * @return the usuarioModApp
-	 */
-	public UsuarioApp getUsuarioModApp() {
-		return usuarioModApp;
-	}
-
-	/**
-	 * @param usuarioModApp the usuarioModApp to set
-	 */
-	public void setUsuarioModApp(UsuarioApp usuarioModApp) {
-		this.usuarioModApp = usuarioModApp;
-	}
-
-	/**
-	 * @return the showPanelModificarUsuario
-	 */
-	public boolean isShowPanelModificarUsuario() {
-		return showPanelModificarUsuario;
-	}
-
-	/**
-	 * @param showPanelModificarUsuario the showPanelModificarUsuario to set
-	 */
-	public void setShowPanelModificarUsuario(boolean showPanelModificarUsuario) {
-		this.showPanelModificarUsuario = showPanelModificarUsuario;
-	}
-
-	/**
-	 * @return the properties
-	 */
-	public Properties getProperties() {
-		return properties;
-	}
-
-	/**
-	 * @param properties the properties to set
-	 */
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-	}
-
+    public void setShowPanelModificarUsuario(boolean showPanelModificarUsuario) {
+        this.showPanelModificarUsuario = showPanelModificarUsuario;
+    }
 }

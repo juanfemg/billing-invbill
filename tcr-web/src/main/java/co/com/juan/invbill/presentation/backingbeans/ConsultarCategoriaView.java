@@ -1,213 +1,125 @@
 package co.com.juan.invbill.presentation.backingbeans;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-
 import co.com.juan.invbill.delegate.businessdelegate.IProductoDelegate;
+import co.com.juan.invbill.enums.StatusEnum;
+import co.com.juan.invbill.exceptions.EntityException;
+import co.com.juan.invbill.model.CategoriaProducto;
+import co.com.juan.invbill.util.Bundle;
+import co.com.juan.invbill.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.com.juan.invbill.delegate.businessdelegate.IClienteDelegate;
-import co.com.juan.invbill.enums.StatusEnum;
-import co.com.juan.invbill.model.CategoriaProducto;
-import co.com.juan.invbill.util.Properties;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.model.SelectItem;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Juan Felipe
- * 
  */
 @ManagedBean(name = "consultarCategoria")
 @ViewScoped
-public class ConsultarCategoriaView implements Serializable {
+public class ConsultarCategoriaView extends Bundle implements Serializable {
 
-	private static final String FILE_MESSAGES = "bundles.msg_ModificacionCategoria";
-	private static final long serialVersionUID = 1709195946652231206L;
-	private static final Logger log = LoggerFactory.getLogger(ConsultarCategoriaView.class);
-	private static final String ID_DIALOG_MESSAGES = "menMod";
+    private static final String FILE_MESSAGES = "bundles.msg_ModificacionCategoria";
+    private static final Logger log = LoggerFactory.getLogger(ConsultarCategoriaView.class);
+    private final Properties properties = new Properties(FILE_MESSAGES);
+    @ManagedProperty(value = "#{productoDelegate}")
+    private IProductoDelegate productoDelegate;
+    private CategoriaProducto categoriaModProducto;
+    private List<SelectItem> estadosApp;
+    private List<CategoriaProducto> categoriasProducto;
+    private boolean showDialogModificarCategoria;
 
-	@ManagedProperty(value = "#{clienteDelegate}")
-	private transient IClienteDelegate clienteDelegate;
+    public ConsultarCategoriaView() {
+        super();
+    }
 
-	public IProductoDelegate getProductoDelegate() {
-		return productoDelegate;
-	}
+    @PostConstruct
+    public void init() {
+        categoriaModProducto = new CategoriaProducto();
+        estadosApp = new ArrayList<>();
+        categoriasProducto = new ArrayList<>();
+        showDialogModificarCategoria = false;
+        this.initEstadosApp();
+        this.initCategoriasProducto();
+    }
 
-	public void setProductoDelegate(IProductoDelegate productoDelegate) {
-		this.productoDelegate = productoDelegate;
-	}
+    private void initEstadosApp() {
+        Arrays.stream(StatusEnum.values())
+                .forEach(statusEnum -> estadosApp.add(new SelectItem(statusEnum, statusEnum.getStatus())));
+    }
 
-	@ManagedProperty(value = "#{productoDelegate}")
-	private transient IProductoDelegate productoDelegate;
+    private void initCategoriasProducto() {
+        try {
+            categoriasProducto = this.productoDelegate.getCategoriasProductoSortByCategoria();
+        } catch (EntityException e) {
+            addErrorMessage(this.properties.getParameterByKey(MSG_ERROR_CONSULTA_CATEGORIAS));
+            log.error(ERROR_CONSULTA_CATEGORIAS, e);
+        }
+    }
 
-	private CategoriaProducto categoriaModProducto;
-	private List<SelectItem> estadosApp;
-	private List<CategoriaProducto> categoriasProducto;
-	private boolean showDialogModificarCategoria;
-	private transient Properties properties = new Properties(FILE_MESSAGES);
+    public void actionEditar() {
+        showDialogModificarCategoria = true;
+    }
 
-	public ConsultarCategoriaView() {
-		super();
-	}
+    public void actionModificar() {
+        try {
+            this.productoDelegate.update(categoriaModProducto);
+            addInfoMessage(this.properties.getParameterByKey(MSG_CATEGORIA_ACTUALIZADA));
+            showDialogModificarCategoria = false;
+        } catch (EntityException e) {
+            addErrorMessage(this.properties.getParameterByKey(MSG_ERROR_ACTUALIZACION_CATEGORIA), ID_DIALOG_MESSAGES);
+            log.error(ERROR_ACTUALIZACION_CATEGORIA, categoriaModProducto.getIdCategoria(), e.getMessage());
+        }
+    }
 
-	@PostConstruct
-	public void init() {
-		categoriaModProducto = new CategoriaProducto();
-		estadosApp = new ArrayList<>();
-		categoriasProducto = new ArrayList<>();
-		showDialogModificarCategoria = false;
-		initEstadosApp();
-		initCategoriasProducto();
-	}
+    public void actionCancelar() {
+        showDialogModificarCategoria = false;
+    }
 
-	public void initEstadosApp() {
-		for (StatusEnum estadosAppEnumTemp : StatusEnum.values()) {
-			estadosApp.add(new SelectItem(estadosAppEnumTemp, estadosAppEnumTemp.getStatus()));
-		}
-	}
+    public CategoriaProducto getCategoriaModProducto() {
+        return categoriaModProducto;
+    }
 
-	public void initCategoriasProducto() {
-		try {
-			categoriasProducto = this.productoDelegate.getCategoriasProductoSortByCategoria();
-		} catch (Exception e) {
-			addErrorMessage(properties.getParameterByKey("MSG_ERROR_CONSULTA_CATEGORIAS"));
-			log.error("=== Consulta de Categorias: Fallo la consulta de las categorias", e);
-		}
-	}
+    public void setCategoriaModProducto(CategoriaProducto categoriaModProducto) {
+        this.categoriaModProducto = categoriaModProducto;
+    }
 
-	public void actionEditar() {
-		showDialogModificarCategoria = true;
-	}
+    public List<SelectItem> getEstadosApp() {
+        return estadosApp;
+    }
 
-	public void actionModificar() {
-		try {
-			this.productoDelegate.update(categoriaModProducto);
-			showDialogModificarCategoria = false;
-			log.info("=== Actualizacion de categoria: Categoria actualizada. Id={}, descripcion={} ===",
-					categoriaModProducto.getIdCategoria(), categoriaModProducto.getCategoria());
-			addInfoMessage(properties.getParameterByKey("MSG_CATEGORIA_ACTUALIZADA"));
-		} catch (Exception e) {
-			addErrorMessage(properties.getParameterByKey("MSG_ERROR_ACTUALIZACION_CATEGORIA"), ID_DIALOG_MESSAGES);
-			log.error(
-					"=== Actualizacion de categoria: Fallo la actualizacion de la categoria {}. Se ha producido un error: {}",
-					categoriaModProducto.getIdCategoria(), e.getMessage());
-		}
-	}
+    public void setEstadosApp(List<SelectItem> estadosApp) {
+        this.estadosApp = estadosApp;
+    }
 
-	public void actionCancelar() {
-		FacesContext.getCurrentInstance().getViewRoot().getViewMap().clear();
-	}
+    public List<CategoriaProducto> getCategoriasProducto() {
+        return categoriasProducto;
+    }
 
-	public void addInfoMessage(String summary) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
+    public void setCategoriasProducto(List<CategoriaProducto> categoriasProducto) {
+        this.categoriasProducto = categoriasProducto;
+    }
 
-	public void addWarnMessage(String summary) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, summary, null);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
+    public boolean isShowDialogModificarCategoria() {
+        return showDialogModificarCategoria;
+    }
 
-	public void addErrorMessage(String summary) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, null);
-		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
+    public void setShowDialogModificarCategoria(boolean showDialogModificarCategoria) {
+        this.showDialogModificarCategoria = showDialogModificarCategoria;
+    }
 
-	public void addErrorMessage(String summary, String clientId) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, null);
-		FacesContext.getCurrentInstance().addMessage(clientId, message);
-	}
+    public IProductoDelegate getProductoDelegate() {
+        return productoDelegate;
+    }
 
-	/**
-	 * @return the businessDelegate
-	 */
-	public IClienteDelegate getClienteDelegate() {
-		return clienteDelegate;
-	}
-
-	/**
-	 * 
-	 */
-	public void setClienteDelegate(IClienteDelegate clienteDelegate) {
-		this.clienteDelegate = clienteDelegate;
-	}
-
-	/**
-	 * @return the categoriaModProducto
-	 */
-	public CategoriaProducto getCategoriaModProducto() {
-		return categoriaModProducto;
-	}
-
-	/**
-	 * @param categoriaModProducto the categoriaModProducto to set
-	 */
-	public void setCategoriaModProducto(CategoriaProducto categoriaModProducto) {
-		this.categoriaModProducto = categoriaModProducto;
-	}
-
-	/**
-	 * @return the estadosApp
-	 */
-	public List<SelectItem> getEstadosApp() {
-		return estadosApp;
-	}
-
-	/**
-	 * @param estadosApp the estadosApp to set
-	 */
-	public void setEstadosApp(List<SelectItem> estadosApp) {
-		this.estadosApp = estadosApp;
-	}
-
-	/**
-	 * @return the properties
-	 */
-	public Properties getProperties() {
-		return properties;
-	}
-
-	/**
-	 * @param properties the properties to set
-	 */
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-	}
-
-	/**
-	 * @return the categoriasProducto
-	 */
-	public List<CategoriaProducto> getCategoriasProducto() {
-		return categoriasProducto;
-	}
-
-	/**
-	 * @param categoriasProducto the categoriasProducto to set
-	 */
-	public void setCategoriasProducto(List<CategoriaProducto> categoriasProducto) {
-		this.categoriasProducto = categoriasProducto;
-	}
-
-	/**
-	 * @return the showDialogModificarCategoria
-	 */
-	public boolean isShowDialogModificarCategoria() {
-		return showDialogModificarCategoria;
-	}
-
-	/**
-	 * @param showDialogModificarCategoria the showDialogModificarCategoria to set
-	 */
-	public void setShowDialogModificarCategoria(boolean showDialogModificarCategoria) {
-		this.showDialogModificarCategoria = showDialogModificarCategoria;
-	}
-
+    public void setProductoDelegate(IProductoDelegate productoDelegate) {
+        this.productoDelegate = productoDelegate;
+    }
 }

@@ -15,8 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.print.PrintService;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
@@ -41,13 +41,16 @@ public class ReportService implements IReportService {
     private static final Logger log = LoggerFactory.getLogger(ReportService.class);
     private static final String COMPILED_FILE_EXT = "jasper";
     private static final String LAYOUT_FILE_EXT = "jrxml";
+    private final DataSource dataSource;
     private PrintService printService;
     private Connection connection;
     private JasperPrint jasperPrint;
     private File file;
 
-    @Resource
-    private DataSource dataSource;
+    @Inject
+    public ReportService(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     static <T> Consumer<T> throwingConsumerWrapper(ThrowingConsumer<T, JRException> throwingConsumer) {
         return i -> {
@@ -61,17 +64,17 @@ public class ReportService implements IReportService {
 
     @Override
     public PrintService lookUpDefaultPrinter() {
-        if (this.printService == null) {
+        if (printService == null) {
             HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             AppConfig appConfig = (AppConfig) session.getAttribute(ParameterEnum.IMPRESORA_PREDETERMINADA.name());
 
             if (appConfig.getValor() != null) {
                 PrintService[] printServices = PrinterJob.lookupPrintServices();
-                this.printService = Arrays.stream(printServices).filter(printService -> printService.getName().equalsIgnoreCase(appConfig.getValor())).findFirst().orElse(null);
+                printService = Arrays.stream(printServices).filter(printService -> printService.getName().equalsIgnoreCase(appConfig.getValor())).findFirst().orElse(null);
             }
         }
 
-        return this.printService;
+        return printService;
     }
 
     @Override
@@ -103,8 +106,8 @@ public class ReportService implements IReportService {
 
             if (exporter != null) {
                 SimplePdfExporterConfiguration configuration = (SimplePdfExporterConfiguration) exporter.getConfiguration();
-                exporter.exportReport(configuration, this.jasperPrint, this.file);
-                return Files.newInputStream(this.file.toPath());
+                exporter.exportReport(configuration, jasperPrint, file);
+                return Files.newInputStream(file.toPath());
             }
         } catch (SQLException se) {
             log.error("An error has occurred obtaining the connection", se);
@@ -131,7 +134,7 @@ public class ReportService implements IReportService {
 
             if (exporter != null) {
                 SimpleXlsExporterConfiguration configuration = (SimpleXlsExporterConfiguration) exporter.getConfiguration();
-                exporter.exportReport(configuration, this.jasperPrint, this.file);
+                exporter.exportReport(configuration, jasperPrint, file);
                 return Files.newInputStream(file.toPath());
             }
         } catch (SQLException se) {
@@ -157,8 +160,8 @@ public class ReportService implements IReportService {
             Exporter exporter = ExporterFactory.getExporter(ExporterEnum.PRINT_SERVICE.name());
 
             if (exporter != null) {
-                SimplePrintServiceExporterConfiguration configuration = (SimplePrintServiceExporterConfiguration) exporter.getConfiguration(this.printService);
-                exporter.exportReport(configuration, this.jasperPrint);
+                SimplePrintServiceExporterConfiguration configuration = (SimplePrintServiceExporterConfiguration) exporter.getConfiguration(printService);
+                exporter.exportReport(configuration, jasperPrint);
             }
         } catch (SQLException se) {
             log.error("An error has occurred obtaining the connection", se);
@@ -176,10 +179,10 @@ public class ReportService implements IReportService {
 
     private void prepareReport(String reportName, Map<String, Object> parameters)
             throws JRException, SQLException, IOException {
-        InputStream file = ReportService.class.getResourceAsStream(String.format("/reports/%s.%s", reportName, COMPILED_FILE_EXT));
-        this.connection = this.getConnection();
-        this.jasperPrint = JasperFillManager.fillReport(file, parameters, this.connection);
-        this.file = File.createTempFile(reportName, null);
+        InputStream inputStream = ReportService.class.getResourceAsStream(String.format("/reports/%s.%s", reportName, COMPILED_FILE_EXT));
+        connection = this.getConnection();
+        jasperPrint = JasperFillManager.fillReport(inputStream, parameters, connection);
+        file = File.createTempFile(reportName, null);
     }
 
     private void prepareReportWithSubReports(String reportName, Map<String, Object> parameters,
@@ -191,15 +194,15 @@ public class ReportService implements IReportService {
                 parameters.put("SUB_REPORT_PARAMETER_" + subReportName.toUpperCase(), jasperSubReport);
             }
         }));
-        InputStream file = ReportService.class.getResourceAsStream(String.format("/reports/%s.%s", reportName, LAYOUT_FILE_EXT));
-        JasperReport jasperReport = JasperCompileManager.compileReport(file);
-        this.connection = this.getConnection();
-        this.jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, this.connection);
-        this.file = File.createTempFile(reportName, null);
+        InputStream inputStream = ReportService.class.getResourceAsStream(String.format("/reports/%s.%s", reportName, LAYOUT_FILE_EXT));
+        JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+        connection = this.getConnection();
+        jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+        file = File.createTempFile(reportName, null);
     }
 
     private Connection getConnection() throws SQLException {
-        return this.connection == null ? this.dataSource.getConnection() : this.connection;
+        return connection == null ? this.dataSource.getConnection() : connection;
     }
 
 }
