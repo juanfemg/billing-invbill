@@ -23,17 +23,6 @@
 hs_err_pid*
 replay_pid*
 
-# Explorers
+# Others
 .DS_Store
-
-# Builds
-tcr-parent/target/
-tcr-web/target/
-tcr-logic/target/
-tcr-config/target/
-
-# IDE's configurations
-tcr-parent/.idea/
-tcr-web/.idea/
-tcr-logic/.idea/
-tcr-config/.idea/
+.project

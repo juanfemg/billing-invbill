@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
 
     <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <property name="jndiName" value="java:jboss/datasources/MySqlDS"/>
+        <property name="jndiName" value="jdbc/MySqlDS"/>
         <property name="lookupOnStartup" value="false"/>
         <property name="cache" value="true"/>
         <property name="proxyInterface" value="javax.sql.DataSource"/>

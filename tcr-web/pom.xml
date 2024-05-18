@@ -25,7 +25,7 @@
 
 		<!-- Primefaces -->
 		<dependency>
-			<groupId>co.edu.javerianacali.theme</groupId>
+			<groupId>co.com.juan.invbill.theme</groupId>
 			<artifactId>adamantium-theme</artifactId>
 			<version>2_1_2</version>
 		</dependency>
